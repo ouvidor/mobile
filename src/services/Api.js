@@ -1,5 +1,6 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
+import { getJWT } from '../helpers';
 
 export const baseURL = 'http://10.0.10.168:3003';
 
@@ -16,7 +17,7 @@ const configs = {
  * Se não tivermos, retorno uma conexão com as configurações padrões
  */
 export const getSecureRequest = async () => {
-  const jwt = await AsyncStorage.getitem('jwt');
+  const jwt = await getJWT();
 
   if (jwt) {
     configs.headers = {
@@ -28,10 +29,46 @@ export const getSecureRequest = async () => {
   return axios.create(configs);
 };
 
+/**
+ * @param {string} url
+ * @param {object} data
+ * @author Lucas Sousa
+ * @since 2020.01.23
+ * @description
+ * Este método realiza um POST request para URL, passando DATA.
+ * Retorno a resposta do request.
+ */
 export const getPostRequest = async (url, data) => {
-  return axios({
-    method: 'post',
-    url: `${baseURL}${url}`,
-    data,
-  });
+  try {
+    const response = await axios({
+      method: 'post',
+      url: `${baseURL}${url}`,
+      data,
+    });
+    return response;
+  } catch (e) {
+    return e.response;
+  }
+};
+
+/**
+ * @param {string} url
+ * @param {object} data
+ * @author Lucas Sousa
+ * @since 2020.01.23
+ * @description
+ * Este método realiza um GET request para URL, passando PARAMS.
+ * Retorno a resposta do request.
+ */
+export const getRequest = async (url, params) => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${baseURL}${url}`,
+      params,
+    });
+    return response;
+  } catch (e) {
+    return e.response;
+  }
 };
