@@ -23,3 +23,13 @@ export const CenteredContainer = styled.View`
   align-items: center;
   justify-content: center;
 `;
+
+/**
+ * @author Lucas Sousa
+ * @since 2020.01.23
+ * Container padrão com scroll. Ocupa todo o espaço disponível, assim como o <Container/>
+ */
+export const ScrollableContainer = styled.ScrollView`
+  flex: 1;
+  padding: 0 10px;
+`;
