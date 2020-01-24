@@ -7,7 +7,7 @@ import styled from 'styled-components/native';
  * É possível, por exemplo, passar uma props fontFamily='BoldItalic' para Text,
  * e Text utilizará a fonte OpenSans-BoldItalic.
  */
-const fontFaces = {
+export const fontFaces = {
   Bold: 'OpenSans-Bold',
   BoldItalic: 'OpenSans-BoldItalic',
   ExtraBold: 'OpenSans-ExtraBold',
