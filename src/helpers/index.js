@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import AsyncStorage from '@react-native-community/async-storage';
 import { getPostRequest } from '../services/Api';
 
@@ -40,4 +41,17 @@ export const getJWT = async () => {
     return user.token;
   }
   return false;
+};
+
+/**
+ * @param {string} email
+ * @author Lucas Sousa
+ * @since 2020.01.23
+ * @description
+ * Método para validar um email.
+ */
+export const validarEmail = email => {
+  return !!String(email).match(
+    /^[0-9a-zA-Z][0-9a-zA-Z_.-]+@[0-9a-zA-Z][0-9a-zA-Z_.-]+\.[a-zA-Z]{2,}$/
+  );
 };
