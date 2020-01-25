@@ -29,7 +29,9 @@ export const CenteredContainer = styled.View`
  * @since 2020.01.23
  * Container padrão com scroll. Ocupa todo o espaço disponível, assim como o <Container/>
  */
-export const ScrollableContainer = styled.ScrollView`
+export const ScrollableContainer = styled.ScrollView.attrs({
+  keyboardShouldPersistTaps: 'handled',
+})`
   flex: 1;
   padding: 0 10px;
 `;
