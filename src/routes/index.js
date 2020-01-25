@@ -23,7 +23,7 @@ export default function Routes() {
   return (
     <NavigationNativeContainer>
       <Stack.Navigator
-        initialRouteName="Cadastro"
+        initialRouteName="Splash"
         headerMode="none"
         screenOptions={{
           gestureEnabled: false,
