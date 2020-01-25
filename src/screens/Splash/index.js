@@ -13,9 +13,9 @@ export default function Splash({ navigation }) {
   async function checkAuth() {
     const jwt = await getJWT();
     if (jwt) {
-      navigation.navigate('Home');
+      navigation.replace('Home');
     } else {
-      navigation.navigate('Login');
+      navigation.replace('Login');
     }
   }
 
