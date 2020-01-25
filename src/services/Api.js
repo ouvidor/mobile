@@ -1,73 +1,60 @@
 import axios from 'axios';
-import { getJWT } from '../helpers';
+import AsyncStorage from '@react-native-community/async-storage';
 
-export const baseURL = 'http://10.0.10.168:3003';
-
-const configs = {
-  baseURL,
-};
-
-/**
- * @author Lucas Sousa
- * @since 2020.01.22
- * @description
- * Este método verifica se temos um JWT armazenado no dispositivo.
- * Se tivermos, retorno uma conexão onde já enviamos o JWT como Authorization Token.
- * Se não tivermos, retorno uma conexão com as configurações padrões
- */
-export const getSecureRequest = async () => {
-  const jwt = await getJWT();
-
-  if (jwt) {
-    configs.headers = {
-      ...configs.headers,
-      Authorization: `Bearer ${jwt}`,
+class Api {
+  constructor() {
+    this.configs = {
+      baseURL: 'http://10.0.10.168:3003',
     };
+
+    this.api = axios.create(this.configs);
   }
 
-  return axios.create(configs);
-};
-
-/**
- * @param {string} url
- * @param {object} data
- * @author Lucas Sousa
- * @since 2020.01.23
- * @description
- * Este método realiza um POST request para URL, passando DATA.
- * Retorno a resposta do request.
- */
-export const getPostRequest = async (url, data) => {
-  try {
-    const response = await axios({
-      method: 'post',
-      url: `${baseURL}${url}`,
-      data,
-    });
-    return response;
-  } catch (e) {
-    return e.response;
+  getConfigs() {
+    return this.configs;
   }
-};
 
-/**
- * @param {string} url
- * @param {object} data
- * @author Lucas Sousa
- * @since 2020.01.23
- * @description
- * Este método realiza um GET request para URL, passando PARAMS.
- * Retorno a resposta do request.
- */
-export const getRequest = async (url, params) => {
-  try {
-    const response = await axios({
-      method: 'get',
-      url: `${baseURL}${url}`,
-      params,
-    });
-    return response;
-  } catch (e) {
-    return e.response;
+  setConfigs(configs) {
+    if (typeof configs !== 'object') {
+      throw new Error(
+        `setConfigs expects an object and instead received ${typeof configs}`
+      );
+    } else {
+      Object.keys(configs).map(k => {
+        this.configs[k] = configs[k];
+      });
+      return this.configs;
+    }
   }
-};
+
+  /**
+   * @author Lucas Sousa
+   * @since 2020.01.25
+   * @description
+   * Se tivermos um JWT armazenado no dispositivo, seto nas configs
+   * como Authorization: Bearer JWT
+   */
+  async setToken() {
+    let user = await AsyncStorage.getItem('user');
+    if (user) {
+      user = JSON.parse(user);
+      this.setConfigs({
+        headers: {
+          ...this.configs.headers,
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+    }
+  }
+
+  async post(url, data) {
+    try {
+      const req = await this.api.post(url, data);
+      return req.data;
+    } catch (e) {
+      return e.response.data;
+    }
+  }
+}
+
+export default new Api();
