@@ -1,10 +1,23 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
-import { View, Text } from 'react-native';
+import { CenteredContainer, Text, Button } from '../../components';
+import { SignOut } from '../../helpers';
 
-export default function Home() {
+export default function Home({ navigation }) {
   return (
-    <View>
-      <Text>Home caralho</Text>
-    </View>
+    <CenteredContainer>
+      <Text>Home do app</Text>
+      <Button
+        touchableProps={{
+          onPress: async () => {
+            const signOut = await SignOut();
+            if (signOut) {
+              navigation.replace('Login');
+            }
+          },
+        }}
+        textProps={{ title: 'Sair' }}
+      />
+    </CenteredContainer>
   );
 }

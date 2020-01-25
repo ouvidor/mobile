@@ -28,6 +28,18 @@ export const SignIn = async (email, password) => {
 
 /**
  * @author Lucas Sousa
+ * @since 2020.01.25
+ * @description
+ * Desloga um usuário, por deslogar, significa que simplesmente
+ * limpamos o JWT do armazenamento do dispositivo.
+ */
+export const SignOut = async () => {
+  await AsyncStorage.removeItem('user');
+  return true;
+};
+
+/**
+ * @author Lucas Sousa
  * @since 2020.01.23
  * @description
  * Busco e retorno o JWT, caso este exista.
