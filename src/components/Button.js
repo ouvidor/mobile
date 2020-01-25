@@ -12,7 +12,6 @@ const ButtonContainer = styled.TouchableOpacity.attrs({
   background: ${props => props.background || Purple};
   padding: 10px 25px;
   margin: 5px 10px;
-  flex: 1;
   align-self: center;
   border-radius: 5px;
 `;
