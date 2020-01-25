@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-escape */
 import AsyncStorage from '@react-native-community/async-storage';
-import { getPostRequest } from '../services/Api';
+import Api from '../services/Api';
 
 /**
  * @param {string} email
@@ -11,17 +11,15 @@ import { getPostRequest } from '../services/Api';
  * Em caso de login bem sucedido, armazeno o user/JWT no dispositivo.
  * Retorno a resposta do request.
  */
-export const Logar = async (email, password) => {
+export const SignIn = async (email, password) => {
   try {
-    const response = await getPostRequest('/auth', {
+    const response = await Api.post('/auth', {
       email,
       password,
     });
-
-    if ('token' in response.data) {
-      AsyncStorage.setItem('user', JSON.stringify(response.data));
+    if ('token' in response) {
+      AsyncStorage.setItem('user', JSON.stringify(response));
     }
-
     return response;
   } catch (e) {
     return e;

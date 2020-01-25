@@ -6,8 +6,8 @@ import {
   Button,
   Text,
 } from '../../components';
-import { validarEmail, Logar } from '../../helpers';
-import { getPostRequest } from '../../services/Api';
+import { validarEmail, SignIn } from '../../helpers';
+import Api from '../../services/Api';
 
 export default function Cadastro({ navigation }) {
   const [nome, setNome] = useState();
@@ -56,7 +56,7 @@ export default function Cadastro({ navigation }) {
    * @description
    * Valida os dados do formulário e cadastra o usuário
    */
-  async function signUp() {
+  async function handleSignUp() {
     const requiredData = {
       nome: { field: 'first_name', value: nome },
       sobrenome: { field: 'last_name', value: sobrenome },
@@ -87,14 +87,12 @@ export default function Cadastro({ navigation }) {
 
     /** Se temos todos os campos válidos, posso cadastrar o usuário */
     if (valid) {
-      const cadastro = await getPostRequest('/user', payload);
-      console.log(payload, typeof payload.password);
+      const cadastro = await Api.post('/user', payload);
 
-      if (cadastro.data.error) {
-        setActionError(cadastro.data.error);
+      if ('error' in cadastro) {
+        setActionError(cadastro.error);
       } else {
-        const login = await Logar(payload.email, payload.senha);
-        console.log(login);
+        await SignIn(payload.email, payload.password);
         navigation.replace('Home');
       }
     }
@@ -129,6 +127,7 @@ export default function Cadastro({ navigation }) {
             validateOnBlur(email, 'email', validarEmail, 'E-mail inválido'),
           onFocus: () => clearOnFocus('email'),
           errorMessage: erro.email,
+          autoCapitalize: 'none',
         }}
       />
       <LabeledInput
@@ -139,13 +138,14 @@ export default function Cadastro({ navigation }) {
           secureTextEntry: true,
           onFocus: () => clearOnFocus('senha'),
           errorMessage: erro.senha,
+          autoCapitalize: 'none',
         }}
       />
 
       <Text>{actionError}</Text>
 
       <Button
-        touchableProps={{ onPress: signUp }}
+        touchableProps={{ onPress: handleSignUp }}
         textProps={{ title: 'Cadastrar' }}
       />
     </ScrollableContainer>
