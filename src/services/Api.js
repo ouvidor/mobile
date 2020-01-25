@@ -1,5 +1,4 @@
 import axios from 'axios';
-import AsyncStorage from '@react-native-community/async-storage';
 import { getJWT } from '../helpers';
 
 export const baseURL = 'http://10.0.10.168:3003';
