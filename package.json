@@ -7,10 +7,13 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "makeDebug": "cd ./android && sudo ./gradlew assembleDebug && mv ./app/build/outputs/apk/debug/app-debug.apk /var/www/apks/ouvidor-debug.apk"
+
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.7.1",
+    "@react-native-community/geolocation": "^2.0.2",
     "@react-native-community/masked-view": "^0.1.6",
     "@react-navigation/core": "^5.0.0-alpha.35",
     "@react-navigation/native": "^5.0.0-alpha.27",
