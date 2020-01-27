@@ -28,9 +28,9 @@ export default function Home({ navigation }) {
     Location.getCurrentPosition(updateCoordinates);
   }, []);
 
-  return (
-    <Container noPadding>
-      <MapView style={{ flex: 1 }} region={coords}>
+  function renderCurrentLocationMarker() {
+    if (Location.permissionGranted) {
+      return (
         <MapView.Marker
           coordinate={{
             latitude: coords.latitude,
@@ -39,18 +39,33 @@ export default function Home({ navigation }) {
           title="title"
           description="description"
         />
+      );
+    }
+    return null;
+  }
+
+  return (
+    <Container noPadding>
+      <MapView style={{ flex: 1 }} initialRegion={coords}>
+        {renderCurrentLocationMarker()}
       </MapView>
 
       <Button
         touchableProps={{
           onPress: async () => {
-            console.log({
-              latitude: coords.latitude,
-              longitude: coords.longitude,
-            });
+            const signOut = await SignOut();
+            if (signOut) {
+              navigation.replace('Login');
+            }
           },
         }}
         textProps={{ title: 'Sair' }}
+      />
+      <Button
+        touchableProps={{
+          onPress: () => navigation.navigate('AddManifestation'),
+        }}
+        textProps={{ title: 'Criar' }}
       />
     </Container>
   );
