@@ -8,6 +8,7 @@ class Api {
     };
 
     this.api = axios.create(this.configs);
+    this.setToken();
   }
 
   getConfigs() {
@@ -44,12 +45,22 @@ class Api {
           Authorization: `Bearer ${user.token}`,
         },
       });
+      this.api = axios.create(this.configs);
     }
   }
 
   async post(url, data) {
     try {
       const req = await this.api.post(url, data);
+      return req.data;
+    } catch (e) {
+      return e.response.data;
+    }
+  }
+
+  async get(url, params) {
+    try {
+      const req = await this.api.get(url, params);
       return req.data;
     } catch (e) {
       return e.response.data;

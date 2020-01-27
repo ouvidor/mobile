@@ -65,3 +65,27 @@ export const validarEmail = email => {
     /^[0-9a-zA-Z][0-9a-zA-Z_.-]+@[0-9a-zA-Z][0-9a-zA-Z_.-]+\.[a-zA-Z]{2,}$/
   );
 };
+
+/**
+ * @author Lucas Sousa
+ * @since 2020.01.27
+ * @description
+ * Busca e retorna todas as categorias existentes para manifestações
+ */
+export const getCategories = async () => {
+  try {
+    const categories = await Api.get('/category');
+    return categories;
+  } catch (e) {
+    return e;
+  }
+};
+
+export const getTypes = async () => {
+  try {
+    const types = await Api.get('/type');
+    return types;
+  } catch (e) {
+    return e;
+  }
+};
