@@ -1,4 +1,7 @@
+/* eslint-disable react/prop-types */
+import React from 'react';
 import styled from 'styled-components/native';
+import { Text } from './Text';
 
 /**
  * @author Lucas Sousa
@@ -35,3 +38,15 @@ export const ScrollableContainer = styled.ScrollView.attrs({
   flex: 1;
   padding: 0 10px;
 `;
+
+export const ScrollableContainerWithLoading = props => {
+  const { loading, children } = props;
+  if (loading) {
+    return (
+      <CenteredContainer>
+        <Text>Carregando</Text>
+      </CenteredContainer>
+    );
+  }
+  return <ScrollableContainer>{children}</ScrollableContainer>;
+};
