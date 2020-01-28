@@ -1,7 +1,12 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useRef } from 'react';
+import LottieView from 'lottie-react-native';
 import styled from 'styled-components/native';
 import { Text } from './Text';
+
+const loadingAnimations = {
+  default: require('../assets/animations/loading-dots.json'),
+};
 
 /**
  * @author Lucas Sousa
@@ -39,12 +44,31 @@ export const ScrollableContainer = styled.ScrollView.attrs({
   padding: 0 10px;
 `;
 
+/**
+ * @param {object} props
+ * @author Lucas Sousa
+ * @since 2020.01.27
+ * @description
+ * ScrollView que exibe um loading animado caso receba a props
+ * loading como true.
+ * É possível adicionar novos loadings baixando-os daqui: https://lottiefiles.com/
+ * Baixe o JSON e coloque na pasta /assets/animations/
+ * Adicionei a nova animação no objeto loadingAnimations no topo do arquivo.
+ */
 export const ScrollableContainerWithLoading = props => {
+  const animationRef = useRef();
   const { loading, children } = props;
   if (loading) {
     return (
-      <CenteredContainer>
-        <Text>Carregando</Text>
+      <CenteredContainer onLayout={() => animationRef.current.play()}>
+        <LottieView
+          ref={animationRef}
+          source={loadingAnimations.default}
+          style={{ marginBottom: 50 }}
+        />
+        <Text style={{ fontSize: 15 }} fontFamily="Bold">
+          Carregando...
+        </Text>
       </CenteredContainer>
     );
   }
