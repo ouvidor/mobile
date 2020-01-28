@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { getCategories, getTypes } from '../../helpers';
 import {
-  ScrollableContainer,
   LabeledInput,
   Button,
   ScrollableContainerWithLoading,
+  Select,
 } from '../../components';
 
 export default function AddManifestation() {
@@ -14,27 +14,41 @@ export default function AddManifestation() {
   const [type, setType] = useState();
   const [categories, setCategories] = useState();
   const [types, setTypes] = useState();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchCategories() {
       const data = await getCategories();
-      setCategories(data);
+      const orderedCategories = data.map(c => ({
+        value: c.id,
+        label: c.title,
+      }));
+      setCategories(orderedCategories);
     }
     async function fetchTypes() {
       const data = await getTypes();
-      setTypes(data);
+      const orderedTypes = data.map(c => ({
+        value: c.id,
+        label: c.title,
+      }));
+      setTypes(orderedTypes);
     }
     fetchCategories();
     fetchTypes();
   }, []);
 
+  useEffect(() => {
+    if (categories && types) {
+      setLoading(false);
+    }
+  }, [categories, types]);
+
   function addManifestation() {
-    console.log('BORA CRIAR UMA MANIFESTAÇÃO!!!!!!!!!!!!!');
     getCategories();
   }
 
   return (
-    <ScrollableContainerWithLoading>
+    <ScrollableContainerWithLoading loading={loading}>
       <LabeledInput
         labelProps={{ label: 'Título' }}
         inputProps={{
@@ -44,23 +58,17 @@ export default function AddManifestation() {
           // errorMessage: erro.nome,
         }}
       />
-      <LabeledInput
-        labelProps={{ label: 'Categoria da manifestação' }}
-        inputProps={{
-          value: category,
-          onChangeText: setCategory,
-          // onFocus: () => clearOnFocus('nome'),
-          // errorMessage: erro.nome,
-        }}
+      <Select
+        label="Categoria da manifestação"
+        blankOption="Selecione uma categoria"
+        options={categories}
+        onSelect={option => setCategory(option.value)}
       />
-      <LabeledInput
-        labelProps={{ label: 'Tipo de manifestação' }}
-        inputProps={{
-          value: type,
-          onChangeText: setType,
-          // onFocus: () => clearOnFocus('nome'),
-          // errorMessage: erro.nome,
-        }}
+      <Select
+        label="Tipo de manifestação"
+        blankOption="Selecione um tipo"
+        options={types}
+        onSelect={option => setType(option.value)}
       />
       <LabeledInput
         labelProps={{ label: 'Descrição do problema' }}

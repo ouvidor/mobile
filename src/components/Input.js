@@ -15,6 +15,7 @@ export const Input = styled.TextInput`
   border-radius: 5px;
   padding: 10px;
   color: ${props => (props.errorMessage ? MarioCap : BlackSirius)};
+  elevation: 1;
 `;
 
 const InputContainer = styled.View`
