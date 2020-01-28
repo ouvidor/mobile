@@ -58,7 +58,7 @@ export const Select = props => {
   function renderOptions() {
     if (!collapsed) {
       return options.map(option => {
-        if (selected && option.label !== selected) {
+        if (option.label !== selected) {
           return (
             <SelectOption
               key={option.value}
