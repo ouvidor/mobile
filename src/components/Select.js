@@ -125,18 +125,12 @@ export const Select = props => {
     return null;
   }
 
-  function selectedOption() {
-    if (!selected && !selectedOptions) {
-      return blankOption;
-    }
-  }
-
   return (
     <>
       <SelectLabel>{label}</SelectLabel>
       <SelectContainer>
         <SelectedOption onPress={() => setCollapsed(!collapsed)}>
-          <SelectOptionText>{selectedOption()}</SelectOptionText>
+          <SelectOptionText>{selected || blankOption}</SelectOptionText>
           <Entypo name="select-arrows" size={21} color={BlackSirius} />
         </SelectedOption>
         {renderOptions()}
