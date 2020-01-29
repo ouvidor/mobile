@@ -63,6 +63,7 @@ export default function AddManifestation() {
         blankOption="Selecione uma categoria"
         options={categories}
         onSelect={option => setCategory(option.value)}
+        multiple
       />
       <Select
         label="Tipo de manifestação"
