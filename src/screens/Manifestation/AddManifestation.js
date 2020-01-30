@@ -5,6 +5,7 @@ import {
   Button,
   ScrollableContainerWithLoading,
   Select,
+  SelectCheckbox,
 } from '../../components';
 
 export default function AddManifestation() {
@@ -65,11 +66,11 @@ export default function AddManifestation() {
         onSelect={option => setCategory(option.value)}
         multiple
       />
-      <Select
+      <SelectCheckbox
         label="Tipo de manifestação"
         blankOption="Selecione um tipo"
         options={types}
-        onSelect={option => setType(option.value)}
+        onSelect={option => {}}
       />
       <LabeledInput
         labelProps={{ label: 'Descrição do problema' }}
