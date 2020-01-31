@@ -70,7 +70,7 @@ export default function AddManifestation() {
         label="Tipo de manifestação"
         blankOption="Selecione um tipo"
         options={types}
-        onSelect={option => {}}
+        onSelect={options => setCategories(Object.keys(options))}
       />
       <LabeledInput
         labelProps={{ label: 'Descrição do problema' }}

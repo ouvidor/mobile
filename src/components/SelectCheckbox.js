@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { Text } from './Text';
+import { fontFaces, Text } from './Text';
 import {
   SelectContainer,
   SelectOption,
@@ -34,16 +34,24 @@ const CheckboxItem = props => {
   );
 };
 
-const SelectedContainer = styled(Text)`
-  color: ${Walter};
+const SelectedOptionsContainer = styled.View`
+  flex: 1;
+  flex-direction: row;
+  flex-wrap: wrap;
+`;
+
+const SelectedOptionBadge = styled.TouchableOpacity`
+  margin: 3px;
+  padding: 5px;
+  border-radius: 5px;
   background: ${SuccessGreen};
 `;
 
-const Selected = props => {
-  const { title = 'Title' } = props;
-
-  return <SelectedContainer>{title}</SelectedContainer>;
-};
+const SelectedOptionText = styled(Text)`
+  font-size: 13px;
+  font-family: ${fontFaces.Bold};
+  color: ${Walter};
+`;
 
 export const SelectCheckbox = props => {
   const {
@@ -96,13 +104,41 @@ export const SelectCheckbox = props => {
     });
 
     if (Object.keys(selected).length === emptyKeys) {
-      return blankOption;
+      return <Text>{blankOption}</Text>;
     }
-    return Object.keys(selected).map(key => {
-      const option = selected[key];
-      if (option) {
-        return <Selected key={key} title={option.label} />;
+
+    /** Ordenando opções selecionadas por tamanho do título */
+    const orderedOptions = {};
+    Object.keys(selected).map(key => {
+      if (selected[key]) {
+        const option = selected[key];
+        /** Index aqui se refere ao tamanho do título */
+        const index = option.label.length;
+        if (!orderedOptions[index]) {
+          orderedOptions[index] = [];
+        }
+        orderedOptions[index].push(option);
       }
+    });
+
+    /** Renderizando opções selecionadas e reordenadas */
+    return Object.keys(orderedOptions).map(key => {
+      const values = orderedOptions[key];
+
+      return values.map(option => {
+        if (option) {
+          return (
+            <SelectedOptionBadge
+              key={option.value}
+              onPress={() =>
+                setSelected({ ...selected, [option.value]: false })
+              }
+            >
+              <SelectedOptionText>{option.label}</SelectedOptionText>
+            </SelectedOptionBadge>
+          );
+        }
+      });
     });
   }
 
@@ -111,7 +147,9 @@ export const SelectCheckbox = props => {
       <SelectLabel>{label}</SelectLabel>
       <SelectContainer>
         <SelectedOption onPress={() => setCollapsed(!collapsed)}>
-          <SelectOptionText>{renderSelected()}</SelectOptionText>
+          <SelectedOptionsContainer>
+            {renderSelected()}
+          </SelectedOptionsContainer>
           <Entypo name="select-arrows" size={21} color={BlackSirius} />
         </SelectedOption>
         {renderOptions()}
