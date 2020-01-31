@@ -79,9 +79,8 @@ export const SelectCheckbox = props => {
                 Object.keys(selected).includes(String(option.value)) &&
                 selected[option.value]
               ) {
-                const newSelection = selected;
-                delete newSelection[option.value];
                 setSelected({ ...selected, [option.value]: false });
+                onSelect({ ...selected, [option.value]: false });
               } else {
                 const selectionSnapshot = selected;
                 setSelected({ ...selected, [option.value]: option });
@@ -130,9 +129,10 @@ export const SelectCheckbox = props => {
           return (
             <SelectedOptionBadge
               key={option.value}
-              onPress={() =>
-                setSelected({ ...selected, [option.value]: false })
-              }
+              onPress={() => {
+                setSelected({ ...selected, [option.value]: false });
+                onSelect({ ...selected, [option.value]: false });
+              }}
             >
               <SelectedOptionText>{option.label}</SelectedOptionText>
             </SelectedOptionBadge>
