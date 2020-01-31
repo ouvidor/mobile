@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { clearEmptyKeys } from '../helpers';
 import { fontFaces, Text } from './Text';
 import {
   SelectContainer,
@@ -13,7 +14,14 @@ import {
 } from './Select';
 import colors from '../utils/colors';
 
-const { MarioCap, BlackSirius, SuccessGreen, Walter } = colors;
+const { ErrorTextColor, BlackSirius, SuccessGreen, Walter } = colors;
+
+const Error = styled(Text)`
+  color: ${ErrorTextColor};
+  padding-left: 3px;
+  margin-bottom: 5px;
+  font-family: ${fontFaces.SemiBoldItalic};
+`;
 
 const Check = styled(FontAwesome).attrs(props => ({
   name: props.checked ? 'check-square' : 'square-o',
@@ -57,8 +65,10 @@ export const SelectCheckbox = props => {
   const {
     blankOption = 'Selecione',
     options = [],
+    onPress = () => {},
     onSelect,
     label = 'Label',
+    errorMessage,
   } = props;
   const [collapsed, setCollapsed] = useState(true);
   const [selected, setSelected] = useState({});
@@ -80,11 +90,18 @@ export const SelectCheckbox = props => {
                 selected[option.value]
               ) {
                 setSelected({ ...selected, [option.value]: false });
-                onSelect({ ...selected, [option.value]: false });
+                onSelect(
+                  clearEmptyKeys({ ...selected, [option.value]: false })
+                );
               } else {
                 const selectionSnapshot = selected;
                 setSelected({ ...selected, [option.value]: option });
-                onSelect({ ...selectionSnapshot, [option.value]: option });
+                onSelect(
+                  clearEmptyKeys({
+                    ...selectionSnapshot,
+                    [option.value]: option,
+                  })
+                );
               }
             }}
           />
@@ -103,7 +120,7 @@ export const SelectCheckbox = props => {
     });
 
     if (Object.keys(selected).length === emptyKeys) {
-      return <Text>{blankOption}</Text>;
+      return <SelectOptionText>{blankOption}</SelectOptionText>;
     }
 
     /** Ordenando opções selecionadas por tamanho do título */
@@ -131,7 +148,9 @@ export const SelectCheckbox = props => {
               key={option.value}
               onPress={() => {
                 setSelected({ ...selected, [option.value]: false });
-                onSelect({ ...selected, [option.value]: false });
+                onSelect(
+                  clearEmptyKeys({ ...selected, [option.value]: false })
+                );
               }}
             >
               <SelectedOptionText>{option.label}</SelectedOptionText>
@@ -144,9 +163,16 @@ export const SelectCheckbox = props => {
 
   return (
     <>
-      <SelectLabel>{label}</SelectLabel>
-      <SelectContainer>
-        <SelectedOption onPress={() => setCollapsed(!collapsed)}>
+      <SelectLabel errorMessage={errorMessage && collapsed}>
+        {label}
+      </SelectLabel>
+      <SelectContainer errorMessage={errorMessage && collapsed}>
+        <SelectedOption
+          onPress={() => {
+            setCollapsed(!collapsed);
+            onPress();
+          }}
+        >
           <SelectedOptionsContainer>
             {renderSelected()}
           </SelectedOptionsContainer>
@@ -154,6 +180,7 @@ export const SelectCheckbox = props => {
         </SelectedOption>
         {renderOptions()}
       </SelectContainer>
+      {errorMessage && collapsed && <Error>{errorMessage}</Error>}
     </>
   );
 };
