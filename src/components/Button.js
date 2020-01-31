@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components/native';
+import { ActivityIndicator } from 'react-native';
 import { fontFaces } from './Text';
 import colors from '../utils/colors';
 
@@ -23,8 +24,28 @@ font-size: ${props => props.fontSize || '18px'}
   color: ${props => props.textColor || Walter};
 `;
 
-export const Button = ({ touchableProps = {}, textProps = {} }) => (
-  <ButtonContainer {...touchableProps}>
-    <ButtonText {...textProps}>{textProps.title || 'Title'}</ButtonText>
-  </ButtonContainer>
-);
+export const Button = ({ touchableProps = {}, textProps = {} }) => {
+  const { loading } = textProps;
+  const { onPress = () => {} } = touchableProps;
+  function renderButtonContent() {
+    if (textProps.loading) {
+      return <ActivityIndicator size="small" color={Walter} />;
+    }
+    const { title } = textProps;
+    return <ButtonText {...textProps}>{title || 'Title'}</ButtonText>;
+  }
+
+  return (
+    <ButtonContainer
+      disabled={loading}
+      {...touchableProps}
+      onPress={() => {
+        if (!loading) {
+          onPress();
+        }
+      }}
+    >
+      {renderButtonContent()}
+    </ButtonContainer>
+  );
+};
