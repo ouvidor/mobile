@@ -45,7 +45,16 @@ export default function AddManifestation() {
   }, [categories, types]);
 
   function addManifestation() {
-    getCategories();
+    const requiredData = {
+      title: { value: title, field: 'title' },
+      description: { value: description, field: 'description' },
+      category: { value: category, field: 'categories_id' },
+      type: { value: type, field: 'type_id' },
+    };
+
+    Object.entries(requiredData).map(entry => {
+      console.log('entry', entry);
+    });
   }
 
   return (
@@ -59,18 +68,18 @@ export default function AddManifestation() {
           // errorMessage: erro.nome,
         }}
       />
-      <Select
+      <SelectCheckbox
         label="Categoria da manifestação"
         blankOption="Selecione uma categoria"
         options={categories}
-        onSelect={option => setCategory(option.value)}
-        multiple
+        onSelect={selectedCategories => setCategory(selectedCategories)}
       />
-      <SelectCheckbox
+      <Select
         label="Tipo de manifestação"
         blankOption="Selecione um tipo"
         options={types}
-        onSelect={options => setCategories(Object.keys(options))}
+        onSelect={setType}
+        multiple
       />
       <LabeledInput
         labelProps={{ label: 'Descrição do problema' }}
