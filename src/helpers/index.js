@@ -81,6 +81,12 @@ export const getCategories = async () => {
   }
 };
 
+/**
+ * @author Lucas Sousa
+ * @since 2020.01.27
+ * @description
+ * Busca e retorna todas os tipos existentes para manifestações
+ */
 export const getTypes = async () => {
   try {
     const types = await Api.get('/type');
@@ -88,4 +94,20 @@ export const getTypes = async () => {
   } catch (e) {
     return e;
   }
+};
+
+/**
+ * @author Lucas Sousa
+ * @since 2020.01.31
+ * @description
+ * Itera por um objeto eliminando keys que tenham false como seu valor.
+ */
+export const clearEmptyKeys = obj => {
+  const newObj = {};
+  Object.keys(obj).map(key => {
+    if (obj[key]) {
+      newObj[key] = obj[key];
+    }
+  });
+  return newObj;
 };
