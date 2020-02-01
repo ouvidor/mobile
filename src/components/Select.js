@@ -65,7 +65,6 @@ export const Select = props => {
   const {
     blankOption = 'Selecione',
     options = {},
-    onPress = () => {},
     onSelect,
     label = 'Label',
     errorMessage,
@@ -105,7 +104,6 @@ export const Select = props => {
         <SelectedOption
           onPress={() => {
             setCollapsed(!collapsed);
-            onPress();
           }}
         >
           <SelectOptionText>{selected || blankOption}</SelectOptionText>
