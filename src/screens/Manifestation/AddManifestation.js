@@ -7,15 +7,19 @@ import {
   Select,
   SelectCheckbox,
 } from '../../components';
+import Api from '../../services/Api';
+import Location from '../../services/Location';
 
 export default function AddManifestation() {
   const [title, setTitle] = useState();
   const [description, setDescription] = useState();
-  const [category, setCategory] = useState();
+  const [category, setCategory] = useState([]);
   const [type, setType] = useState();
   const [categories, setCategories] = useState();
   const [types, setTypes] = useState();
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState({});
+  const [btnLoading, setBtnLoading] = useState(false);
 
   useEffect(() => {
     async function fetchCategories() {
@@ -44,17 +48,47 @@ export default function AddManifestation() {
     }
   }, [categories, types]);
 
-  function addManifestation() {
+  async function addManifestation() {
+    setBtnLoading(true);
     const requiredData = {
       title: { value: title, field: 'title' },
       description: { value: description, field: 'description' },
-      category: { value: category, field: 'categories_id' },
+      category: {
+        value: category.length > 0 ? category : false,
+        field: 'categories_id',
+      },
       type: { value: type, field: 'type_id' },
     };
 
-    Object.entries(requiredData).map(entry => {
-      console.log('entry', entry);
+    const errors = {};
+
+    Object.keys(requiredData).map(key => {
+      const entry = requiredData[key];
+      if (!entry.value) {
+        errors[key] = entry.errorMessage
+          ? entry.errorMessage
+          : 'Campo inválido';
+      }
     });
+
+    if (Object.keys(errors).length > 0) {
+      setError(errors);
+      setBtnLoading(false);
+    } else {
+      const data = {};
+      Object.keys(requiredData).map(key => {
+        const entry = requiredData[key];
+        data[entry.field] = entry.value;
+      });
+
+      Location.getCurrentPosition(location => {
+        data.latitude = location.coords.latitude;
+        data.longitude = location.coords.longitude;
+      });
+
+      const addManifestation = await Api.post('/manifestation', data);
+      setBtnLoading(false);
+    }
   }
 
   return (
@@ -64,30 +98,52 @@ export default function AddManifestation() {
         inputProps={{
           value: title,
           onChangeText: setTitle,
-          // onFocus: () => clearOnFocus('nome'),
-          // errorMessage: erro.nome,
+          onBlur: () =>
+            setError({
+              ...error,
+              title: title ? false : 'Título é obrigatório',
+            }),
+          onFocus: () => setError({ ...error, title: false }),
+          errorMessage: error.title,
         }}
       />
       <SelectCheckbox
         label="Categoria da manifestação"
         blankOption="Selecione uma categoria"
         options={categories}
-        onSelect={selectedCategories => setCategory(selectedCategories)}
+        onSelect={selectedCategories =>
+          setCategory(Object.keys(selectedCategories))
+        }
+        onPress={() =>
+          setError({
+            ...error,
+            category: category ? false : 'Campo obrigatório',
+          })
+        }
+        errorMessage={error.category}
       />
       <Select
         label="Tipo de manifestação"
         blankOption="Selecione um tipo"
         options={types}
-        onSelect={setType}
-        multiple
+        onSelect={selectedType => {
+          setType(selectedType.value);
+          setError({ ...error, type: false });
+        }}
+        errorMessage={error.type}
       />
       <LabeledInput
         labelProps={{ label: 'Descrição do problema' }}
         inputProps={{
           value: description,
           onChangeText: setDescription,
-          // onFocus: () => clearOnFocus('nome'),
-          // errorMessage: erro.nome,
+          onBlur: () =>
+            setError({
+              ...error,
+              description: description ? false : 'Descrição é obrigatório',
+            }),
+          onFocus: () => setError({ ...error, description: false }),
+          errorMessage: error.description,
           multiline: true,
           numberOfLines: 4,
         }}
@@ -96,7 +152,10 @@ export default function AddManifestation() {
         touchableProps={{
           onPress: addManifestation,
         }}
-        textProps={{ title: 'Criar manifestação, disgraça' }}
+        textProps={{
+          title: 'Criar manifestação, disgraça',
+          loading: btnLoading,
+        }}
       />
     </ScrollableContainerWithLoading>
   );
