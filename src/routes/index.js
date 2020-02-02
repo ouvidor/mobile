@@ -50,7 +50,6 @@ export default function Routes() {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Home" component={HomeTabNavigator} />
         <Stack.Screen name="Cadastro" component={Cadastro} />
-        {/* <Stack.Screen name="AddManifestation" component={AddManifestation} /> */}
       </Stack.Navigator>
     </NavigationNativeContainer>
   );
