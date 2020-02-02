@@ -994,6 +994,15 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.6.tgz#c7f2ac187c1f25aa8c30d11baa8f4398eca3bb84"
   integrity sha512-PpMoeXwPUoldCRKDuSi+zK5rT+sJTW6ri6RdGPkSKRzU77Q1d9IaR0O5IKvBj0XSdL3p+dcOa05gk35aGDffBQ==
 
+"@react-navigation/bottom-tabs@^5.0.0-alpha.39":
+  version "5.0.0-alpha.39"
+  resolved "https://registry.yarnpkg.com/@react-navigation/bottom-tabs/-/bottom-tabs-5.0.0-alpha.39.tgz#abc7b496276fe27c6b1439fa8b60b42765cee8b7"
+  integrity sha512-zskuwjXsRKw8+w3zx3aod8KoDL1zfD2moL+1CahPMpS60SCbnOx9MspVM2IVHUSzTK4NfYARHqFR8fxzv8oc6g==
+  dependencies:
+    "@react-navigation/routers" "^5.0.0-alpha.27"
+    color "^3.1.2"
+    react-native-iphone-x-helper "^1.2.1"
+
 "@react-navigation/core@^5.0.0-alpha.35":
   version "5.0.0-alpha.35"
   resolved "https://registry.yarnpkg.com/@react-navigation/core/-/core-5.0.0-alpha.35.tgz#169d96443e72c08a1f9d5c30cfd911910306d560"
@@ -1001,6 +1010,17 @@
   dependencies:
     escape-string-regexp "^2.0.0"
     query-string "^6.9.0"
+    shortid "^2.2.15"
+    use-subscription "^1.3.0"
+
+"@react-navigation/core@^5.0.0-alpha.37":
+  version "5.0.0-alpha.37"
+  resolved "https://registry.yarnpkg.com/@react-navigation/core/-/core-5.0.0-alpha.37.tgz#0e91dc2f1d46d646a5d63f882dc3c18a9e74a2cf"
+  integrity sha512-lTk7yx9jqzK3+yRxX+yz8v+1uw9aOaX1LfQFPpgwyJUAjQdZU9qqigSd/qZHtaOSg5XCOacjO+G4Qk9/hNp+Ag==
+  dependencies:
+    escape-string-regexp "^2.0.0"
+    query-string "^6.9.0"
+    react-is "^16.12.0"
     shortid "^2.2.15"
     use-subscription "^1.3.0"
 
@@ -1017,6 +1037,14 @@
   integrity sha512-xZDUa8AL/fE3pItBI2QCv0yGqVBlxdOanfpvGng/m8OoLF2aqj9s6hxjBkVjyjdOg6RoT9bz0GlJIjAXcM9ReA==
   dependencies:
     "@react-navigation/core" "^5.0.0-alpha.35"
+    shortid "^2.2.15"
+
+"@react-navigation/routers@^5.0.0-alpha.27":
+  version "5.0.0-alpha.27"
+  resolved "https://registry.yarnpkg.com/@react-navigation/routers/-/routers-5.0.0-alpha.27.tgz#ff2ce1e8d23b0668824da69ae92df0ab8f96bf45"
+  integrity sha512-uTAbElgQh3M6VhAIo/5OspUPgIbaugONKY4tOKS1GSwo3nas9TFbMDiJ9MaWN/Hjke4164hg3QLhEDEo6uev9A==
+  dependencies:
+    "@react-navigation/core" "^5.0.0-alpha.37"
     shortid "^2.2.15"
 
 "@react-navigation/stack@^5.0.0-alpha.61":
@@ -5418,7 +5446,7 @@ react-devtools-core@^3.6.3:
     shell-quote "^1.6.1"
     ws "^3.3.1"
 
-react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.9.0:
+react-is@^16.12.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.9.0:
   version "16.12.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.12.0.tgz#2cc0fe0fba742d97fd527c42a13bec4eeb06241c"
   integrity sha512-rPCkf/mWBtKc97aLL9/txD8DZdemK0vkA3JMLShjlJB3Pj3s+lpf1KaBzMfQrAmhMQB0n1cU/SUGgKKBCe837Q==
