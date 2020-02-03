@@ -86,7 +86,7 @@ export default function AddManifestation() {
         data.longitude = location.coords.longitude;
       });
 
-      const addManifestation = await Api.post('/manifestation', data);
+      const add = await Api.post('/manifestation', data);
       setBtnLoading(false);
     }
   }

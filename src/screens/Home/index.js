@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import MapView from 'react-native-maps';
 import { Container, Button } from '../../components';
-import { SignOut } from '../../helpers';
+import { SignOut, getManifestationsList } from '../../helpers';
 import Location from '../../services/Location';
 
 export default function Home({ navigation }) {
@@ -14,6 +14,7 @@ export default function Home({ navigation }) {
   };
 
   const [coords, setCoords] = useState(initialCoords);
+  const [manifestations, setManifestations] = useState([]);
 
   function updateCoordinates(location) {
     setCoords({
@@ -23,9 +24,15 @@ export default function Home({ navigation }) {
     });
   }
 
+  async function fetchManifestations() {
+    const manifestationsList = await getManifestationsList();
+    setManifestations(manifestationsList.rows);
+  }
+
   useEffect(() => {
     Location.subscribeToLocationUpdates();
     Location.getCurrentPosition(updateCoordinates);
+    fetchManifestations();
   }, []);
 
   function renderCurrentLocationMarker() {
@@ -44,10 +51,29 @@ export default function Home({ navigation }) {
     return null;
   }
 
+  function renderMarkers() {
+    return manifestations.map(manifestation => {
+      if (manifestation.location) {
+        return (
+          <MapView.Marker
+            key={manifestation.protocol}
+            coordinate={{
+              latitude: Number(manifestation.latitude),
+              longitude: Number(manifestation.longitude),
+            }}
+            title={manifestation.titulo}
+            description={manifestation.description}
+          />
+        );
+      }
+    });
+  }
+
   return (
     <Container noPadding>
       <MapView style={{ flex: 1 }} initialRegion={coords}>
         {renderCurrentLocationMarker()}
+        {renderMarkers()}
       </MapView>
 
       <Button
