@@ -52,6 +52,9 @@ export default function Home({ navigation }) {
   }
 
   function renderMarkers() {
+    if(!manifestations){
+      return;
+    }
     return manifestations.map(manifestation => {
       if (manifestation.location) {
         return (
