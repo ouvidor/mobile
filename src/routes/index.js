@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { NavigationNativeContainer } from '@react-navigation/native';
+import { NavigationNativeContainer, useRoute } from '@react-navigation/native';
 import {
   createStackNavigator,
   CardStyleInterpolators,
@@ -24,9 +24,19 @@ import Menu from '../screens/Menu';
 const Stack = createStackNavigator();
 
 function getTabBarIcon(route) {
+  const navigationTab = useRoute();
+
+  let currentName = navigationTab.state
+    ?
+      navigationTab.state.routeNames[navigationTab.state.index]
+    :
+      'Home'
+
+  let tabColor = currentName == route.name ? "blue" : "green";
+
   const tabBarIcons = {
-    Home: <Ionicons name="ios-home" color="blue" />,
-    default: <Ionicons name="ios-home" color="green" />,
+    Home: <Ionicons name="ios-home" color={tabColor} />,
+    default: <Ionicons name="ios-home" color={tabColor} />,
   };
 
   return tabBarIcons[route.name] || tabBarIcons.default;
