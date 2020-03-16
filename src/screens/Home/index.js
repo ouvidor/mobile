@@ -4,6 +4,7 @@ import MapView from 'react-native-maps';
 import { Container, Button } from '../../components';
 import { SignOut, getManifestationsList } from '../../helpers';
 import Location from '../../services/Location';
+import Manifestation from '../../Models/Manifestation';
 
 export default function Home({ navigation }) {
   const initialCoords = {
@@ -25,7 +26,7 @@ export default function Home({ navigation }) {
   }
 
   async function fetchManifestations() {
-    const manifestationsList = await getManifestationsList();
+    const manifestationsList = await Manifestation.fetchAll();
     setManifestations(manifestationsList.rows);
   }
 
@@ -52,12 +53,12 @@ export default function Home({ navigation }) {
   }
 
   function renderMarkers() {
-    if(!manifestations){
-      return;
-    }
-    return manifestations.map(manifestation => {
+    if (!manifestations) return null;
+    const markers = [];
+
+    manifestations.map(manifestation => {
       if (manifestation.location) {
-        return (
+        markers.push(
           <MapView.Marker
             key={manifestation.protocol}
             coordinate={{
@@ -70,6 +71,8 @@ export default function Home({ navigation }) {
         );
       }
     });
+
+    return markers;
   }
 
   return (
@@ -79,7 +82,7 @@ export default function Home({ navigation }) {
         {renderMarkers()}
       </MapView>
 
-      <Button
+      {/* <Button
         touchableProps={{
           onPress: async () => {
             const signOut = await SignOut();
@@ -95,7 +98,7 @@ export default function Home({ navigation }) {
           onPress: () => navigation.navigate('AddManifestation'),
         }}
         textProps={{ title: 'Criar' }}
-      />
+      /> */}
     </Container>
   );
 }

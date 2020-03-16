@@ -26,13 +26,11 @@ const Stack = createStackNavigator();
 function getTabBarIcon(route) {
   const navigationTab = useRoute();
 
-  let currentName = navigationTab.state
-    ?
-      navigationTab.state.routeNames[navigationTab.state.index]
-    :
-      'Home'
+  const currentName = navigationTab.state
+    ? navigationTab.state.routeNames[navigationTab.state.index]
+    : 'Home';
 
-  let tabColor = currentName == route.name ? "blue" : "green";
+  const tabColor = currentName === route.name ? 'blue' : 'green';
 
   const tabBarIcons = {
     Home: <Ionicons name="ios-home" color={tabColor} />,
