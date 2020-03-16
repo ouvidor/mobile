@@ -98,21 +98,6 @@ export const getTypes = async () => {
 
 /**
  * @author Lucas Sousa
- * @since 2020.02.01
- * @description
- * Busca e retorna uma lista de todas as manifestações
- */
-export const getManifestationsList = async () => {
-  try {
-    const manifestationList = await Api.get('/manifestation');
-    return manifestationList;
-  } catch (e) {
-    return e;
-  }
-};
-
-/**
- * @author Lucas Sousa
  * @since 2020.01.31
  * @description
  * Itera por um objeto eliminando keys que tenham false como seu valor.
