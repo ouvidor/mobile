@@ -10,7 +10,8 @@ import {
   CardStyleInterpolators,
 } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
+import { TabBarLabel } from '../components';
 
 /** Importação das telas */
 import Splash from '../screens/Splash';
@@ -20,33 +21,61 @@ import Cadastro from '../screens/Cadastro';
 import AddManifestation from '../screens/Manifestation/AddManifestation';
 import Menu from '../screens/Menu';
 
+/** Component para */
+
 /** Criando Stack. Navigators que sejam uma stack utilizarão Stack.Navigator e Stack.Screen */
 const Stack = createStackNavigator();
 
-function getTabBarIcon(route) {
+/**
+ * @param {object} route
+ * @author Lucas Sousa
+ * @since 2020.04.04
+ * @description
+ * Método onde definimos todas as configurações para determinada rota.
+ */
+function getScreenOptionsForRoute(route) {
+  /** Definindo rota atual */
   const navigationTab = useRoute();
+  const { state } = navigationTab;
+  const currentRoute = state ? state.routeNames[state.index] : 'Home';
+  const tabColor = currentRoute === route.name ? 'blue' : '#646464';
+  const iconSize = 21;
 
-  const currentName = navigationTab.state
-    ? navigationTab.state.routeNames[navigationTab.state.index]
-    : 'Home';
-
-  const tabColor = currentName === route.name ? 'blue' : 'green';
-
-  const tabBarIcons = {
-    Home: <Ionicons name="ios-home" color={tabColor} />,
-    default: <Ionicons name="ios-home" color={tabColor} />,
+  const screenOptions = {
+    Home: {
+      tabBarIcon: () => (
+        <Feather name="home" color={tabColor} size={iconSize} />
+      ),
+      tabBarLabel: () => <TabBarLabel>Início</TabBarLabel>,
+    },
+    AddManifestation: {
+      tabBarIcon: () => (
+        <Feather name="plus-circle" color={tabColor} size={iconSize} />
+      ),
+      tabBarLabel: () => <TabBarLabel>Criar</TabBarLabel>,
+    },
+    Menu: {
+      tabBarIcon: () => (
+        <Feather name="menu" color={tabColor} size={iconSize} />
+      ),
+      tabBarLabel: () => <TabBarLabel>Menu</TabBarLabel>,
+    },
+    default: {
+      tabBarIcon: () => (
+        <Feather name="home" color={tabColor} size={iconSize} />
+      ),
+      tabBarLabel: () => <TabBarLabel>Title</TabBarLabel>,
+    },
   };
 
-  return tabBarIcons[route.name] || tabBarIcons.default;
+  return screenOptions[route.name] || screenOptions.default;
 }
 
 const HomeTabs = createBottomTabNavigator();
 const HomeTabNavigator = () => {
   return (
     <HomeTabs.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: () => getTabBarIcon(route),
-      })}
+      screenOptions={({ route }) => getScreenOptionsForRoute(route)}
     >
       <HomeTabs.Screen name="Home" component={Home} />
       <HomeTabs.Screen name="AddManifestation" component={AddManifestation} />

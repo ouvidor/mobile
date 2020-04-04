@@ -1,4 +1,7 @@
 import styled from 'styled-components/native';
+import colors from '../utils/colors';
+
+const { globalColors } = colors;
 
 /**
  * @const fontFaces
@@ -29,6 +32,15 @@ export const fontFaces = {
  * fontFamily possa ser mapeada a uma fonte em fontFaces.
  */
 export const Text = styled.Text`
-  color: black;
+  color: ${props =>
+    props.color ? props.color : globalColors.text.primaryColor};
   font-family: ${props => fontFaces[props.fontFamily] || fontFaces.Regular};
 `;
+
+/**
+ * @author Lucas Sousa
+ * @since 2020.04.04
+ * @description
+ * Component usado como label de tabs do BottomTabNavigator.
+ */
+export const TabBarLabel = styled(Text)``;
