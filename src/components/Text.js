@@ -43,4 +43,7 @@ export const Text = styled.Text`
  * @description
  * Component usado como label de tabs do BottomTabNavigator.
  */
-export const TabBarLabel = styled(Text)``;
+export const TabBarLabel = styled(Text)`
+  color: ${props =>
+    props.focused ? globalColors.primaryColor : globalColors.text.primaryColor};
+`;

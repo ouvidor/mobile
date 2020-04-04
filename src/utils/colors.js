@@ -10,6 +10,7 @@ export default {
   Walter: '#FFF', // FUCK YOU, SKYLER.
   SuccessGreen: '#62D46B', // Verde padrão para sucesso.
   globalColors: {
+    primaryColor: '#9762F5',
     text: {
       primaryColor: '#646464',
     },

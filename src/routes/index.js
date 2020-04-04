@@ -12,6 +12,7 @@ import {
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Feather from 'react-native-vector-icons/Feather';
 import { TabBarLabel } from '../components';
+import colors from '../utils/colors';
 
 /** Importação das telas */
 import Splash from '../screens/Splash';
@@ -38,7 +39,10 @@ function getScreenOptionsForRoute(route) {
   const navigationTab = useRoute();
   const { state } = navigationTab;
   const currentRoute = state ? state.routeNames[state.index] : 'Home';
-  const tabColor = currentRoute === route.name ? 'blue' : '#646464';
+  /** Definindo estilo para icon/label */
+  const { globalColors } = colors;
+  const tabColor =
+    currentRoute === route.name ? globalColors.primaryColor : '#646464';
   const iconSize = 21;
 
   const screenOptions = {
@@ -46,25 +50,33 @@ function getScreenOptionsForRoute(route) {
       tabBarIcon: () => (
         <Feather name="home" color={tabColor} size={iconSize} />
       ),
-      tabBarLabel: () => <TabBarLabel>Início</TabBarLabel>,
+      tabBarLabel: ({ focused }) => (
+        <TabBarLabel focused={focused}>Início</TabBarLabel>
+      ),
     },
     AddManifestation: {
       tabBarIcon: () => (
         <Feather name="plus-circle" color={tabColor} size={iconSize} />
       ),
-      tabBarLabel: () => <TabBarLabel>Criar</TabBarLabel>,
+      tabBarLabel: ({ focused }) => (
+        <TabBarLabel focused={focused}>Criar</TabBarLabel>
+      ),
     },
     Menu: {
       tabBarIcon: () => (
         <Feather name="menu" color={tabColor} size={iconSize} />
       ),
-      tabBarLabel: () => <TabBarLabel>Menu</TabBarLabel>,
+      tabBarLabel: ({ focused }) => (
+        <TabBarLabel focused={focused}>Menu</TabBarLabel>
+      ),
     },
     default: {
       tabBarIcon: () => (
         <Feather name="home" color={tabColor} size={iconSize} />
       ),
-      tabBarLabel: () => <TabBarLabel>Title</TabBarLabel>,
+      tabBarLabel: ({ focused }) => (
+        <TabBarLabel focused={focused}>Title</TabBarLabel>
+      ),
     },
   };
 
