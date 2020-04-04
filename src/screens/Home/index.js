@@ -2,11 +2,10 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import MapView from 'react-native-maps';
-import { Container, Button } from '../../components';
-import { SignOut, getManifestationsList } from '../../helpers';
+import Device from 'react-native-device-info';
+import { Container, Text, Button } from '../../components';
 import Location from '../../services/Location';
 import Manifestation from '../../services/Manifestation';
-import Device from '../../services/Device';
 
 export default function Home({ navigation }) {
   const initialCoords = {
@@ -18,7 +17,12 @@ export default function Home({ navigation }) {
 
   const [coords, setCoords] = useState(initialCoords);
   const [manifestations, setManifestations] = useState([]);
+  const [locationEnabled, setLocationEnabled] = useState(false);
 
+  /**
+   * @desc Método invocado toda vez que há uma atualização na localização.
+   * Recebo as coordenadas, e atualizo o state.
+   */
   function updateCoordinates(location) {
     setCoords({
       ...coords,
@@ -27,16 +31,36 @@ export default function Home({ navigation }) {
     });
   }
 
+  /**
+   * @desc Método para buscar uma lista the manifestações
+   */
   async function fetchManifestations() {
-    const manifestationsList = await Manifestation.fetchAll();
-    setManifestations(manifestationsList.rows);
+    const manifestationList = await Manifestation.fetchAll();
+    setManifestations(manifestationList.rows);
+  }
+
+  /**
+   * @author Lucas Sousa
+   * @since 2020.04.04
+   * @description
+   * Método para checar se a localização do dispositivo está habilitada
+   */
+  async function checkIfLocationEnabled() {
+    const enabled = await Device.isLocationEnabled();
+    setLocationEnabled(enabled);
   }
 
   useEffect(() => {
-    Location.subscribeToLocationUpdates();
-    Location.getCurrentPosition(updateCoordinates);
-    fetchManifestations();
+    checkIfLocationEnabled();
   }, []);
+  useEffect(() => {
+    if (locationEnabled) {
+      Location.getPermissionAndroid();
+      Location.subscribeToLocationUpdates();
+      Location.getCurrentPosition(updateCoordinates);
+      fetchManifestations();
+    }
+  }, [locationEnabled]);
 
   function renderCurrentLocationMarker() {
     if (Location.permissionGranted) {
@@ -46,8 +70,8 @@ export default function Home({ navigation }) {
             latitude: coords.latitude,
             longitude: coords.longitude,
           }}
-          title="title"
-          description="description"
+          title="Localização atual"
+          description="Você está aqui!"
         />
       );
     }
@@ -77,30 +101,29 @@ export default function Home({ navigation }) {
     return markers;
   }
 
+  if (!locationEnabled) {
+    return (
+      <Container>
+        <Text>Sem localização</Text>
+        <Button
+          touchableProps={{
+            onPress: checkIfLocationEnabled,
+          }}
+          textProps={{
+            title: 'Atualizar',
+            loading: false,
+          }}
+        />
+      </Container>
+    );
+  }
+
   return (
     <Container noPadding>
       <MapView style={{ flex: 1 }} initialRegion={coords}>
         {renderCurrentLocationMarker()}
         {renderMarkers()}
       </MapView>
-
-      {/* <Button
-        touchableProps={{
-          onPress: async () => {
-            const signOut = await SignOut();
-            if (signOut) {
-              navigation.replace('Login');
-            }
-          },
-        }}
-        textProps={{ title: 'Sair' }}
-      />
-      <Button
-        touchableProps={{
-          onPress: () => navigation.navigate('AddManifestation'),
-        }}
-        textProps={{ title: 'Criar' }}
-      /> */}
     </Container>
   );
 }
