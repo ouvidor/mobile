@@ -11,4 +11,10 @@ export default {
   SuccessGreen: '#62D46B', // Verde padrão para sucesso.
   Blu: '#3889D3', // Um ótimo amigo imaginário.
 
+  globalColors: {
+    primaryColor: '#9762F5',
+    text: {
+      primaryColor: '#646464',
+    },
+  },
 };

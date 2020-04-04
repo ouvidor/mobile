@@ -3,7 +3,7 @@ import { PermissionsAndroid } from 'react-native';
 
 class Location {
   constructor() {
-    this.permissionGranted = this.getPermissionAndroid();
+    this.permissionGranted = false;
     this.currentCoords = {};
     this.error = null;
     this.timestamp = null;
