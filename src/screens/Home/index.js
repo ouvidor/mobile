@@ -1,10 +1,12 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import MapView from 'react-native-maps';
 import { Container, Button } from '../../components';
 import { SignOut, getManifestationsList } from '../../helpers';
 import Location from '../../services/Location';
-import Manifestation from '../../Models/Manifestation';
+import Manifestation from '../../services/Manifestation';
+import Device from '../../services/Device';
 
 export default function Home({ navigation }) {
   const initialCoords = {
