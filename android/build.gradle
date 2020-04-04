@@ -8,6 +8,7 @@ buildscript {
         targetSdkVersion = 28
         supportLibVersion = "28.0.0"
         googlePlayServicesVersion = "16.1.0"
+        googlePlayServicesIidVersion = "16.0.1" // Workaround for RNDeviceInfo
         androidMapsUtilsVersion = "0.5+"
     }
     repositories {
