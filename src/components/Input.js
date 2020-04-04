@@ -44,7 +44,9 @@ const Error = styled(Text)`
 
 export const LabeledInput = ({ labelProps = {}, inputProps = {} }) => (
   <InputContainer>
-    <Label {...inputProps}>{labelProps.label || 'Label'}</Label>
+    {labelProps.label &&
+     <Label {...inputProps}>{labelProps.label || 'Label'}</Label>
+    }
     <Input {...inputProps} />
     {inputProps.errorMessage && <Error>{inputProps.errorMessage}</Error>}
   </InputContainer>

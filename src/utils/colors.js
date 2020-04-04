@@ -9,4 +9,6 @@ export default {
   Purple: '#9762F5', // Só roxo, sem referência.
   Walter: '#FFF', // FUCK YOU, SKYLER.
   SuccessGreen: '#62D46B', // Verde padrão para sucesso.
+  Blu: '#3889D3', // Um ótimo amigo imaginário.
+
 };

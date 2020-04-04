@@ -10,6 +10,7 @@ const { Purple, Walter } = colors;
 const ButtonContainer = styled.TouchableOpacity.attrs({
   activeOpacity: 0.7,
 })`
+  width: 100%;
   background: ${props => props.background || Purple};
   padding: 10px 25px;
   margin: 5px 10px;
