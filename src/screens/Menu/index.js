@@ -10,7 +10,7 @@ export default function Menu({ navigation }) {
         onPress={async () => {
           const signOut = await SignOut();
           if (signOut) {
-            navigation.replace('Login');
+            navigation.dangerouslyGetParent().replace('Login');
           }
         }}
       >
