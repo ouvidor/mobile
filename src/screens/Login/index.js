@@ -19,6 +19,7 @@ export default function Login({ navigation }) {
   }
 
   async function handleLogin() {
+    setBtnLoading(true);
     const requiredData = {
       email: { field: 'email', value: email },
       password: { field: 'password', value: password },
@@ -55,6 +56,7 @@ export default function Login({ navigation }) {
         navigation.replace('Home');
       }
     }
+    setBtnLoading(false);
   }
 
   return (

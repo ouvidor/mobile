@@ -21,6 +21,7 @@ export default function Cadastro({ navigation }) {
   const [senha, setSenha] = useState();
   const [erro, setErro] = useState({});
   const [actionError, setActionError] = useState();
+  const [btnLoading, setBtnLoading] = useState(false);
 
   useEffect(() => setActionError(null), [nome, sobrenome, email, senha]);
 
@@ -62,6 +63,7 @@ export default function Cadastro({ navigation }) {
    * Valida os dados do formulário e cadastra o usuário
    */
   async function handleSignUp() {
+    setBtnLoading(true);
     const requiredData = {
       nome: { field: 'first_name', value: nome },
       sobrenome: { field: 'last_name', value: sobrenome },
@@ -101,6 +103,7 @@ export default function Cadastro({ navigation }) {
         navigation.replace('Home');
       }
     }
+    setBtnLoading(false);
   }
 
   return (
