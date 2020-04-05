@@ -1,13 +1,18 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
+import { View } from 'react-native';
+import { StandardBackground } from '../../components/BackgroundImage';
 import {
   ScrollableContainer,
   LabeledInput,
   Button,
   Text,
 } from '../../components';
+import { ContainerForm } from './styles';
 import { validarEmail, SignIn } from '../../helpers';
 import Api from '../../services/Api';
+import colors from '../../utils/colors';
+
 
 export default function Cadastro({ navigation }) {
   const [nome, setNome] = useState();
@@ -99,55 +104,75 @@ export default function Cadastro({ navigation }) {
   }
 
   return (
-    <ScrollableContainer>
-      <LabeledInput
-        labelProps={{ label: 'Nome' }}
-        inputProps={{
-          value: nome,
-          onChangeText: setNome,
-          onFocus: () => clearOnFocus('nome'),
-          errorMessage: erro.nome,
-        }}
-      />
-      <LabeledInput
-        labelProps={{ label: 'Sobrenome' }}
-        inputProps={{
-          value: sobrenome,
-          onChangeText: setSobrenome,
-          onFocus: () => clearOnFocus('sobrenome'),
-          errorMessage: erro.sobrenome,
-        }}
-      />
-      <LabeledInput
-        labelProps={{ label: 'E-mail' }}
-        inputProps={{
-          value: email,
-          onChangeText: setEmail,
-          onBlur: () =>
-            validateOnBlur(email, 'email', validarEmail, 'E-mail inválido'),
-          onFocus: () => clearOnFocus('email'),
-          errorMessage: erro.email,
-          autoCapitalize: 'none',
-        }}
-      />
-      <LabeledInput
-        labelProps={{ label: 'Senha' }}
-        inputProps={{
-          value: senha,
-          onChangeText: setSenha,
-          secureTextEntry: true,
-          onFocus: () => clearOnFocus('senha'),
-          errorMessage: erro.senha,
-          autoCapitalize: 'none',
-        }}
-      />
+    <StandardBackground>
+      <ScrollableContainer>
+        <ContainerForm>
+          <LabeledInput
+            inputProps={{
+              value: nome,
+              onChangeText: setNome,
+              onFocus: () => clearOnFocus('nome'),
+              errorMessage: erro.nome,
+              placeholder: 'Nome'
+            }}
+          />
+          <LabeledInput
+            inputProps={{
+              value: sobrenome,
+              onChangeText: setSobrenome,
+              onFocus: () => clearOnFocus('sobrenome'),
+              errorMessage: erro.sobrenome,
+              placeholder: 'Sobrenome'
+            }}
+          />
+          <LabeledInput
+            inputProps={{
+              value: email,
+              onChangeText: setEmail,
+              onBlur: () =>
+                validateOnBlur(email, 'email', validarEmail, 'E-mail inválido'),
+              onFocus: () => clearOnFocus('email'),
+              errorMessage: erro.email,
+              autoCapitalize: 'none',
+              placeholder: 'E-mail'
+            }}
+          />
+          <LabeledInput
+            inputProps={{
+              value: senha,
+              onChangeText: setSenha,
+              secureTextEntry: true,
+              onFocus: () => clearOnFocus('senha'),
+              errorMessage: erro.senha,
+              autoCapitalize: 'none',
+              placeholder: 'Senha',
+            }}
+          />
 
-      <Text>{actionError}</Text>
+          <Text>{actionError}</Text>
 
-      <Button
-        touchableProps={{ onPress: handleSignUp }}
-        textProps={{ title: 'Cadastrar' }}
-      />
-    </ScrollableContainer>
+          <Button
+            touchableProps={{ onPress: handleSignUp, background: colors.Blu }}
+            textProps={{
+              title: 'Cadastrar',
+              loading: btnLoading,
+            }}
+
+          />
+          <View style={{alignItems: 'center', marginTop: 20}}>
+            <Text>Já tem conta?</Text>
+            <Text
+              style={{
+                lineHeight: 20,
+                fontSize: 18,
+                fontWeight: 'bold',
+                color: colors.Blu
+              }}
+              onPress={() => navigation.navigate('Login')}>Faça login!
+            </Text>
+          </View>
+        </ContainerForm>
+     </ScrollableContainer>
+    </StandardBackground>
   );
 }

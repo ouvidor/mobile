@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
-import { View, ImageBackground } from 'react-native';
+import { View } from 'react-native';
 import { Container, Button, LabeledInput, Text } from '../../components';
+import { StandardBackground } from '../../components/BackgroundImage';
 import { SignIn } from '../../helpers';
 import { ContainerForm } from './styles';
 import colors from '../../utils/colors';
@@ -11,6 +12,7 @@ export default function Login({ navigation }) {
   const [password, setPassword] = useState();
   const [error, setError] = useState({});
   const [actionError, setActionError] = useState();
+  const [btnLoading, setBtnLoading] = useState(false);
 
   function clearOnFocus(field) {
     setError({ ...error, [field]: null });
@@ -57,60 +59,66 @@ export default function Login({ navigation }) {
 
   return (
     <Container noPadding>
-      <ImageBackground
-        style={{flex:1, backgroundColor: '#d0dae0'}}
-        imageStyle={{flex: 1}}
-        resizeMode ='repeat'
-        resizeMethod = 'resize'
-        source={require('../../assets/images/hideout.png')}
-      >
-      <ContainerForm >
-        <LabeledInput
-          inputProps={{
-            value: email,
-            onChangeText: setEmail,
-            onFocus: () => clearOnFocus('email'),
-            errorMessage: error.email,
-            autoCapitalize: 'none',
-            placeholder: 'Email'
-          }}
-        />
+      <StandardBackground>
+        <ContainerForm >
+          <LabeledInput
+            inputProps={{
+              value: email,
+              onChangeText: setEmail,
+              onFocus: () => clearOnFocus('email'),
+              errorMessage: error.email,
+              autoCapitalize: 'none',
+              placeholder: 'Email'
+            }}
+          />
 
-        <LabeledInput
-          inputProps={{
-            value: password,
-            onChangeText: setPassword,
-            onFocus: () => clearOnFocus('password'),
-            errorMessage: error.password,
-            autoCapitalize: 'none',
-            secureTextEntry: true,
-            placeholder: 'Senha'
-          }}
-        />
+          <LabeledInput
+            inputProps={{
+              value: password,
+              onChangeText: setPassword,
+              onFocus: () => clearOnFocus('password'),
+              errorMessage: error.password,
+              autoCapitalize: 'none',
+              secureTextEntry: true,
+              placeholder: 'Senha',
+            }}
+          />
 
-        <Text>{actionError}</Text>
-        <View
-          style={{
-            width: '100%',
-            alignSelf: 'center',
-            borderBottomColor: 'gray',
-            borderBottomWidth: .6,
-            marginBottom: 20
-          }}
-        />
+          <Text>{actionError}</Text>
 
-        <Button
-          touchableProps={{ onPress: handleLogin, background: colors.Blu }}
-          textProps={{ title: 'Login' }}
-          style={{width: '100%'}}
-        />
+          <View
+            style={{
+              width: '100%',
+              alignSelf: 'center',
+              borderBottomColor: colors.BlackSirius,
+              borderBottomWidth: .4,
+              marginBottom: 20
+            }}
+          />
 
-        <View style={{alignItems: 'center', marginTop: 20}}>
-          <Text>Não tem conta?</Text>
-          <Text style={{fontWeight: 'bold', color: colors.Blu}} onPress={() => navigation.navigate('Cadastro')}>Cadastre-se já</Text>
-        </View>
-      </ContainerForm>
-      </ImageBackground>
+          <Button
+            touchableProps={{ onPress: handleLogin, background: colors.Blu }}
+            textProps={{
+              title: 'Login',
+              loading: btnLoading,
+            }}
+            style={{width: '100%'}}
+          />
+
+          <View style={{alignItems: 'center', marginTop: 20}}>
+            <Text>Não tem conta?</Text>
+            <Text
+              style={{
+                lineHeight: 20,
+                fontSize: 18,
+                fontWeight: 'bold',
+                color: colors.Blu
+              }}
+              onPress={() => navigation.navigate('Cadastro')}>Cadastre-se já
+            </Text>
+          </View>
+        </ContainerForm>
+      </StandardBackground>
     </Container>
   );
 }

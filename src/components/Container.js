@@ -39,6 +39,7 @@ export const CenteredContainer = styled.View`
  */
 export const ScrollableContainer = styled.ScrollView.attrs({
   keyboardShouldPersistTaps: 'handled',
+  contentContainerStyle: {flexGrow: 1}
 })`
   flex: 1;
   padding: 0 10px;

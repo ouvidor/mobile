@@ -16,17 +16,17 @@ const {
 export const Input = styled.TextInput`
   font-size: ${props => props.fontSize || '16px'};
   font-family: ${props => fontFaces[props.fontFamily] || fontFaces.Regular};
-  border: ${StyleSheet.hairlineWidth}px;
+  border: ${props => props.border ? StyleSheet.hairlineWidth + 'px' : 'none'};
   border-color: ${props => (props.errorMessage ? MarioCap : BlackSirius)};
   border-radius: 5px;
   padding: 10px;
   color: ${props => (props.errorMessage ? MarioCap : BlackSirius)};
   background: ${props => (props.errorMessage ? ErrorBackground : Walter)};
-  elevation: 1;
+  elevation: ${props => props.shadow ? 1 : 0};
 `;
 
 const InputContainer = styled.View`
-  margin: 5px 0;
+  margin: 8px 0;
 `;
 
 const Label = styled(Text)`
