@@ -3,7 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import MapView from 'react-native-maps';
 import Device from 'react-native-device-info';
-import { Container, Text, Button } from '../../components';
+import {
+  Container,
+  Text,
+  Button,
+  ManifestationDetailsModal,
+} from '../../components';
 import Location from '../../services/Location';
 import Manifestation from '../../services/Manifestation';
 
@@ -18,6 +23,8 @@ export default function Home({ navigation }) {
   const [coords, setCoords] = useState(initialCoords);
   const [manifestations, setManifestations] = useState([]);
   const [locationEnabled, setLocationEnabled] = useState(false);
+  /** Controle do Modal */
+  const [modalVisible, setModalVisible] = useState(false);
 
   /**
    * @desc Método invocado toda vez que há uma atualização na localização.
@@ -93,6 +100,7 @@ export default function Home({ navigation }) {
             }}
             title={manifestation.titulo}
             description={manifestation.description}
+            onPress={() => setModalVisible(!modalVisible)}
           />
         );
       }
@@ -124,6 +132,10 @@ export default function Home({ navigation }) {
         {renderCurrentLocationMarker()}
         {renderMarkers()}
       </MapView>
+      <ManifestationDetailsModal
+        isVisible={modalVisible}
+        close={() => setModalVisible(false)}
+      />
     </Container>
   );
 }

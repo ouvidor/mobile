@@ -13,6 +13,8 @@ export default {
 
   globalColors: {
     primaryColor: '#9762F5',
+    dark: '#646464',
+    success: 'green',
     text: {
       primaryColor: '#646464',
     },

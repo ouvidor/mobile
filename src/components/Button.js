@@ -2,10 +2,10 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { ActivityIndicator } from 'react-native';
-import { fontFaces } from './Text';
+import { Text, fontFaces } from './Text';
 import colors from '../utils/colors';
 
-const { Purple, Walter } = colors;
+const { Purple, Walter, globalColors } = colors;
 
 const ButtonContainer = styled.TouchableOpacity.attrs({
   activeOpacity: 0.7,
@@ -48,5 +48,35 @@ export const Button = ({ touchableProps = {}, textProps = {} }) => {
     >
       {renderButtonContent()}
     </ButtonContainer>
+  );
+};
+
+const OutlinedButtonContainer = styled.TouchableOpacity.attrs(() => ({
+  activeOpacity: 0.7,
+}))`
+  flex: 1;
+  flex-direction: row;
+  background: transparent;
+  border: 1px solid
+    ${props => (props.color ? props.color : globalColors.primaryColor)};
+  padding: 5px 0;
+  border-radius: 15px;
+  margin-top: 5px;
+  justify-content: center;
+  align-items: center;
+`;
+const OutlinedButtonText = styled(Text)`
+  color: ${props => (props.color ? props.color : globalColors.primaryColor)};
+  text-align: center;
+  font-size: 14px;
+`;
+
+export const OutlinedButton = props => {
+  const { children } = props;
+
+  return (
+    <OutlinedButtonContainer {...props}>
+      <OutlinedButtonText {...props}>{children}</OutlinedButtonText>
+    </OutlinedButtonContainer>
   );
 };
