@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
+import { useNetInfo } from "@react-native-community/netinfo";
 import { StandardBackground } from '../../components/BackgroundImage';
 import {
   ScrollableContainer,
@@ -22,6 +23,7 @@ export default function Cadastro({ navigation }) {
   const [erro, setErro] = useState({});
   const [actionError, setActionError] = useState();
   const [btnLoading, setBtnLoading] = useState(false);
+  const netInfo = useNetInfo();
 
   useEffect(() => setActionError(null), [nome, sobrenome, email, senha]);
 
@@ -106,6 +108,14 @@ export default function Cadastro({ navigation }) {
     setBtnLoading(false);
   }
 
+  function CheckConnectivity() {
+    if (netInfo.isConnected) {
+      handleSignUp();
+    } else {
+      setActionError('Você está sem conexão a rede')
+    }
+  };
+
   return (
     <StandardBackground>
       <ScrollableContainer>
@@ -155,7 +165,7 @@ export default function Cadastro({ navigation }) {
           <Text>{actionError}</Text>
 
           <Button
-            touchableProps={{ onPress: handleSignUp, background: colors.Blu }}
+            touchableProps={{ onPress: CheckConnectivity, background: colors.Blu }}
             textProps={{
               title: 'Cadastrar',
               loading: btnLoading,
