@@ -66,6 +66,15 @@ class Api {
       return e.response.data;
     }
   }
+
+  async put(url, params) {
+    try {
+      const req = await this.api.put(url, params);
+      return req.data;
+    } catch (e) {
+      return e.response.data;
+    }
+  }
 }
 
 export default new Api();
