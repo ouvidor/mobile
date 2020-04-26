@@ -1,11 +1,13 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View } from 'react-native';
 import { Container, Button, LabeledInput, Text } from '../../components';
 import { StandardBackground } from '../../components/BackgroundImage';
 import { SignIn } from '../../helpers';
 import { ContainerForm } from './styles';
 import colors from '../../utils/colors';
+import { SessionContext } from '../../store/session';
+import { signIn } from '../../store/session/actions';
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState();
@@ -13,6 +15,7 @@ export default function Login({ navigation }) {
   const [error, setError] = useState({});
   const [actionError, setActionError] = useState();
   const [btnLoading, setBtnLoading] = useState(false);
+  const { dispatch } = useContext(SessionContext);
 
   function clearOnFocus(field) {
     setError({ ...error, [field]: null });
@@ -49,6 +52,7 @@ export default function Login({ navigation }) {
 
     if (valid) {
       const login = await SignIn(payload.email, payload.password);
+      dispatch(signIn({ token: login.token, profile: login.user }));
 
       if ('error' in login) {
         setActionError(login.messages ? login.messages[0] : login.error);
@@ -62,7 +66,7 @@ export default function Login({ navigation }) {
   return (
     <Container noPadding>
       <StandardBackground>
-        <ContainerForm >
+        <ContainerForm>
           <LabeledInput
             inputProps={{
               value: email,
@@ -70,7 +74,7 @@ export default function Login({ navigation }) {
               onFocus: () => clearOnFocus('email'),
               errorMessage: error.email,
               autoCapitalize: 'none',
-              placeholder: 'Email'
+              placeholder: 'Email',
             }}
           />
 
@@ -93,8 +97,8 @@ export default function Login({ navigation }) {
               width: '100%',
               alignSelf: 'center',
               borderBottomColor: colors.BlackSirius,
-              borderBottomWidth: .4,
-              marginBottom: 20
+              borderBottomWidth: 0.4,
+              marginBottom: 20,
             }}
           />
 
@@ -104,19 +108,21 @@ export default function Login({ navigation }) {
               title: 'Login',
               loading: btnLoading,
             }}
-            style={{width: '100%'}}
+            style={{ width: '100%' }}
           />
 
-          <View style={{alignItems: 'center', marginTop: 20}}>
+          <View style={{ alignItems: 'center', marginTop: 20 }}>
             <Text>Não tem conta?</Text>
             <Text
               style={{
                 lineHeight: 20,
                 fontSize: 18,
                 fontWeight: 'bold',
-                color: colors.Blu
+                color: colors.Blu,
               }}
-              onPress={() => navigation.navigate('Cadastro')}>Cadastre-se já
+              onPress={() => navigation.navigate('Cadastro')}
+            >
+              Cadastre-se já
             </Text>
           </View>
         </ContainerForm>
