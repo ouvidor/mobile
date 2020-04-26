@@ -16,13 +16,13 @@ const {
 export const Input = styled.TextInput`
   font-size: ${props => props.fontSize || '16px'};
   font-family: ${props => fontFaces[props.fontFamily] || fontFaces.Regular};
-  border: ${props => props.border ? StyleSheet.hairlineWidth + 'px' : 'none'};
+  border: ${StyleSheet.hairlineWidth}px;
   border-color: ${props => (props.errorMessage ? MarioCap : BlackSirius)};
   border-radius: 5px;
   padding: 10px;
   color: ${props => (props.errorMessage ? MarioCap : BlackSirius)};
   background: ${props => (props.errorMessage ? ErrorBackground : Walter)};
-  elevation: ${props => props.shadow ? 1 : 0};
+  elevation: ${props => (props.shadow ? 1 : 0)};
 `;
 
 const InputContainer = styled.View`
@@ -44,9 +44,9 @@ const Error = styled(Text)`
 
 export const LabeledInput = ({ labelProps = {}, inputProps = {} }) => (
   <InputContainer>
-    {labelProps.label &&
-     <Label {...inputProps}>{labelProps.label || 'Label'}</Label>
-    }
+    {labelProps.label && (
+      <Label {...inputProps}>{labelProps.label || 'Label'}</Label>
+    )}
     <Input {...inputProps} />
     {inputProps.errorMessage && <Error>{inputProps.errorMessage}</Error>}
   </InputContainer>

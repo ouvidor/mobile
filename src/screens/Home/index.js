@@ -25,6 +25,8 @@ export default function Home({ navigation }) {
   const [locationEnabled, setLocationEnabled] = useState(false);
   /** Controle do Modal */
   const [modalVisible, setModalVisible] = useState(false);
+  /** Controle de qual manifestação foi clicada por ultimo. */
+  const [currentManifestation, setCurrentManifestation] = useState(null);
 
   /**
    * @desc Método invocado toda vez que há uma atualização na localização.
@@ -57,6 +59,10 @@ export default function Home({ navigation }) {
     setLocationEnabled(enabled);
   }
 
+  function handleManifestationPress(m) {
+    setCurrentManifestation(m);
+  }
+
   useEffect(() => {
     checkIfLocationEnabled();
   }, []);
@@ -68,6 +74,11 @@ export default function Home({ navigation }) {
       fetchManifestations();
     }
   }, [locationEnabled]);
+  useEffect(() => {
+    if (currentManifestation) {
+      setModalVisible(true);
+    }
+  }, [currentManifestation]);
 
   function renderCurrentLocationMarker() {
     if (Location.permissionGranted) {
@@ -100,7 +111,7 @@ export default function Home({ navigation }) {
             }}
             title={manifestation.titulo}
             description={manifestation.description}
-            onPress={() => setModalVisible(!modalVisible)}
+            onPress={() => handleManifestationPress(manifestation)}
           />
         );
       }
@@ -135,6 +146,7 @@ export default function Home({ navigation }) {
       <ManifestationDetailsModal
         isVisible={modalVisible}
         close={() => setModalVisible(false)}
+        manifestation={currentManifestation}
       />
     </Container>
   );

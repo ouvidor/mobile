@@ -134,6 +134,7 @@ const ManifestationDetailsInnerCard = () => {
 
 export const ManifestationDetailsModal = props => {
   const {
+    manifestation = {},
     isVisible = false,
     close = () => {},
     onBackButtonPress = () => close(),
@@ -151,7 +152,7 @@ export const ManifestationDetailsModal = props => {
           <ManifestationDetailsHeader>
             <ManifestationDetailsHeaderLeft>
               <ManifestationTitle>
-                Suco de Farofa é um titulo demasiadamente grande
+                {manifestation ? manifestation.title : 'Title'}
               </ManifestationTitle>
               <ManifestationTipoTag>Tag</ManifestationTipoTag>
             </ManifestationDetailsHeaderLeft>
