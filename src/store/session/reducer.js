@@ -11,6 +11,9 @@ export default function auth(state, action) {
       // retira o token, o perfil e marca o usuario como deslogado
       return { token: null, isSigned: false, profile: null };
 
+    case "UPDATE_PROFILE":
+      return { ...state, profile: action.payload.profile }
+
     default:
       return state;
   }
