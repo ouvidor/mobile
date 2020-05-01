@@ -22,11 +22,47 @@ import Cadastro from '../screens/Cadastro';
 import AddManifestation from '../screens/Manifestation/AddManifestation';
 import Menu from '../screens/Menu';
 import Perfil from '../screens/Perfil';
+import EditarPerfil from '../screens/Perfil/EditProfile';
 
 /** Component para */
 
 /** Criando Stack. Navigators que sejam uma stack utilizarão Stack.Navigator e Stack.Screen */
 const Stack = createStackNavigator();
+
+const StackPerfil = createStackNavigator();
+const StackPerfilNavigator = () => {
+  return (
+    <StackMenu.Navigator
+      initialRouteName="Perfil"
+      headerMode="none"
+      screenOptions={{
+        gestureEnabled: false,
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      }}
+    >
+      <StackMenu.Screen name="Perfil" component={Perfil} />
+      <StackMenu.Screen name="EditarPerfil" component={EditarPerfil} />
+
+    </StackMenu.Navigator>
+  );
+};
+
+const StackMenu = createStackNavigator();
+const StackMenuNavigator = () => {
+  return (
+    <StackMenu.Navigator
+      initialRouteName="Menu"
+      headerMode="none"
+      screenOptions={{
+        gestureEnabled: false,
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      }}
+    >
+      <StackMenu.Screen options={{headerShown: false}} name="Menu" component={Menu} />
+      <StackMenu.Screen name="Perfil" component={StackPerfilNavigator} />
+    </StackMenu.Navigator>
+  );
+};
 
 /**
  * @param {object} route
@@ -92,7 +128,7 @@ const HomeTabNavigator = () => {
     >
       <HomeTabs.Screen name="Home" component={Home} />
       <HomeTabs.Screen name="AddManifestation" component={AddManifestation} />
-      <HomeTabs.Screen name="Menu" component={Menu} />
+      <StackMenu.Screen name="Menu" component={StackMenuNavigator} />
     </HomeTabs.Navigator>
   );
 };
@@ -111,8 +147,6 @@ export default function Routes() {
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Home" component={HomeTabNavigator} />
-        { /** FIXME: o que fazer com perfil? */ }
-        <Stack.Screen name="Perfil" component={Perfil} />
         <Stack.Screen name="Cadastro" component={Cadastro} />
       </Stack.Navigator>
     </NavigationNativeContainer>
