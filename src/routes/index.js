@@ -21,6 +21,7 @@ import Home from '../screens/Home';
 import Cadastro from '../screens/Cadastro';
 import AddManifestation from '../screens/Manifestation/AddManifestation';
 import Menu from '../screens/Menu';
+import Perfil from '../screens/Perfil';
 
 /** Component para */
 
@@ -110,6 +111,8 @@ export default function Routes() {
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Home" component={HomeTabNavigator} />
+        { /** FIXME: o que fazer com perfil? */ }
+        <Stack.Screen name="Perfil" component={Perfil} />
         <Stack.Screen name="Cadastro" component={Cadastro} />
       </Stack.Navigator>
     </NavigationNativeContainer>
