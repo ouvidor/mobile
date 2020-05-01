@@ -5,7 +5,6 @@ import {
   Text,
   Button,
 } from '../../components';
-import Api from '../../services/Api';
 import colors from '../../utils/colors';
 import { SessionContext } from '../../store/session';
 

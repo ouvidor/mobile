@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View } from 'react-native';
 import { useNetInfo } from "@react-native-community/netinfo";
 import { StandardBackground } from '../../components/BackgroundImage';
@@ -13,6 +13,8 @@ import { ContainerForm } from './styles';
 import { validarEmail, SignIn } from '../../helpers';
 import Api from '../../services/Api';
 import colors from '../../utils/colors';
+import { SessionContext } from '../../store/session';
+import { signIn } from '../../store/session/actions';
 
 
 export default function Cadastro({ navigation }) {
@@ -23,6 +25,8 @@ export default function Cadastro({ navigation }) {
   const [erro, setErro] = useState({});
   const [actionError, setActionError] = useState();
   const [btnLoading, setBtnLoading] = useState(false);
+  const { dispatch } = useContext(SessionContext);
+
   const netInfo = useNetInfo();
 
   useEffect(() => setActionError(null), [nome, sobrenome, email, senha]);
@@ -97,11 +101,12 @@ export default function Cadastro({ navigation }) {
     /** Se temos todos os campos válidos, posso cadastrar o usuário */
     if (valid) {
       const cadastro = await Api.post('/user', payload);
-
       if ('error' in cadastro) {
         setActionError(cadastro.error);
       } else {
-        await SignIn(payload.email, payload.password);
+        const sign = await SignIn(payload.email, payload.password);
+        dispatch(signIn({ token: sign.token, profile: sign.user }));
+
         navigation.replace('Home');
       }
     }
