@@ -140,6 +140,17 @@ export const ManifestationDetailsModal = props => {
     onBackButtonPress = () => close(),
   } = props;
 
+  function renderTipoTags() {
+    const toRender = [];
+    if (manifestation && manifestation.categories) {
+      manifestation.categories.map(c => {
+        toRender.push(<ManifestationTipoTag>{c.title}</ManifestationTipoTag>);
+      });
+    }
+
+    return toRender;
+  }
+
   return (
     <Modal
       isVisible={isVisible}
@@ -154,6 +165,7 @@ export const ManifestationDetailsModal = props => {
               <ManifestationTitle>
                 {manifestation ? manifestation.title : 'Title'}
               </ManifestationTitle>
+              {renderTipoTags()}
               <ManifestationTipoTag>Tag</ManifestationTipoTag>
             </ManifestationDetailsHeaderLeft>
             <ManifestationDetailsHeaderRight>

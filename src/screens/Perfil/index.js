@@ -1,10 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, useContext } from 'react';
-import {
-  ScrollableContainerWithLoading,
-  Text,
-  Button,
-} from '../../components';
+import { ScrollableContainerWithLoading, Text, Button } from '../../components';
 import colors from '../../utils/colors';
 import { SessionContext } from '../../store/session';
 
@@ -19,13 +15,13 @@ export default function Perfil({ navigation }) {
   useEffect(() => {
     async function getUser() {
       if ('profile' in session) {
-        let { email, first_name, last_name } = session.profile;
+        const { email, first_name, last_name } = session.profile;
         setEmail(email);
         setNome(first_name);
         setSobrenome(last_name);
       } else {
         session.then(s => {
-          let { id, email, first_name, last_name } = s.profile;
+          const { id, email, first_name, last_name } = s.profile;
           setEmail(email);
           setNome(first_name);
           setSobrenome(last_name);

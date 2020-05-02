@@ -42,7 +42,6 @@ const StackPerfilNavigator = () => {
     >
       <StackMenu.Screen name="Perfil" component={Perfil} />
       <StackMenu.Screen name="EditarPerfil" component={EditarPerfil} />
-
     </StackMenu.Navigator>
   );
 };
@@ -58,7 +57,11 @@ const StackMenuNavigator = () => {
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}
     >
-      <StackMenu.Screen options={{headerShown: false}} name="Menu" component={Menu} />
+      <StackMenu.Screen
+        options={{ headerShown: false }}
+        name="Menu"
+        component={Menu}
+      />
       <StackMenu.Screen name="Perfil" component={StackPerfilNavigator} />
     </StackMenu.Navigator>
   );
