@@ -878,6 +878,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/async-storage/-/async-storage-1.7.1.tgz#ef2104d865de61ad91bba66613e57e689ff4e6a1"
   integrity sha512-/oX/x+EU4xNaqIaC/epVKzO8XghzImPA7l8cLz3USEFmtFiXFjBbTeeIFjjEm/u4/cv38Wi1xMEa10PHIWygRg==
 
+"@react-native-community/cameraroll@^1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/cameraroll/-/cameraroll-1.6.0.tgz#2a4f9318fb53b5b2576269085c60ec7aced764c8"
+  integrity sha512-0P6IDqFlpWmuqLBFvm4WsQ6QR6E7WDadtFQiug/zU4Ieu6wcz70pgbB6yG3uQwGqwQf6HgFq95Z7+SHV3k5hpw==
+
 "@react-native-community/cli-debugger-ui@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-3.0.0.tgz#d01d08d1e5ddc1633d82c7d84d48fff07bd39416"
@@ -993,6 +998,11 @@
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.6.tgz#c7f2ac187c1f25aa8c30d11baa8f4398eca3bb84"
   integrity sha512-PpMoeXwPUoldCRKDuSi+zK5rT+sJTW6ri6RdGPkSKRzU77Q1d9IaR0O5IKvBj0XSdL3p+dcOa05gk35aGDffBQ==
+
+"@react-native-community/netinfo@^5.7.0":
+  version "5.7.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-5.7.0.tgz#54be55f22c6a6358d5d61f2aa1bc1de20c7b53b6"
+  integrity sha512-ZhmkaqRpLFvOMu/Ln3YCitBJUgk7lbFsvcinbW/LIktXM6BwVwEZPTkYr+N74hEAhKz2CcDN8aMzzaokxwxRqg==
 
 "@react-navigation/bottom-tabs@^5.0.0-alpha.39":
   version "5.0.0-alpha.39"

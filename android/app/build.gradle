@@ -182,6 +182,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
     compile project(':lottie-react-native')
+    compile project(':@react-native-community_cameraroll')
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
