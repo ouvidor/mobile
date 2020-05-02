@@ -9,6 +9,7 @@ import {
 } from '../../components';
 import Api from '../../services/Api';
 import Location from '../../services/Location';
+import SelectImage from '../../components/Camera/SelectImage';
 
 export default function AddManifestation() {
   const [title, setTitle] = useState();
@@ -148,6 +149,8 @@ export default function AddManifestation() {
           numberOfLines: 4,
         }}
       />
+      <SelectImage />
+
       <Button
         touchableProps={{
           onPress: addManifestation,

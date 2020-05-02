@@ -6,9 +6,7 @@ import { Container, Text } from '../index';
 
 const SelectedImage = styled.Image.attrs(props => ({
   source: {
-    uri:
-      props.source ||
-      'https://abrilveja.files.wordpress.com/2016/06/imperdivel-2010-shrek-original.jpeg',
+    uri: props.source,
   },
 }))`
   width: 200px;
@@ -39,7 +37,7 @@ export default function SelectImage() {
 
   return (
     <Container>
-      <Text onPress={getImage}>Camera roll</Text>
+      <Text onPress={getImage}>Anexar imagem</Text>
       <SelectedImage source={selectedImage} />
     </Container>
   );
