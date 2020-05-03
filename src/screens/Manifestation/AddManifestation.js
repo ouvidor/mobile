@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import { getCategories, getTypes } from '../../helpers';
 import {
@@ -13,7 +14,7 @@ import Api from '../../services/Api';
 import Location from '../../services/Location';
 import SelectImage from '../../components/Camera/SelectImage';
 
-export default function AddManifestation() {
+export default function AddManifestation({ navigation }) {
   const [title, setTitle] = useState();
   const [description, setDescription] = useState();
   const [category, setCategory] = useState([]);
@@ -52,6 +53,15 @@ export default function AddManifestation() {
       setLoading(false);
     }
   }, [categories, types]);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', e => {
+      if (success) {
+        setSuccess(false);
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   async function addManifestation() {
     setBtnLoading(true);
