@@ -6,6 +6,8 @@ import {
   ScrollableContainerWithLoading,
   Select,
   SelectCheckbox,
+  CenteredContainer,
+  Text,
 } from '../../components';
 import Api from '../../services/Api';
 import Location from '../../services/Location';
@@ -18,9 +20,11 @@ export default function AddManifestation() {
   const [type, setType] = useState();
   const [categories, setCategories] = useState();
   const [types, setTypes] = useState();
+  const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState({});
   const [btnLoading, setBtnLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     async function fetchCategories() {
@@ -88,8 +92,40 @@ export default function AddManifestation() {
       });
 
       const add = await Api.post('/manifestation', data);
+
+      /**
+       * Checando se add foi bem sucedido. Checo apenas por um id na resposta.
+       * Tendo um id na resposta, assumo que add foi bem sucedido
+       */
+      if (add.id && images.length > 0) {
+        const imagesData = new FormData();
+        const file = {
+          uri: images[0].uri,
+          name: images[0].fileName,
+          type: images[0].type,
+        };
+
+        imagesData.append('file', file);
+        imagesData.append('manifestation_id', add.id);
+
+        const addFile = await Api.post('/files', imagesData);
+      }
+
+      setSuccess(add.id !== null);
       setBtnLoading(false);
     }
+  }
+
+  function handleImageSelection(data) {
+    setImages(data);
+  }
+
+  if (success) {
+    return (
+      <CenteredContainer>
+        <Text>Manifestação cadastrada!</Text>
+      </CenteredContainer>
+    );
   }
 
   return (
@@ -149,7 +185,7 @@ export default function AddManifestation() {
           numberOfLines: 4,
         }}
       />
-      <SelectImage />
+      <SelectImage onSelect={handleImageSelection} />
 
       <Button
         touchableProps={{
