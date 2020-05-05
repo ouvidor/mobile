@@ -59,6 +59,15 @@ export default function Perfil({ navigation }) {
             title: 'Atualizar informações',
           }}
         />
+        <Button
+          touchableProps={{
+            onPress: () => navigation.navigate('Historico'),
+            background: colors.Blu,
+          }}
+          textProps={{
+            title: 'Minhas manifestações',
+          }}
+        />
       </>
     );
   }

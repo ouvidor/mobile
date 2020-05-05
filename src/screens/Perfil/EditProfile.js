@@ -22,7 +22,7 @@ export default function EditarPerfil({ navigation }) {
   const [sobrenome, setSobrenome] = useState();
   const [email, setEmail] = useState();
   const [senha, setSenha] = useState();
-  const [novaSenha, setnovaSenha] = useState();
+  const [novaSenha, setNovaSenha] = useState();
   const [confirmarNovaSenha, setConfirmarNovaSenha] = useState();
   const [erro, setErro] = useState({});
   const [actionError, setActionError] = useState();
@@ -62,10 +62,11 @@ export default function EditarPerfil({ navigation }) {
 
     let formData = {
       nome: { field: 'first_name', value: nome },
+      sobrenome: { field: 'last_name', value: sobrenome },
       email: { field: 'email', value: email, validator: validarEmail },
     };
 
-    if (novaSenha) {
+    if (novaSenha || senha) {
       requiredConfirmPasswordData = {
         senha: { field: 'oldPassword', value: senha },
         novaSenha: { field: 'password', value: novaSenha },
@@ -126,7 +127,7 @@ export default function EditarPerfil({ navigation }) {
 
     /** Se temos todos os campos válidos */
     if (valid) {
-      console.log(payload);
+
       if (novaSenha && novaSenha != confirmarNovaSenha) {
         setActionError('As senhas não coincidem');
         setBtnLoading(false);
@@ -185,6 +186,16 @@ export default function EditarPerfil({ navigation }) {
         />
         <LabeledInput
           inputProps={{
+            value: sobrenome,
+            onChangeText: setSobrenome,
+            onFocus: () => clearOnFocus('sobrenome'),
+            errorMessage: erro.sobrenome,
+            autoCapitalize: 'none',
+            placeholder: 'Sobrenome',
+          }}
+        />
+        <LabeledInput
+          inputProps={{
             value: email,
             onChangeText: setEmail,
             onBlur: () =>
@@ -209,7 +220,7 @@ export default function EditarPerfil({ navigation }) {
         <LabeledInput
           inputProps={{
             value: novaSenha,
-            onChangeText: setnovaSenha,
+            onChangeText: setNovaSenha,
             secureTextEntry: true,
             onFocus: () => clearOnFocus('novaSenha'),
             errorMessage: erro.novaSenha,
@@ -247,7 +258,8 @@ export default function EditarPerfil({ navigation }) {
 
   return (
     <ScrollableContainerWithLoading loading={loading}>
-      {renderUpdateUser()}
+        <Text style={{fontWeight: 'bold', fontSize: 20}}>Editar Perfil</Text>
+        {renderUpdateUser()}
     </ScrollableContainerWithLoading>
   );
 }
