@@ -31,6 +31,8 @@ export default function Login({ navigation }) {
     let valid = true;
     const payload = {};
 
+    payload.city = 'Cabo Frio';
+
     /** Verificando que temos todos os dados */
     Object.entries(requiredData).map(k => {
       if (valid) {
@@ -51,7 +53,7 @@ export default function Login({ navigation }) {
     });
 
     if (valid) {
-      const login = await SignIn(payload.email, payload.password);
+      const login = await SignIn(payload.email, payload.password, payload.city);
       dispatch(signIn({ token: login.token, profile: login.user }));
 
       if ('error' in login) {

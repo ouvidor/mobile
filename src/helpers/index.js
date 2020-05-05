@@ -11,11 +11,12 @@ import Api from '../services/Api';
  * Em caso de login bem sucedido, armazeno o user/JWT no dispositivo.
  * Retorno a resposta do request.
  */
-export const SignIn = async (email, password) => {
+export const SignIn = async (email, password, city) => {
   try {
     const response = await Api.post('/auth', {
       email,
       password,
+      city,
     });
     if ('token' in response) {
       AsyncStorage.setItem('user', JSON.stringify(response));
