@@ -23,6 +23,7 @@ import AddManifestation from '../screens/Manifestation/AddManifestation';
 import Menu from '../screens/Menu';
 import Perfil from '../screens/Perfil';
 import EditarPerfil from '../screens/Perfil/EditProfile';
+import Historico from '../screens/Perfil/Historic';
 
 /** Component para */
 
@@ -42,6 +43,7 @@ const StackPerfilNavigator = () => {
     >
       <StackMenu.Screen name="Perfil" component={Perfil} />
       <StackMenu.Screen name="EditarPerfil" component={EditarPerfil} />
+      <StackMenu.Screen name="Historico" component={Historico} />
     </StackMenu.Navigator>
   );
 };

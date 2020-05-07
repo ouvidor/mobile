@@ -79,6 +79,7 @@ export default function Cadastro({ navigation }) {
 
     let valid = true;
     const payload = {};
+    payload.city = 'Cabo Frio';
 
     /** Verificando que temos todos os dados */
     Object.entries(requiredData).map(k => {
@@ -104,7 +105,7 @@ export default function Cadastro({ navigation }) {
       if ('error' in cadastro) {
         setActionError(cadastro.error);
       } else {
-        const sign = await SignIn(payload.email, payload.password);
+        const sign = await SignIn(payload.email, payload.password, payload.city);
         dispatch(signIn({ token: sign.token, profile: sign.user }));
 
         navigation.replace('Home');
