@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import { getCategories, getTypes } from '../../helpers';
@@ -48,16 +49,22 @@ export default function AddManifestation({ navigation }) {
     fetchTypes();
   }, []);
 
+  /** Hook responsável por garantir que tenhamos
+   * as categorias e os tipos de manifestação.
+   */
   useEffect(() => {
     if (categories && types) {
       setLoading(false);
     }
   }, [categories, types]);
+
+  /**
+   * Hook responsável por resetar o estado de success para false após
+   * mudança de tela.
+   */
   useEffect(() => {
-    const unsubscribe = navigation.addListener('blur', e => {
-      if (success) {
-        setSuccess(false);
-      }
+    const unsubscribe = navigation.addListener('blur', () => {
+      setSuccess(false);
     });
 
     return unsubscribe;
@@ -65,6 +72,7 @@ export default function AddManifestation({ navigation }) {
 
   async function addManifestation() {
     setBtnLoading(true);
+
     const requiredData = {
       title: { value: title, field: 'title' },
       description: { value: description, field: 'description' },
@@ -109,13 +117,16 @@ export default function AddManifestation({ navigation }) {
        */
       if (add.id && images.length > 0) {
         const imagesData = new FormData();
-        const file = {
-          uri: images[0].uri,
-          name: images[0].fileName,
-          type: images[0].type,
-        };
 
-        imagesData.append('file', file);
+        images.map(image => {
+          const file = {
+            uri: image.uri,
+            name: image.fileName,
+            type: image.type,
+          };
+
+          imagesData.append('file', file);
+        });
         imagesData.append('manifestation_id', add.id);
 
         const addFile = await Api.post('/files', imagesData);
