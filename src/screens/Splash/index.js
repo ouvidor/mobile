@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { View, Image } from 'react-native';
 import { getJWT } from '../../helpers';
 
 export default function Splash({ navigation }) {
@@ -24,8 +24,11 @@ export default function Splash({ navigation }) {
   }, []);
 
   return (
-    <View>
-      <Text onPress={() => navigation.navigate('Login')}>Splash screen</Text>
+    <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
+      <Image
+        style={{maxWidth: 200, maxHeight: 200}}
+        source={require('../../assets/images/logoOuvidor.png')}
+      />
     </View>
   );
 }
