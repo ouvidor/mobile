@@ -20,6 +20,13 @@ export default function Menu({ navigation }) {
           Meu Perfil
         </ItemMenu>
         <ItemMenu
+          onPress={() => {
+            navigation.navigate('Prefeitura');
+          }}
+        >
+          Prefeitura
+        </ItemMenu>
+        <ItemMenu
           onPress={async () => {
             const signout = await SignOut();
             if (signout) {

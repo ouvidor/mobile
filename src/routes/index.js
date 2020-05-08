@@ -24,6 +24,7 @@ import Menu from '../screens/Menu';
 import Perfil from '../screens/Perfil';
 import EditarPerfil from '../screens/Perfil/EditProfile';
 import Historico from '../screens/Perfil/Historic';
+import Prefeitura from '../screens/Prefeitura';
 
 /** Component para */
 
@@ -65,6 +66,7 @@ const StackMenuNavigator = () => {
         component={Menu}
       />
       <StackMenu.Screen name="Perfil" component={StackPerfilNavigator} />
+      <StackMenu.Screen name="Prefeitura" component={Prefeitura} />
     </StackMenu.Navigator>
   );
 };
