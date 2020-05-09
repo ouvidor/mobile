@@ -8,7 +8,9 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "makeDebug": "cd ./android && sudo ./gradlew assembleDebug && mv ./app/build/outputs/apk/debug/app-debug.apk /var/www/apks/ouvidor-debug.apk"
+    "makeDebug": "cd ./android && sudo ./gradlew assembleDebug && mv ./app/build/outputs/apk/debug/app-debug.apk /var/www/apks/ouvidor-debug.apk",
+    "makeRelease": "cd ./android && sudo ./gradlew assembleRelease && mv ./app/build/outputs/apk/release/app-release.apk /var/www/apks/ouvidor-release.apk"
+
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.7.1",
@@ -32,6 +34,7 @@
     "react-native-reanimated": "^1.7.0",
     "react-native-safe-area-context": "^0.6.2",
     "react-native-screens": "^2.0.0-alpha.29",
+    "react-native-splash-screen": "^3.2.0",
     "react-native-vector-icons": "^6.6.0",
     "styled-components": "^5.0.0"
   },
