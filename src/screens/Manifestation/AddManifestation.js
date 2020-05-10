@@ -104,36 +104,36 @@ export default function AddManifestation({ navigation }) {
         data[entry.field] = entry.value;
       });
 
-      Location.getCurrentPosition(location => {
+      Location.getCurrentPosition(async location => {
         data.latitude = location.coords.latitude;
         data.longitude = location.coords.longitude;
+
+        const add = await Api.post('/manifestation', data);
+
+        /**
+         * Checando se add foi bem sucedido. Checo apenas por um id na resposta.
+         * Tendo um id na resposta, assumo que add foi bem sucedido
+         */
+        if (add.id && images.length > 0) {
+          const imagesData = new FormData();
+
+          images.map(image => {
+            const file = {
+              uri: image.uri,
+              name: image.fileName,
+              type: image.type,
+            };
+
+            imagesData.append('file', file);
+          });
+          imagesData.append('manifestation_id', add.id);
+
+          const addFile = await Api.post('/files', imagesData);
+        }
+
+        setSuccess(add.id !== null);
+        setBtnLoading(false);
       });
-
-      const add = await Api.post('/manifestation', data);
-
-      /**
-       * Checando se add foi bem sucedido. Checo apenas por um id na resposta.
-       * Tendo um id na resposta, assumo que add foi bem sucedido
-       */
-      if (add.id && images.length > 0) {
-        const imagesData = new FormData();
-
-        images.map(image => {
-          const file = {
-            uri: image.uri,
-            name: image.fileName,
-            type: image.type,
-          };
-
-          imagesData.append('file', file);
-        });
-        imagesData.append('manifestation_id', add.id);
-
-        const addFile = await Api.post('/files', imagesData);
-      }
-
-      setSuccess(add.id !== null);
-      setBtnLoading(false);
     }
   }
 
