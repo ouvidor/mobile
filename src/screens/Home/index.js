@@ -1,8 +1,9 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import MapView from 'react-native-maps';
 import Device from 'react-native-device-info';
+import { set } from 'react-native-reanimated';
 import {
   Container,
   Text,
@@ -12,21 +13,26 @@ import {
 import Location from '../../services/Location';
 import Manifestation from '../../services/Manifestation';
 
-export default function Home({ navigation }) {
-  const initialCoords = {
-    latitude: 37.78825,
-    longitude: -122.4324,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  };
+/** Coordenadas iniciais do mapa */
+const initialCoords = {
+  latitude: 37.78825,
+  longitude: -122.4324,
+  latitudeDelta: 0.0922,
+  longitudeDelta: 0.0421,
+};
 
+export default function Home({ navigation }) {
   const [coords, setCoords] = useState(initialCoords);
   const [manifestations, setManifestations] = useState([]);
+  /** Controles de localização/permissao */
   const [locationEnabled, setLocationEnabled] = useState(false);
+  const [locationPermission, setLocationPermission] = useState(false);
   /** Controle do Modal */
   const [modalVisible, setModalVisible] = useState(false);
   /** Controle de qual manifestação foi clicada por ultimo. */
   const [currentManifestation, setCurrentManifestation] = useState(null);
+
+  const mapRef = useRef();
 
   /**
    * @desc Método invocado toda vez que há uma atualização na localização.
@@ -38,6 +44,7 @@ export default function Home({ navigation }) {
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
     });
+    Location.subscribeToLocationUpdates();
   }
 
   /**
@@ -63,17 +70,43 @@ export default function Home({ navigation }) {
     setCurrentManifestation(m);
   }
 
+  /**
+   * Checando se o dispositivo está com a localização ativada.
+   * Este método pode retornar falsos positivos, por este motivo
+   * devemos verificar no método de capturar a localização se algum
+   * erro foi retornado
+   */
   useEffect(() => {
     checkIfLocationEnabled();
   }, []);
+
+  /**
+   * Se o disposivi está com a localização ativada,
+   * pedimos permissão para acessar a localização.
+   */
   useEffect(() => {
+    async function getPermission() {
+      const permission = await Location.getPermissionAndroid();
+      setLocationPermission(permission);
+    }
     if (locationEnabled) {
-      Location.getPermissionAndroid();
-      Location.subscribeToLocationUpdates();
-      Location.getCurrentPosition(updateCoordinates);
-      fetchManifestations();
+      getPermission();
     }
   }, [locationEnabled]);
+
+  /**
+   * Tendo permissão para acessar a localização, tentamos buscar
+   * as coordenadas
+   */
+  useEffect(() => {
+    if (locationPermission) {
+      Location.getCurrentPosition(updateCoordinates, () => {
+        setLocationEnabled(false);
+      });
+      fetchManifestations();
+    }
+  }, [locationPermission]);
+
   useEffect(() => {
     if (currentManifestation) {
       setModalVisible(true);
@@ -82,6 +115,14 @@ export default function Home({ navigation }) {
 
   function renderCurrentLocationMarker() {
     if (Location.permissionGranted) {
+      mapRef.current.animateCamera({
+        center: {
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+        },
+        duration: 3000,
+      });
+
       return (
         <MapView.Marker
           coordinate={{
@@ -139,7 +180,7 @@ export default function Home({ navigation }) {
 
   return (
     <Container noPadding>
-      <MapView style={{ flex: 1 }} initialRegion={coords}>
+      <MapView style={{ flex: 1 }} initialRegion={coords} ref={mapRef}>
         {renderCurrentLocationMarker()}
         {renderMarkers()}
       </MapView>
