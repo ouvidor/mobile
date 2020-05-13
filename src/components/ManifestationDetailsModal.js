@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
+import { View } from 'react-native';
 import styled from 'styled-components/native';
 import Modal from 'react-native-modal';
 import Feather from 'react-native-vector-icons/Feather';
@@ -8,6 +9,7 @@ import { Text, fontFaces } from './Text';
 import { ManifestationTipoTag } from './Tags';
 import { OutlinedButton } from './Button';
 import colors from '../utils/colors';
+import statusManifestation from '../utils/status';
 
 const { globalColors } = colors;
 
@@ -19,7 +21,7 @@ const ManifestationDetailsModalContainer = styled(Container)`
 `;
 const ManifestationDetailsModalInnerContainer = styled(Container)`
   background: white;
-  border-radius: 10px;
+  border-radius: 11px;
   padding: 10px 15px;
 `;
 
@@ -66,6 +68,7 @@ const InnerCardContainer = styled(Container)`
   margin: 5px 0;
   border: 1px solid ${globalColors.dark};
   border-radius: 15px;
+  max-height: 175px;
 `;
 
 const InnerCardHeader = styled(Container)`
@@ -80,7 +83,7 @@ const InnerCardHeaderLeft = styled(Container)`
   padding: 0;
 `;
 const InnerCardTitle = styled(Text)`
-  color: ${globalColors.success};
+  color: ${props => props.color || globalColors.success};
   font-family: ${fontFaces.Bold};
 `;
 const InnerCardHeaderRight = styled.TouchableOpacity`
@@ -107,27 +110,41 @@ const InnerCardFooter = styled(Text)`
   font-family: ${fontFaces.BoldItalic};
 `;
 
-const ManifestationDetailsInnerCard = () => {
+const ManifestationDetailsInnerCard = props => {
+  const { status } = props;
+
+  if (!status) {
+    return null;
+  }
+
+  const statusInfo = statusManifestation[status.status.id];
+  const date = new Date(status.created_at);
+
   return (
     <InnerCardContainer>
       <InnerCardHeader>
         <InnerCardHeaderLeft>
-          <Feather name="check" size={21} color={globalColors.success} />
-          <InnerCardTitle>Resolvido</InnerCardTitle>
+          <Feather name={statusInfo.icon} size={21} color={statusInfo.color} />
+          <InnerCardTitle color={statusInfo.color}>
+            {statusInfo.name}
+          </InnerCardTitle>
         </InnerCardHeaderLeft>
-        <InnerCardHeaderRight>
-          <Feather name="image" size={21} color={globalColors.dark} />
-          <InnerCardAttachment>Imagem</InnerCardAttachment>
-        </InnerCardHeaderRight>
+        {status.image && (
+          <InnerCardHeaderRight>
+            <Feather name="image" size={21} color={globalColors.dark} />
+            <InnerCardAttachment>Imagem</InnerCardAttachment>
+          </InnerCardHeaderRight>
+        )}
       </InnerCardHeader>
 
       <InnerCardBody>
-        <InnerCardBodyContent>
-          Lorem ipsum dolor sit amet, consec tetur adipiscing elit.
-        </InnerCardBodyContent>
+        <InnerCardBodyContent>{status.description}</InnerCardBodyContent>
       </InnerCardBody>
 
-      <InnerCardFooter>Atualizado em: 04/04/2002 às 17:59h</InnerCardFooter>
+      <InnerCardFooter>
+        Atualizado em: {date.toLocaleDateString()} às{' '}
+        {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}h
+      </InnerCardFooter>
     </InnerCardContainer>
   );
 };
@@ -144,13 +161,46 @@ export const ManifestationDetailsModal = props => {
     const toRender = [];
     if (manifestation && manifestation.categories) {
       manifestation.categories.map(c => {
-        toRender.push(<ManifestationTipoTag>{c.title}</ManifestationTipoTag>);
+        return toRender.push(
+          <ManifestationTipoTag>{c.title}</ManifestationTipoTag>
+        );
       });
     }
 
     return toRender;
   }
 
+  function renderCurrentStatus() {
+    const toRender = [];
+    if (manifestation && manifestation.status_history) {
+      const i = manifestation.status_history.length;
+      const currentStatus = manifestation.status_history[i - 1];
+      const status = statusManifestation[currentStatus.status.id];
+      toRender.push(
+        <OutlinedButton color={status.color} style={{ width: 110 }}>
+          <Feather name={status.icon} size={18} />
+          {status.name}
+        </OutlinedButton>
+      );
+    }
+
+    return toRender;
+  }
+
+  function renderStatusHistory() {
+    const toRender = [];
+    if (manifestation && manifestation.status_history) {
+      const statusHistory = manifestation.status_history;
+      statusHistory
+        .slice(0)
+        .reverse()
+        .map(s => {
+          return toRender.push(<ManifestationDetailsInnerCard status={s} />);
+        });
+    }
+
+    return toRender;
+  }
   return (
     <Modal
       isVisible={isVisible}
@@ -167,22 +217,15 @@ export const ManifestationDetailsModal = props => {
                 {manifestation ? manifestation.title : 'Title'}
               </ManifestationTitle>
               {renderTipoTags()}
-              <ManifestationTipoTag>Tag</ManifestationTipoTag>
             </ManifestationDetailsHeaderLeft>
             <ManifestationDetailsHeaderRight>
-              <OutlinedButton color="green" style={{ width: 110 }}>
-                <Feather name="check" size={18} />
-                Resolvido
-              </OutlinedButton>
-              <OutlinedButton style={{ width: 110 }}>Seguir</OutlinedButton>
+              {renderCurrentStatus()}
+              <View style={{ flex: 1 }} />
             </ManifestationDetailsHeaderRight>
           </ManifestationDetailsHeader>
 
           <ManifestationDetailsBody>
-            <ManifestationDetailsInnerCard />
-            <ManifestationDetailsInnerCard />
-            <ManifestationDetailsInnerCard />
-            <ManifestationDetailsInnerCard />
+            {renderStatusHistory()}
           </ManifestationDetailsBody>
 
           <ManifestationDetailsFooter onPress={close}>
