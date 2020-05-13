@@ -157,6 +157,7 @@ export const ManifestationDetailsModal = props => {
       onBackButtonPress={onBackButtonPress}
       animationInTiming={600}
       animationOutTiming={600}
+      backdropTransitionOutTiming={0}
     >
       <ManifestationDetailsModalContainer>
         <ManifestationDetailsModalInnerContainer>
