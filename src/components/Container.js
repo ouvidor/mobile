@@ -75,3 +75,23 @@ export const ScrollableContainerWithLoading = props => {
   }
   return <ScrollableContainer>{children}</ScrollableContainer>;
 };
+
+export const ContainerWithLoading = props => {
+  const animationRef = useRef();
+  const { loading, children } = props;
+  if (loading) {
+    return (
+      <CenteredContainer onLayout={() => animationRef.current.play()}>
+        <LottieView
+          ref={animationRef}
+          source={loadingAnimations.default}
+          style={{ marginBottom: 50 }}
+        />
+        <Text style={{ fontSize: 15 }} fontFamily="Bold">
+          Carregando...
+        </Text>
+      </CenteredContainer>
+    );
+  }
+  return <Container>{children}</Container>;
+};
