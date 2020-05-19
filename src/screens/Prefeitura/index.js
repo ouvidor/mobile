@@ -1,227 +1,59 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import Feather from 'react-native-vector-icons/Feather';
+import { Container } from '../../components';
+
 import {
-  ScrollableContainerWithLoading,
-  Container,
-  Text,
-  LabeledInput,
-  Button,
-  SelectCheckbox
-} from '../../components';
-import { InfoContainer, Subtitle } from './styles';
-import Api from '../../services/Api';
-import { getCategories } from '../../helpers';
-import colors from '../../utils/colors';
-import Location from '../../services/Location';
+  HeaderContainer,
+  HeaderButtonContainer,
+  HeaderButton,
+  HeaderIconContainer,
+} from './styles';
+import Prefecture from './Prefecture';
+import Manifestations from './Manifestations';
 
-export default function Prefeitura({ navigation }) {
-  const [loading, setLoading] = useState(true);
-  const [city, setCity] = useState();
-  const [site, setSite] = useState();
-  const [telephone, setTelephone] = useState();
-  const [email, setEmail] = useState();
-  const [attendance, setAttendance] = useState();
-  const [title, setTitle] = useState();
-  const [description, setDescription] = useState();
-  const [manifestationCount, setManifestationCount] = useState();
-  const [category, setCategory] = useState([]);
-  const [categories, setCategories] = useState();
-  const [btnLoading, setBtnLoading] = useState(false);
-  const [error, setError] = useState({});
-  const [actionMessage, setActionMessage] = useState();
+export default function Prefeitura() {
+  const [tab, setTab] = useState(1);
+  const [selected, setSelected] = useState(1);
 
-  useEffect(() => {
-    async function prefecture() {
-      try{
-        const prefecture = await Api.get('/prefecture');
-
-        const { name, email, telephone, site, attendance } = prefecture[0];
-
-        setCity(name);
-        setEmail(email);
-        setTelephone(telephone);
-        setSite(site);
-        setAttendance(attendance);
-      } catch(err) {
-        console.log('Não foi possivel capturar dados da prefeitura')
-      }
+  function renderContent() {
+    if (tab === 1) {
+      return <Prefecture />;
     }
-    async function getManifestationCount() {
-      const manifestations = await Api.get('/manifestation');
-      setManifestationCount(manifestations.count);
-    }
-    async function fetchCategories() {
-      const data = await getCategories();
-      const orderedCategories = data.map(c => ({
-        value: c.id,
-        label: c.title,
-      }));
-      setCategories(orderedCategories);
-      setLoading(false);
-    }
-
-    prefecture();
-    getManifestationCount();
-    fetchCategories()
-  }, []);
-
-  function clearOnFocus(field) {
-    setError({ ...error, [field]: null });
-    setActionMessage('');
+    return <Manifestations />;
   }
 
-  async function handleManifestation(){
-    setBtnLoading(true);
-
-    const requiredData = {
-      title: { value: title, field: 'title' },
-      description: { value: description, field: 'description' },
-      category: {
-        value: category.length > 0 ? category : false,
-        field: 'categories_id',
-      },
-      type: { value: 1, field: 'type_id' },
-    };
-
-    const errors = {};
-
-    Object.keys(requiredData).map(key => {
-      const entry = requiredData[key];
-      if (!entry.value) {
-        errors[key] = entry.errorMessage
-          ? entry.errorMessage
-          : 'Campo inválido';
-      }
-    });
-
-    if (Object.keys(errors).length > 0) {
-      setError(errors);
-      setBtnLoading(false);
-    }
-    else {
-      const data = {};
-      Object.keys(requiredData).map(key => {
-        const entry = requiredData[key];
-        data[entry.field] = entry.value;
-      });
-
-      Location.getCurrentPosition(location => {
-        data.latitude = location.coords.latitude;
-        data.longitude = location.coords.longitude;
-      });
-
-      const add = await Api.post('/manifestation', data);
-
-      if(add.id){
-        setActionMessage('Sugestão enviada!')
-        clearInputs();
-      }
-
-    }
-    setBtnLoading(false);
-  }
-
-  function clearInputs(){
-    setTitle('');
-    setDescription('');
-  }
-
-  function renderInfo() {
-    return (
-      <InfoContainer>
-        <Text style={{ marginVertical: 10, fontWeight: 'bold', fontSize: 24 }}>
-          {city}
-        </Text>
-        <Subtitle>E-mail</Subtitle>
-        <Text>{email}</Text>
-
-        <Subtitle>Telefone</Subtitle>
-        <Text>{telephone}</Text>
-
-        <Subtitle>Horário de atendimento</Subtitle>
-        <Text>{attendance}</Text>
-
-        <Text></Text>
-        <Text>Total de casos relatados: {manifestationCount}</Text>
-      </InfoContainer>
-    );
-  }
-
-  function renderSugestion(){
-    return (
-      <InfoContainer>
-        <Text style={{ marginTop: 50, fontWeight: 'bold', fontSize: 20 }}>
-          Envie uma Sugestão
-        </Text>
-
-        <SelectCheckbox
-          label=""
-          blankOption="Selecione uma categoria"
-          options={categories}
-          onSelect={selectedCategories =>
-            setCategory(Object.keys(selectedCategories))
-          }
-          onPress={() =>
-            setError({
-              ...error,
-              category: false,
-            })
-          }
-          errorMessage={error.category}
-        />
-        <LabeledInput
-          inputProps={{
-            value: title,
-            onChangeText: setTitle,
-            onFocus: () => clearOnFocus('title'),
-            placeholder: 'Título',
-            onBlur: () =>
-              setError({
-                ...error,
-                title: false,
-            }),
-            errorMessage: error.title,
-
-          }}
-        />
-        <LabeledInput
-          inputProps={{
-            value: description,
-            onChangeText: setDescription,
-            onBlur: () =>
-              setError({
-                ...error,
-                description: false,
-              }),
-            onFocus: () => setError({ ...error, description: false }),
-            multiline: true,
-            numberOfLines: 4,
-            placeholder: 'Deixe sua sugestão aqui',
-            errorMessage: error.description,
-          }}
-        />
-
-        <Button
-          touchableProps={{
-            onPress: handleManifestation,
-            background: colors.Blu,
-          }}
-          textProps={{
-            title: 'Enviar Sugestão',
-            loading: btnLoading,
-          }}
-        />
-      </InfoContainer>
-    );
+  function handlePressButton(t, s) {
+    setTab(t);
+    setSelected(s);
   }
 
   return (
-    <ScrollableContainerWithLoading loading={loading}>
-      <Container>
-        {renderInfo()}
-        {renderSugestion()}
-        <Text>{actionMessage}</Text>
-      </Container>
-    </ScrollableContainerWithLoading>
+    <>
+      <HeaderContainer>
+        <HeaderButtonContainer>
+          <HeaderButton
+            position={1}
+            selected={selected}
+            label="Prefeitura"
+            onPress={() => handlePressButton(1, 1)}
+          />
+          <HeaderButton
+            position={2}
+            selected={selected}
+            label="Manifestação"
+            onPress={() => handlePressButton(2, 2)}
+          />
+        </HeaderButtonContainer>
+        <HeaderIconContainer>
+          <Feather
+            color="#eee"
+            name={tab === 1 ? 'info' : 'map-pin'}
+            size={48}
+          />
+        </HeaderIconContainer>
+      </HeaderContainer>
+      <Container noPadding>{renderContent()}</Container>
+    </>
   );
 }
