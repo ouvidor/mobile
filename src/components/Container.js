@@ -39,10 +39,10 @@ export const CenteredContainer = styled.View`
  */
 export const ScrollableContainer = styled.ScrollView.attrs({
   keyboardShouldPersistTaps: 'handled',
-  contentContainerStyle: {flexGrow: 1}
+  contentContainerStyle: { flexGrow: 1 },
 })`
   flex: 1;
-  padding: 0 10px;
+  padding: ${props => (props.noPadding ? '0px' : '0 10px')};
 `;
 
 /**
@@ -58,7 +58,9 @@ export const ScrollableContainer = styled.ScrollView.attrs({
  */
 export const ScrollableContainerWithLoading = props => {
   const animationRef = useRef();
-  const { loading, children } = props;
+  const { loading, children, noPadding } = props;
+  const isPadding = !!noPadding;
+
   if (loading) {
     return (
       <CenteredContainer onLayout={() => animationRef.current.play()}>
@@ -73,7 +75,9 @@ export const ScrollableContainerWithLoading = props => {
       </CenteredContainer>
     );
   }
-  return <ScrollableContainer>{children}</ScrollableContainer>;
+  return (
+    <ScrollableContainer noPadding={isPadding}>{children}</ScrollableContainer>
+  );
 };
 
 export const ContainerWithLoading = props => {
