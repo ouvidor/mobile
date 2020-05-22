@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import MapView from 'react-native-maps';
 import Device from 'react-native-device-info';
-import { set } from 'react-native-reanimated';
+// import { set } from 'react-native-reanimated';
 import {
   Container,
   Text,
@@ -21,8 +21,9 @@ const initialCoords = {
   longitudeDelta: 0.0421,
 };
 
-export default function Home({ navigation }) {
+export default function Home() {
   const [coords, setCoords] = useState(initialCoords);
+  const [currentMapPosition, setCurrentMapPosition] = useState(initialCoords);
   const [manifestations, setManifestations] = useState([]);
   /** Controles de localização/permissao */
   const [locationEnabled, setLocationEnabled] = useState(false);
@@ -100,9 +101,15 @@ export default function Home({ navigation }) {
    */
   useEffect(() => {
     if (locationPermission) {
-      Location.getCurrentPosition(updateCoordinates, () => {
-        setLocationEnabled(false);
-      });
+      Location.getCurrentPosition(
+        location => {
+          updateCoordinates(location);
+          setCurrentMapPosition(location.coords);
+        },
+        () => {
+          setLocationEnabled(false);
+        }
+      );
       fetchManifestations();
     }
   }, [locationPermission]);
@@ -110,18 +117,39 @@ export default function Home({ navigation }) {
   useEffect(() => {
     if (currentManifestation) {
       setModalVisible(true);
+      setCurrentMapPosition({
+        latitude: Number(currentManifestation.latitude),
+        longitude: Number(currentManifestation.longitude),
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      });
     }
   }, [currentManifestation]);
 
+  // Remover informação de currentManifestation quando fechar modal
+  useEffect(() => {
+    if (!modalVisible) {
+      setTimeout(() => {
+        setCurrentManifestation('');
+      }, 600);
+    }
+  }, [modalVisible]);
+
   function renderCurrentLocationMarker() {
     if (Location.permissionGranted) {
-      mapRef.current.animateCamera({
-        center: {
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-        },
-        duration: 3000,
-      });
+      if (mapRef.current) {
+        mapRef.current.animateCamera({
+          center: {
+            latitude: currentManifestation
+              ? Number(currentManifestation.latitude)
+              : currentMapPosition.latitude,
+            longitude: currentManifestation
+              ? Number(currentManifestation.longitude)
+              : currentMapPosition.longitude,
+          },
+          duration: 3000,
+        });
+      }
 
       return (
         <MapView.Marker
