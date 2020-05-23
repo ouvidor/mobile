@@ -49,7 +49,9 @@ export const HistoricCard = props => {
     const toRender = [];
     if (manifestation && manifestation.item.categories) {
       manifestation.item.categories.map(c => {
-        toRender.push(<ManifestationTipoTag>{c.title}</ManifestationTipoTag>);
+        return toRender.push(
+          <ManifestationTipoTag>{c.title}</ManifestationTipoTag>
+        );
       });
     }
 
@@ -62,7 +64,11 @@ export const HistoricCard = props => {
     const status = statusManifestation[currentStatus.status.id];
 
     return (
-      <OutlinedButton color={status.color} style={{ width: 110 }}>
+      <OutlinedButton
+        key={status.id}
+        color={status.color}
+        style={{ width: 110 }}
+      >
         <Feather name={status.icon} size={18} />
         {status.name}
       </OutlinedButton>
@@ -82,7 +88,7 @@ export const HistoricCard = props => {
       {renderTipoTags()}
       <InnerCardFooter>
         Criada em {date.toLocaleDateString()} às{' '}
-        {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}h
       </InnerCardFooter>
     </HistoricContainer>
   );
@@ -101,8 +107,9 @@ export const HistoricList = props => {
       keyExtractor={manifestation => manifestation.protocol}
       onEndReachedThreshold={0.01}
       onEndReached={handleNextPage}
-      renderItem={manifestation => (
+      renderItem={(manifestation, i) => (
         <HistoricCard
+          key={i}
           manifestation={manifestation}
           handleManifestationPress={handleManifestationPress}
         />
