@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, useContext } from 'react';
 import { View, ActivityIndicator } from 'react-native';
-import { Text, ManifestationDetailsModal } from '../../components';
+import Feather from 'react-native-vector-icons/Feather';
+import { Text, ManifestationDetailsModal, Button } from '../../components';
 import { HistoricList } from '../../components/Historic';
 import { ContainerWithLoading } from '../../components/Container';
 import Api from '../../services/Api';
@@ -58,16 +59,11 @@ export default function Historic({ navigation }) {
     setCurrentManifestation(m);
   }
 
-  // renderizo botões de filtragem
-  function renderButtons() {
-    return <View />;
-  }
-
   // carrego manifestações de acordo com paginação
   async function loadManifestations(pageToLoad = 1) {
     try {
       const manifestationsPage = await Api.get(
-        `/manifestation?ownerId=${userId}&page=${pageToLoad}`
+        `/manifestation/?ownerId=${userId}&page=${pageToLoad}`
       );
 
       // const isNotTheFirstPage = pageToLoad - 1 !== 1;
@@ -78,15 +74,14 @@ export default function Historic({ navigation }) {
 
       if (manifestationsPage && manifestationsPage.count > 0) {
         // Ordenando manifestações
-        const orderedManifestationList = manifestationsPage.rows.sort(function(
-          a,
-          b
-        ) {
-          const first = Date.parse(a.updated_at);
-          const second = Date.parse(b.updated_at);
+        const orderedManifestationList = manifestationsPage.rows.sort(
+          (a, b) => {
+            const first = Date.parse(a.updated_at);
+            const second = Date.parse(b.updated_at);
 
-          return first - second;
-        });
+            return first - second;
+          }
+        );
 
         setPage(
           orderedManifestationList.length >= 1 ? pageToLoad : pageToLoad - 1
@@ -133,9 +128,48 @@ export default function Historic({ navigation }) {
     return toRender;
   }
 
+  function handleFilter() {
+    return console.log('sssss');
+  }
+
+  // renderizo botões de filtragem
+  function renderButtons() {
+    return (
+      <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexGrow: 1, margin: 5 }}>
+          <Button
+            textProps={{
+              title: 'Todos',
+            }}
+          />
+        </View>
+        <View style={{ flexGrow: 1, margin: 5 }}>
+          <Button
+            touchableProps={{
+              onPress: handleFilter,
+              background: 'green',
+            }}
+            textProps={{
+              title: 'Resolvidas',
+            }}
+          />
+        </View>
+      </View>
+    );
+  }
+
   return (
     <ContainerWithLoading loading={loading}>
-      <Text style={{ fontWeight: 'bold', fontSize: 20 }}>Meu Histórico</Text>
+      <Text style={{ marginVertical: 10, fontWeight: 'bold', fontSize: 24 }}>
+        <Feather
+          name="arrow-left"
+          size={22}
+          color={colors.BlackSirius}
+          onPress={() => navigation.pop()}
+        />{' '}
+        Meu Histórico
+      </Text>
+      {/** renderButtons()* */}
       {renderManifestations()}
       {loadingPage ? (
         <ActivityIndicator size="small" color={BlackSirius} />

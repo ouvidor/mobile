@@ -1,6 +1,9 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, useContext } from 'react';
+import { View } from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
 import { ScrollableContainerWithLoading, Text, Button } from '../../components';
+import { OuterContainer } from './styles';
 import colors from '../../utils/colors';
 import { SessionContext } from '../../store/session';
 
@@ -36,44 +39,57 @@ export default function Perfil({ navigation }) {
 
   function renderInfo() {
     return (
-      <>
-        <Text style={{ marginTop: 10, fontWeight: 'bold', fontSize: 20 }}>
-          Nome:
-        </Text>
-        <Text style={{}}>
-          {nome} {sobrenome}
-        </Text>
+      <OuterContainer>
+        <View>
+          <Text style={{ marginTop: 10, fontWeight: 'bold', fontSize: 20 }}>
+            Nome:
+          </Text>
+          <Text style={{}}>
+            {nome} {sobrenome}
+          </Text>
 
-        <Text style={{ marginTop: 10, fontWeight: 'bold', fontSize: 20 }}>
-          E-mail:
-        </Text>
+          <Text style={{ marginTop: 10, fontWeight: 'bold', fontSize: 20 }}>
+            E-mail:
+          </Text>
 
-        <Text style={{ marginBottom: 10 }}>{email}</Text>
+          <Text style={{ marginBottom: 10 }}>{email}</Text>
+        </View>
 
-        <Button
-          touchableProps={{
-            onPress: () => navigation.navigate('EditarPerfil'),
-            background: colors.Blu,
-          }}
-          textProps={{
-            title: 'Atualizar informações',
-          }}
-        />
-        <Button
-          touchableProps={{
-            onPress: () => navigation.navigate('Historico'),
-            background: colors.Blu,
-          }}
-          textProps={{
-            title: 'Minhas manifestações',
-          }}
-        />
-      </>
+        <View>
+          <Button
+            touchableProps={{
+              onPress: () => navigation.navigate('EditarPerfil'),
+              background: colors.Blu,
+            }}
+            textProps={{
+              title: 'Editar Perfil',
+            }}
+          />
+          <Button
+            touchableProps={{
+              onPress: () => navigation.navigate('Historico'),
+              background: colors.Blu,
+            }}
+            textProps={{
+              title: 'Meu Histórico',
+            }}
+          />
+        </View>
+      </OuterContainer>
     );
   }
 
   return (
     <ScrollableContainerWithLoading loading={loading}>
+      <Text style={{ marginVertical: 10, fontWeight: 'bold', fontSize: 24 }}>
+        <Feather
+          name="arrow-left"
+          size={22}
+          color={colors.BlackSirius}
+          onPress={() => navigation.pop()}
+        />{' '}
+        Perfil
+      </Text>
       {renderInfo()}
     </ScrollableContainerWithLoading>
   );
