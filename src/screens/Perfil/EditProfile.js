@@ -1,17 +1,19 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, useContext } from 'react';
+import { View } from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
 import {
   ScrollableContainerWithLoading,
   Text,
   Button,
   LabeledInput,
 } from '../../components';
+import { OuterContainer } from './styles';
 import Api from '../../services/Api';
 import colors from '../../utils/colors';
 import { SessionContext } from '../../store/session';
 import { updateProfile } from '../../store/session/actions';
 import { validarEmail } from '../../helpers';
-
 
 export default function EditarPerfil({ navigation }) {
   const { session } = useContext(SessionContext);
@@ -32,14 +34,14 @@ export default function EditarPerfil({ navigation }) {
   useEffect(() => {
     async function getUser() {
       if ('profile' in session) {
-        let { id, email, first_name, last_name } = session.profile;
+        const { id, email, first_name, last_name } = session.profile;
         setIdUser(id);
         setEmail(email);
         setNome(first_name);
         setSobrenome(last_name);
       } else {
         session.then(s => {
-          let { id, email, first_name, last_name } = s.profile;
+          const { id, email, first_name, last_name } = s.profile;
           setIdUser(id);
           setEmail(email);
           setNome(first_name);
@@ -60,7 +62,7 @@ export default function EditarPerfil({ navigation }) {
 
     let requiredConfirmPasswordData = null;
 
-    let formData = {
+    const formData = {
       nome: { field: 'first_name', value: nome },
       sobrenome: { field: 'last_name', value: sobrenome },
       email: { field: 'email', value: email, validator: validarEmail },
@@ -127,7 +129,6 @@ export default function EditarPerfil({ navigation }) {
 
     /** Se temos todos os campos válidos */
     if (valid) {
-
       if (novaSenha && novaSenha != confirmarNovaSenha) {
         setActionError('As senhas não coincidem');
         setBtnLoading(false);
@@ -142,11 +143,11 @@ export default function EditarPerfil({ navigation }) {
         return;
       }
 
-      let urlPath = `/user/${idUser}`;
+      const urlPath = `/user/${idUser}`;
       const updateUser = await Api.put(urlPath, payload);
 
-      if ('error' in updateUser) {
-        setActionError(updateUser.error);
+      if ('message' in updateUser) {
+        setActionError(updateUser.message);
       } else {
         dispatch(updateProfile({ profile: updateUser }));
         setActionError('Usuário atualizado com sucesso!!');
@@ -173,93 +174,106 @@ export default function EditarPerfil({ navigation }) {
 
   function renderUpdateUser() {
     return (
-      <>
-        <LabeledInput
-          inputProps={{
-            value: nome,
-            onChangeText: setNome,
-            onFocus: () => clearOnFocus('nome'),
-            errorMessage: erro.nome,
-            autoCapitalize: 'none',
-            placeholder: 'Nome',
-          }}
-        />
-        <LabeledInput
-          inputProps={{
-            value: sobrenome,
-            onChangeText: setSobrenome,
-            onFocus: () => clearOnFocus('sobrenome'),
-            errorMessage: erro.sobrenome,
-            autoCapitalize: 'none',
-            placeholder: 'Sobrenome',
-          }}
-        />
-        <LabeledInput
-          inputProps={{
-            value: email,
-            onChangeText: setEmail,
-            onBlur: () =>
+      <OuterContainer>
+        <View>
+          <LabeledInput
+            inputProps={{
+              value: nome,
+              onChangeText: setNome,
+              onFocus: () => clearOnFocus('nome'),
+              errorMessage: erro.nome,
+              autoCapitalize: 'none',
+              placeholder: 'Nome',
+            }}
+          />
+          <LabeledInput
+            inputProps={{
+              value: sobrenome,
+              onChangeText: setSobrenome,
+              onFocus: () => clearOnFocus('sobrenome'),
+              errorMessage: erro.sobrenome,
+              autoCapitalize: 'none',
+              placeholder: 'Sobrenome',
+            }}
+          />
+          <LabeledInput
+            inputProps={{
+              value: email,
+              onChangeText: setEmail,
+              onBlur: () =>
                 validateOnBlur(email, 'email', validarEmail, 'E-mail inválido'),
-            onFocus: () => clearOnFocus('email'),
-            errorMessage: erro.email,
-            autoCapitalize: 'none',
-            placeholder: 'E-mail',
-          }}
-        />
-        <LabeledInput
-          inputProps={{
-            value: senha,
-            onChangeText: setSenha,
-            secureTextEntry: true,
-            onFocus: () => clearOnFocus('senha'),
-            errorMessage: erro.senha,
-            autoCapitalize: 'none',
-            placeholder: 'Senha Atual',
-          }}
-        />
-        <LabeledInput
-          inputProps={{
-            value: novaSenha,
-            onChangeText: setNovaSenha,
-            secureTextEntry: true,
-            onFocus: () => clearOnFocus('novaSenha'),
-            errorMessage: erro.novaSenha,
-            autoCapitalize: 'none',
-            placeholder: 'Nova Senha',
-          }}
-        />
-        <LabeledInput
-          inputProps={{
-            value: confirmarNovaSenha,
-            onChangeText: setConfirmarNovaSenha,
-            secureTextEntry: true,
-            onFocus: () => clearOnFocus('confirmarNovaSenha'),
-            errorMessage: erro.confirmarNovaSenha,
-            autoCapitalize: 'none',
-            placeholder: 'Confirmar Senha',
-          }}
-        />
+              onFocus: () => clearOnFocus('email'),
+              errorMessage: erro.email,
+              autoCapitalize: 'none',
+              placeholder: 'E-mail',
+            }}
+          />
+          <LabeledInput
+            inputProps={{
+              value: senha,
+              onChangeText: setSenha,
+              secureTextEntry: true,
+              onFocus: () => clearOnFocus('senha'),
+              errorMessage: erro.senha,
+              autoCapitalize: 'none',
+              placeholder: 'Senha Atual',
+            }}
+          />
+          <LabeledInput
+            inputProps={{
+              value: novaSenha,
+              onChangeText: setNovaSenha,
+              secureTextEntry: true,
+              onFocus: () => clearOnFocus('novaSenha'),
+              errorMessage: erro.novaSenha,
+              autoCapitalize: 'none',
+              placeholder: 'Nova Senha',
+            }}
+          />
+          <LabeledInput
+            inputProps={{
+              value: confirmarNovaSenha,
+              onChangeText: setConfirmarNovaSenha,
+              secureTextEntry: true,
+              onFocus: () => clearOnFocus('confirmarNovaSenha'),
+              errorMessage: erro.confirmarNovaSenha,
+              autoCapitalize: 'none',
+              placeholder: 'Confirmar Senha',
+            }}
+          />
+          <Text>{actionError}</Text>
+        </View>
 
-        <Text>{actionError}</Text>
-
-        <Button
-          touchableProps={{
-            onPress: handleEditProfile,
-            background: colors.Blu,
-          }}
-          textProps={{
-            title: 'Salvar',
-            loading: btnLoading,
-          }}
-        />
-      </>
+        <View>
+          <Button
+            touchableProps={{
+              onPress: handleEditProfile,
+              background: colors.Blu,
+            }}
+            textProps={{
+              title: 'Salvar',
+              loading: btnLoading,
+            }}
+          />
+        </View>
+      </OuterContainer>
     );
   }
 
   return (
     <ScrollableContainerWithLoading loading={loading}>
-        <Text style={{fontWeight: 'bold', fontSize: 20}}>Editar Perfil</Text>
+      <>
+        <Text style={{ marginVertical: 10, fontWeight: 'bold', fontSize: 24 }}>
+          <Feather
+            name="arrow-left"
+            size={22}
+            color={colors.BlackSirius}
+            onPress={() => navigation.pop()}
+          />{' '}
+          Editar Perfil
+        </Text>
         {renderUpdateUser()}
+      </>
     </ScrollableContainerWithLoading>
   );
 }

@@ -1,8 +1,8 @@
 // FIXME: quando fecho e abro o app ele retorna uma promise, quando faço login,
 // retorna valor correto
 import React, { useReducer, useEffect } from 'react';
-import sessionReducer from './reducer';
 import AsyncStorage from '@react-native-community/async-storage';
+import sessionReducer from './reducer';
 
 import Api from '../../services/Api';
 
@@ -18,7 +18,7 @@ export const SessionContext = React.createContext({
 });
 
 async function getStorageSession() {
-  let value = await AsyncStorage.getItem('session');
+  const value = await AsyncStorage.getItem('session');
   return value;
 }
 
@@ -32,10 +32,9 @@ export default function SessionContextProvider({ children }) {
         Api.setToken(token); // coloca o token salvo no axios
         return parsedLocalData;
       }
-      //caso não tenha nada no AsyncStorage
-      else {
-        return initialState;
-      }
+      // caso não tenha nada no AsyncStorage
+
+      return initialState;
     });
 
     return localData;
@@ -46,10 +45,9 @@ export default function SessionContextProvider({ children }) {
       if ('profile' in session) {
         AsyncStorage.setItem('session', JSON.stringify(session));
         Api.setToken(session.token);
-      }
-      else {
-        session.then( s => {
-          console.log('teste', s);
+      } else {
+        session.then(s => {
+          console.log('session', s);
           AsyncStorage.setItem('session', JSON.stringify(s));
           Api.setToken(s.token);
         });
