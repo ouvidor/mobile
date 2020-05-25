@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import MapView from 'react-native-maps';
 import Device from 'react-native-device-info';
-import { set } from 'react-native-reanimated';
 import {
   Container,
   Text,
