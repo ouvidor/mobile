@@ -22,6 +22,15 @@ const HistoricManifestation = styled.View`
   align-items: center;
 `;
 
+const CardHeaderLeft = styled.View`
+  flex: 1.5;
+`;
+
+const CardHeaderRight = styled.View`
+  flex: 1;
+  align-items: flex-end;
+`;
+
 const ManifestationTitle = styled(Text).attrs(() => ({
   ellipsizeMode: 'tail',
   numberOfLines: 1,
@@ -80,10 +89,10 @@ export const HistoricCard = props => {
       onPress={() => handleManifestationPress(manifestation.item)}
     >
       <HistoricManifestation>
-        <View>
+        <CardHeaderLeft>
           <ManifestationTitle>{manifestation.item.title}</ManifestationTitle>
-        </View>
-        <View>{renderCurrentStatus()}</View>
+        </CardHeaderLeft>
+        <CardHeaderRight>{renderCurrentStatus()}</CardHeaderRight>
       </HistoricManifestation>
       {renderTipoTags()}
       <InnerCardFooter>
