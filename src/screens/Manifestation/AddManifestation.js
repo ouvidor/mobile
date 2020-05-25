@@ -65,6 +65,11 @@ export default function AddManifestation({ navigation }) {
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
       setSuccess(false);
+      setTitle(null);
+      setDescription(null);
+      setCategory(null);
+      setType(null);
+      setImages(null);
     });
 
     return unsubscribe;
