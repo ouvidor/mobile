@@ -25,6 +25,7 @@ import Perfil from '../screens/Perfil';
 import EditarPerfil from '../screens/Perfil/EditProfile';
 import Historico from '../screens/Perfil/Historic';
 import Prefeitura from '../screens/Prefeitura';
+import ManifestationDetails from '../screens/Manifestation/ManifestationDetails';
 
 /** Component para */
 
@@ -45,6 +46,10 @@ const StackPerfilNavigator = () => {
       <StackMenu.Screen name="Perfil" component={Perfil} />
       <StackMenu.Screen name="EditarPerfil" component={EditarPerfil} />
       <StackMenu.Screen name="Historico" component={Historico} />
+      <StackMenu.Screen
+        name="ManifestaoDetalhes"
+        component={ManifestationDetails}
+      />
     </StackMenu.Navigator>
   );
 };

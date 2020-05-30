@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 import styled from 'styled-components/native';
 import Feather from 'react-native-vector-icons/Feather';
@@ -9,111 +10,134 @@ import { ManifestationTipoTag } from './Tags';
 import { OutlinedButton } from './Button';
 import statusManifestation from '../utils/status';
 
-const HistoricContainer = styled.TouchableOpacity`
+const Container = styled.View.attrs({})``;
+const Gradient = styled(LinearGradient).attrs({
+  colors: ['#ffffff', '#ececec'],
+})`
   margin: 10px;
   padding: 10px;
-  border: 0.5px solid black;
   border-radius: 10px;
+  elevation: 5;
 `;
 
-const HistoricManifestation = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
+const HistoricContainer = ({ children }) => {
+  return (
+    <Container>
+      <Gradient>{children}</Gradient>
+    </Container>
+  );
+};
 
 const ManifestationTitle = styled(Text).attrs(() => ({
   ellipsizeMode: 'tail',
   numberOfLines: 1,
 }))`
-  font-size: 18px;
+  font-size: 16px;
   font-family: ${fontFaces.ExtraBold};
+  margin-bottom: 2px;
 `;
 
-const InnerCardFooter = styled(Text)`
-  margin-top: 10px;
-  font-size: 14px;
-  font-family: ${fontFaces.BoldItalic};
+/** ManifestationTypes */
+const MTContainer = styled.ScrollView.attrs({
+  contentContainerStyle: {
+    flexDirection: 'row',
+  },
+  showsHorizontalScrollIndicator: false,
+  horizontal: true,
+})``;
+const MTItem = styled.View`
+  background: #f3e6ff;
+  align-self: flex-start;
+  padding: 3px 6px;
+  margin-right: 2px;
+  border-radius: 5px;
 `;
+const MTTitle = styled(Text).attrs({
+  fontFamily: 'SemiBold',
+})`
+  font-size: 14px;
+`;
+
+const ManifestationTypes = ({ types }) => {
+  function renderItems() {
+    const toRender = [];
+
+    for (let i = 0; i < 5; i++) {
+      toRender.push(
+        <MTItem key={i}>
+          <MTTitle>Type</MTTitle>
+        </MTItem>
+      );
+    }
+
+    return toRender;
+  }
+
+  return <MTContainer>{renderItems()}</MTContainer>;
+};
+
+const FooterContainer = styled.View`
+  margin-top: 10px;
+  flex-direction: row;
+`;
+const FooterText = styled(Text).attrs({
+  fontFamily: 'SemiBoldItalic',
+})`
+  font-size: 12px;
+`;
+
+const Footer = ({ children }) => {
+  return <FooterContainer>{children}</FooterContainer>;
+};
 
 const HistoricLista = styled.FlatList.attrs({
   showVerticalScrollIndicator: false,
   contentContainerStyle: { padding: 0 },
 })``;
 
-export const HistoricCard = props => {
-  const { manifestation = {}, handleManifestationPress } = props;
-  const date = new Date(manifestation.item.created_at);
-
-  function renderTipoTags() {
-    const toRender = [];
-    if (manifestation && manifestation.item.categories) {
-      manifestation.item.categories.map(c => {
-        return toRender.push(
-          <ManifestationTipoTag>{c.title}</ManifestationTipoTag>
-        );
-      });
-    }
-
-    return toRender;
-  }
-
-  function renderCurrentStatus() {
-    const i = manifestation.item.status_history.length;
-    const currentStatus = manifestation.item.status_history[i - 1];
-    const status = statusManifestation[currentStatus.status.id];
-
-    return (
-      <OutlinedButton
-        key={status.id}
-        color={status.color}
-        style={{ width: 110 }}
-      >
-        <Feather name={status.icon} size={18} />
-        {status.name}
-      </OutlinedButton>
-    );
-  }
-
-  return (
-    <HistoricContainer
-      onPress={() => handleManifestationPress(manifestation.item)}
-    >
-      <HistoricManifestation>
-        <View>
-          <ManifestationTitle>{manifestation.item.title}</ManifestationTitle>
-        </View>
-        <View>{renderCurrentStatus()}</View>
-      </HistoricManifestation>
-      {renderTipoTags()}
-      <InnerCardFooter>
-        Criada em {date.toLocaleDateString()} às{' '}
-        {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}h
-      </InnerCardFooter>
-    </HistoricContainer>
-  );
-};
-
 export const HistoricList = props => {
-  const {
-    manifestations = {},
-    handleManifestationPress,
-    handleNextPage,
-  } = props;
+  const { manifestations = {}, navigation } = props;
 
   return (
     <HistoricLista
       data={manifestations}
-      keyExtractor={manifestation => manifestation.protocol}
-      onEndReachedThreshold={0.01}
-      onEndReached={handleNextPage}
-      renderItem={(manifestation, i) => (
-        <HistoricCard
-          key={i}
-          manifestation={manifestation}
-          handleManifestationPress={handleManifestationPress}
-        />
-      )}
+      keyExtractor={item => String(item.id)}
+      renderItem={({ item }) => {
+        const date = new Date(item.updated_at);
+        const data = date.toLocaleDateString();
+        const hora = date.toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+        });
+
+        return (
+          <HistoricContainer>
+            <ManifestationTitle>{item.title}</ManifestationTitle>
+            <ManifestationTypes>{item.types_id}</ManifestationTypes>
+            <Footer>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <FooterText>
+                  Última atualização {data} às {hora}
+                </FooterText>
+                <Feather
+                  name="arrow-right"
+                  size={21}
+                  onPress={() =>
+                    navigation.navigate('ManifestaoDetalhes', { id: item.id })
+                  }
+                />
+              </View>
+            </Footer>
+          </HistoricContainer>
+        );
+      }}
     />
   );
 };
