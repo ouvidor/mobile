@@ -225,12 +225,3 @@ export default function AddManifestation({ navigation }) {
     </ScrollableContainerWithLoading>
   );
 }
-
-// {
-//   "title": "O bagulho tá estranho por aqui",
-//   "description": "Ouço tiros a todo momento.",
-//   "categories_id": [5],
-//   "type_id": 2,
-//   "latitude": -22.9242297,
-//   "longitude": -42.0406372
-// }

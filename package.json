@@ -10,7 +10,6 @@
     "lint": "eslint .",
     "makeDebug": "cd ./android && sudo ./gradlew assembleDebug && mv ./app/build/outputs/apk/debug/app-debug.apk /var/www/apks/ouvidor-debug.apk",
     "makeRelease": "cd ./android && sudo ./gradlew assembleRelease && mv ./app/build/outputs/apk/release/app-release.apk /var/www/apks/ouvidor-release.apk"
-
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.7.1",
@@ -29,6 +28,7 @@
     "react-native-device-info": "^5.5.4",
     "react-native-gesture-handler": "^1.5.3",
     "react-native-image-picker": "^2.3.1",
+    "react-native-linear-gradient": "^2.5.6",
     "react-native-maps": "0.26.1",
     "react-native-modal": "^11.5.6",
     "react-native-reanimated": "^1.7.0",
