@@ -28,6 +28,15 @@ const HistoricContainer = ({ children }) => {
   );
 };
 
+const CardHeaderLeft = styled.View`
+  flex: 1.5;
+`;
+
+const CardHeaderRight = styled.View`
+  flex: 1;
+  align-items: flex-end;
+`;
+
 const ManifestationTitle = styled(Text).attrs(() => ({
   ellipsizeMode: 'tail',
   numberOfLines: 1,
