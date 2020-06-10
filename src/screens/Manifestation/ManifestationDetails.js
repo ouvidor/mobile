@@ -1,7 +1,12 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
-import { ScrollableContainerWithLoading, Text } from '../../components';
-import Status from '../../utils/status';
+import {
+  ScrollableContainerWithLoading,
+  Text,
+  ManifestationTitle,
+  StatusHistory,
+} from '../../components';
 import Api from '../../services/Api';
 
 export default function ManifestationDetails({ route }) {
@@ -36,26 +41,16 @@ export default function ManifestationDetails({ route }) {
   function renderContent() {
     const toRender = [];
 
-    toRender.push(
-      <Text style={{ marginBottom: 25 }}>{manifestation.title}</Text>
-    );
-
-    manifestation.status_history.map(status => {
-      if (status.status.id == 2) {
-        toRender.push(
-          <Text style={{ marginBottom: 25 }}>{status.description}</Text>
-        );
-      } else {
-        toRender.push(
-          <>
-            <Text>{status.status.title}</Text>
-            <Text style={{ marginBottom: 25 }}>{status.description}</Text>
-          </>
-        );
-      }
+    manifestation.status_history.map((status, i) => {
+      toRender.push(<StatusHistory data={status} key={i} />);
     });
 
-    return toRender;
+    return (
+      <>
+        <ManifestationTitle>{manifestation.title}</ManifestationTitle>
+        {toRender}
+      </>
+    );
   }
   function renderError() {
     return <Text>{error}</Text>;

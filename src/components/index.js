@@ -4,8 +4,9 @@ export { SelectCheckbox } from './SelectCheckbox';
 export { Button, OutlinedButton } from './Button';
 export { Text, TabBarLabel } from './Text';
 export { Input, LabeledInput } from './Input';
-export { ManifestationDetailsModal } from './ManifestationDetailsModal';
 export { ManifestationTipoTag } from './Tags';
+export { ManifestationDetailsModal } from './ManifestationDetailsModal';
+export { ManifestationTitle, StatusHistory } from './ManifestationDetails';
 
 export {
   Container,
