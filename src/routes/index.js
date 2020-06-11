@@ -11,6 +11,7 @@ import {
 } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Feather from 'react-native-vector-icons/Feather';
+import Foundation from 'react-native-vector-icons/Foundation';
 import { TabBarLabel } from '../components';
 import colors from '../utils/colors';
 
@@ -26,6 +27,7 @@ import EditarPerfil from '../screens/Perfil/EditProfile';
 import Historico from '../screens/Perfil/Historic';
 import Prefeitura from '../screens/Prefeitura';
 import ManifestationDetails from '../screens/Manifestation/ManifestationDetails';
+import SearchManifestation from '../screens/Manifestation/SearchManifestation';
 
 /** Component para */
 
@@ -103,6 +105,14 @@ function getScreenOptionsForRoute(route) {
         <TabBarLabel focused={focused}>Início</TabBarLabel>
       ),
     },
+    SearchManifestation: {
+      tabBarIcon: () => (
+        <Foundation name="magnifying-glass" color={tabColor} size={iconSize} />
+      ),
+      tabBarLabel: ({ focused }) => (
+        <TabBarLabel focused={focused}>Buscar</TabBarLabel>
+      ),
+    },
     AddManifestation: {
       tabBarIcon: () => (
         <Feather name="plus-circle" color={tabColor} size={iconSize} />
@@ -139,6 +149,10 @@ const HomeTabNavigator = () => {
       screenOptions={({ route }) => getScreenOptionsForRoute(route)}
     >
       <HomeTabs.Screen name="Home" component={Home} />
+      <HomeTabs.Screen
+        name="SearchManifestation"
+        component={SearchManifestation}
+      />
       <HomeTabs.Screen name="AddManifestation" component={AddManifestation} />
       <StackMenu.Screen name="Menu" component={StackMenuNavigator} />
     </HomeTabs.Navigator>
