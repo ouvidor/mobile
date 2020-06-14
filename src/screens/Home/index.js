@@ -1,36 +1,28 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, useRef } from 'react';
-import MapView from 'react-native-maps';
+import MapView from 'react-native-map-clustering';
+import { Marker } from 'react-native-maps';
 import Device from 'react-native-device-info';
-import {
-  Container,
-  Text,
-  Button,
-  ManifestationDetailsModal,
-} from '../../components';
+import { Container, Text, Button } from '../../components';
 import Location from '../../services/Location';
 import Manifestation from '../../services/Manifestation';
 
 /** Coordenadas iniciais do mapa */
 const initialCoords = {
-  latitude: 37.78825,
-  longitude: -122.4324,
+  latitude: -15.749997,
+  longitude: -47.9499962,
   latitudeDelta: 0.0922,
   longitudeDelta: 0.0421,
 };
 
-export default function Home() {
+export default function Home({ navigation }) {
   const [coords, setCoords] = useState(initialCoords);
   const [currentMapPosition, setCurrentMapPosition] = useState(initialCoords);
   const [manifestations, setManifestations] = useState([]);
   /** Controles de localização/permissao */
   const [locationEnabled, setLocationEnabled] = useState(false);
   const [locationPermission, setLocationPermission] = useState(false);
-  /** Controle do Modal */
-  const [modalVisible, setModalVisible] = useState(false);
-  /** Controle de qual manifestação foi clicada por ultimo. */
-  const [currentManifestation, setCurrentManifestation] = useState(null);
 
   const mapRef = useRef();
 
@@ -64,10 +56,6 @@ export default function Home() {
   async function checkIfLocationEnabled() {
     const enabled = await Device.isLocationEnabled();
     setLocationEnabled(enabled);
-  }
-
-  function handleManifestationPress(m) {
-    setCurrentManifestation(m);
   }
 
   /**
@@ -113,45 +101,20 @@ export default function Home() {
     }
   }, [locationPermission]);
 
-  useEffect(() => {
-    if (currentManifestation) {
-      setModalVisible(true);
-      setCurrentMapPosition({
-        latitude: Number(currentManifestation.latitude),
-        longitude: Number(currentManifestation.longitude),
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      });
-    }
-  }, [currentManifestation]);
-
-  // Remover informação de currentManifestation quando fechar modal
-  useEffect(() => {
-    if (!modalVisible) {
-      setTimeout(() => {
-        setCurrentManifestation('');
-      }, 600);
-    }
-  }, [modalVisible]);
-
   function renderCurrentLocationMarker() {
     if (Location.permissionGranted) {
-      if (mapRef.current) {
-        mapRef.current.animateCamera({
-          center: {
-            latitude: currentManifestation
-              ? Number(currentManifestation.latitude)
-              : currentMapPosition.latitude,
-            longitude: currentManifestation
-              ? Number(currentManifestation.longitude)
-              : currentMapPosition.longitude,
-          },
-          duration: 3000,
-        });
+      if (mapRef.current && mapRef.current.state.isReady) {
+        const region = {
+          latitude: currentMapPosition.latitude,
+          longitude: currentMapPosition.longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        };
+        mapRef.current.animateToRegion(region, 3000);
       }
 
       return (
-        <MapView.Marker
+        <Marker
           coordinate={{
             latitude: coords.latitude,
             longitude: coords.longitude,
@@ -171,7 +134,7 @@ export default function Home() {
     manifestations.map(manifestation => {
       if (manifestation.location) {
         markers.push(
-          <MapView.Marker
+          <Marker
             key={manifestation.protocol}
             coordinate={{
               latitude: Number(manifestation.latitude),
@@ -179,7 +142,11 @@ export default function Home() {
             }}
             title={manifestation.titulo}
             description={manifestation.description}
-            onPress={() => handleManifestationPress(manifestation)}
+            onPress={() =>
+              navigation.navigate('ManifestaoDetalhes', {
+                id: manifestation.id,
+              })
+            }
           />
         );
       }
@@ -211,11 +178,6 @@ export default function Home() {
         {renderCurrentLocationMarker()}
         {renderMarkers()}
       </MapView>
-      <ManifestationDetailsModal
-        isVisible={modalVisible}
-        close={() => setModalVisible(false)}
-        manifestation={currentManifestation}
-      />
     </Container>
   );
 }
