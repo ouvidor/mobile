@@ -131,9 +131,13 @@ export default function AddManifestation({ navigation }) {
 
             imagesData.append('file', file);
           });
-          imagesData.append('manifestation_id', add.id);
+          imagesData.append('manifestations_id', add.id);
 
-          const addFile = await Api.post('/files', imagesData);
+          const addFile = await Api.post(
+            `/files/manifestation/${add.id}`,
+            imagesData
+          );
+          console.log('Add file', addFile);
         }
 
         setSuccess(add.id !== null);

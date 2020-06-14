@@ -18,14 +18,14 @@ class Manifestation {
       const lastPage = manifestationList.last_page;
 
       this.manifestations = manifestationList;
-      for (let i = 2; i <= lastPage; i += 1) {
-        const manifestation = await Api.get(`/manifestation/?page=${i}`);
+      // for (let i = 2; i <= lastPage; i += 1) {
+      //   const manifestation = await Api.get(`/manifestation/?page=${i}`);
 
-        this.manifestations.rows = [
-          ...this.manifestations.rows,
-          ...manifestation.rows,
-        ];
-      }
+      //   this.manifestations.rows = [
+      //     ...this.manifestations.rows,
+      //     ...manifestation.rows,
+      //   ];
+      // }
       return this.manifestations;
     } catch (e) {
       return e;

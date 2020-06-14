@@ -4,12 +4,12 @@ import { View } from 'react-native';
 import styled from 'styled-components/native';
 import Modal from 'react-native-modal';
 import Feather from 'react-native-vector-icons/Feather';
-import { Container, ScrollableContainer } from './Container';
-import { Text, fontFaces } from './Text';
-import { ManifestationTipoTag } from './Tags';
-import { OutlinedButton } from './Button';
-import colors from '../utils/colors';
-import statusManifestation from '../utils/status';
+import { Container, ScrollableContainer } from '../Container';
+import { Text, fontFaces } from '../Text';
+import { ManifestationTipoTag } from '../Tags';
+import { OutlinedButton } from '../Button';
+import colors from '../../utils/colors';
+import statusManifestation from '../../utils/status';
 
 const { globalColors } = colors;
 
