@@ -105,12 +105,14 @@ const HistoricLista = styled.FlatList.attrs({
 })``;
 
 export const HistoricList = props => {
-  const { manifestations = {}, navigation } = props;
+  const { manifestations = {}, navigation, handleNextPage } = props;
 
   return (
     <HistoricLista
       data={manifestations}
       keyExtractor={item => String(item.id)}
+      onEndReachedThreshold={0.01}
+      onEndReached={handleNextPage}
       renderItem={({ item }) => {
         const date = new Date(item.updated_at);
         const data = date.toLocaleDateString();
@@ -139,7 +141,9 @@ export const HistoricList = props => {
                   name="arrow-right"
                   size={21}
                   onPress={() =>
-                    navigation.navigate('ManifestaoDetalhes', { id: item.id })
+                    navigation.navigate('ManifestaoDetalhes', {
+                      id: item.id,
+                    })
                   }
                 />
               </View>
