@@ -25,6 +25,7 @@ export default function Home({ navigation }) {
   const [locationPermission, setLocationPermission] = useState(false);
 
   const mapRef = useRef();
+  const lastManifestationPressed = useRef();
 
   /**
    * @desc Método invocado toda vez que há uma atualização na localização.
@@ -127,6 +128,16 @@ export default function Home({ navigation }) {
     return null;
   }
 
+  function handleManifestationPressed(m) {
+    if (m.id !== lastManifestationPressed.current) {
+      lastManifestationPressed.current = m.id;
+    } else {
+      navigation.navigate('ManifestaoDetalhes', {
+        id: m.id,
+      });
+    }
+  }
+
   function renderMarkers() {
     if (!manifestations) return null;
     const markers = [];
@@ -140,13 +151,9 @@ export default function Home({ navigation }) {
               latitude: Number(manifestation.latitude),
               longitude: Number(manifestation.longitude),
             }}
-            title={manifestation.titulo}
+            title={manifestation.title}
             description={manifestation.description}
-            onPress={() =>
-              navigation.navigate('ManifestaoDetalhes', {
-                id: manifestation.id,
-              })
-            }
+            onPress={() => handleManifestationPressed(manifestation)}
           />
         );
       }
