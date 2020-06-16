@@ -1,16 +1,19 @@
 {
   "env": {
     "es6": true,
-    "node": true,
-    "jest": true
+    "node": true
   },
-  "extends": ["airbnb-base", "prettier"],
-  "plugins": ["prettier"],
+  "extends": ["airbnb", "prettier", "prettier/react"],
+  "plugins": ["react", "jsx-a11y", "prettier"],
   "globals": {
     "Atomics": "readonly",
-    "SharedArrayBuffer": "readonly"
+    "SharedArrayBuffer": "readonly",
+    "__DEV__": true
   },
   "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
@@ -20,8 +23,15 @@
     "no-param-reassign": "off",
     "camelcase": "off",
     "no-console": "off",
-    "no-unused-vars": ["error", { "ignorePattern": "next" }],
     "import/no-dynamic-require": "off",
-    "no-restricted-syntax": 0
+    "no-restricted-syntax": 0,
+    "react/jsx-filename-extension": [
+      "error",
+      { "extensions": [".js", ".jsx"] }
+    ],
+    "import/prefer-default-export": "off",
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "global-require": "off",
+    "react/jsx-props-no-spreading": "off"
   }
 }
