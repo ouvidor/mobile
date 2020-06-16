@@ -20,7 +20,7 @@ export default function Menu({ navigation }) {
         </ItemMenu>
         <ItemMenu
           onPress={() => {
-            navigation.navigate('Prefeitura');
+            navigation.navigate('Info');
           }}>
           Prefeitura
         </ItemMenu>

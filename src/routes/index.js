@@ -25,7 +25,7 @@ import Menu from '../screens/Menu';
 import Perfil from '../screens/Perfil';
 import EditarPerfil from '../screens/Perfil/EditProfile';
 import Historico from '../screens/Perfil/Historic';
-import Prefeitura from '../screens/Prefeitura';
+import Info from '../screens/Info';
 import ManifestationDetails from '../screens/ManifestationDetails';
 import SearchManifestation from '../screens/Manifestation/SearchManifestation';
 
@@ -67,7 +67,7 @@ const StackMenuNavigator = () => {
         component={Menu}
       />
       <StackMenu.Screen name="Perfil" component={StackPerfilNavigator} />
-      <StackMenu.Screen name="Prefeitura" component={Prefeitura} />
+      <StackMenu.Screen name="Info" component={Info} />
     </StackMenu.Navigator>
   );
 };
