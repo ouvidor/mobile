@@ -1,7 +1,8 @@
 /* eslint-disable camelcase */
 /* eslint-disable array-callback-return */
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+
 import {
   ScrollableContainerWithLoading,
   Text,
@@ -9,6 +10,7 @@ import {
   Avaliation,
   StatusHistory,
 } from '../../components';
+import { SessionContext } from '../../store/session';
 import Api from '../../services/Api';
 
 export default function ManifestationDetails({ route }) {
@@ -16,14 +18,19 @@ export default function ManifestationDetails({ route }) {
   const [manifestation, setManifestation] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isOwner, setIsOwner] = useState(false);
+
+  const { session } = useContext(SessionContext);
 
   async function fetchManifestationDetails() {
-    const details = await Api.get(`manifestation/${id}`);
+    const manifestationData = await Api.get(`manifestation/${id}`);
 
-    if ('message' in details) {
-      setError(details.message);
+    if ('message' in manifestationData) {
+      setError(manifestationData.message);
     } else {
-      setManifestation(details);
+      setManifestation(manifestationData);
+      const resolvedSession = await session;
+      setIsOwner(resolvedSession.profile.id === manifestationData.user.id);
     }
     setLoading(false);
   }
@@ -35,6 +42,7 @@ export default function ManifestationDetails({ route }) {
     }
     getId();
   }, []);
+
   useEffect(() => {
     if (id) {
       fetchManifestationDetails();
@@ -46,7 +54,7 @@ export default function ManifestationDetails({ route }) {
     const { status_history } = manifestation;
     const lastStatus = status_history[status_history.length - 1].status.id;
 
-    if (lastStatus === 5) {
+    if (lastStatus === 5 && isOwner) {
       toRender.push(
         <Avaliation
           avaliation={manifestation.avaliation}
@@ -72,13 +80,10 @@ export default function ManifestationDetails({ route }) {
       </>
     );
   }
-  function renderError() {
-    return <Text>{error}</Text>;
-  }
 
   return (
     <ScrollableContainerWithLoading loading={loading}>
-      {error && renderError()}
+      {error && <Text>{error}</Text>}
       {manifestation && renderContent()}
     </ScrollableContainerWithLoading>
   );
