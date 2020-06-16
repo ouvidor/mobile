@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { NavigationNativeContainer, useRoute } from '@react-navigation/native';
+import { NavigationContainer, useRoute } from '@react-navigation/native';
 import {
   createStackNavigator,
   CardStyleInterpolators,
@@ -161,7 +161,7 @@ const HomeTabNavigator = () => {
 
 export default function Routes() {
   return (
-    <NavigationNativeContainer>
+    <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Splash"
         headerMode="none"
@@ -175,6 +175,6 @@ export default function Routes() {
         <Stack.Screen name="Home" component={HomeTabNavigator} />
         <Stack.Screen name="Cadastro" component={Cadastro} />
       </Stack.Navigator>
-    </NavigationNativeContainer>
+    </NavigationContainer>
   );
 }
