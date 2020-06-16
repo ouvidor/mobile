@@ -6,7 +6,7 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import TagsList from '../TagList';
 import { Container, Title, Footer } from './styles';
 
-const ManifestationCard = ({ manifestation, handleOpenManifestation }) => {
+const ManifestationCard = ({ manifestation, handleSelectManifestation }) => {
   const tags = [
     manifestation.categories.map(category => category.title),
     manifestation.type.title,
@@ -34,10 +34,11 @@ const ManifestationCard = ({ manifestation, handleOpenManifestation }) => {
           <Text>
             Última atualização {data} às {hora}
           </Text>
+
           <FeatherIcon
             name="arrow-right"
-            size={21}
-            onPress={handleOpenManifestation}
+            size={24}
+            onPress={() => handleSelectManifestation(manifestation.id)}
           />
         </View>
       </Footer>

@@ -16,7 +16,7 @@ const ManifestationList = ({
 }) => {
   function handleSelectManifestation(manifestationId) {
     navigation.navigate('ManifestacaoDetalhes', {
-      id: manifestationId.id,
+      id: manifestationId,
     });
   }
 
@@ -29,7 +29,7 @@ const ManifestationList = ({
       renderItem={({ item }) => (
         <ManifestationCard
           key={item.id}
-          handleSelectManifestation={() => handleSelectManifestation(item.id)}
+          handleSelectManifestation={handleSelectManifestation}
           manifestation={item}
         />
       )}
