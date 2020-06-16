@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+
+import Api from '../../services/Api';
 import { getCategories, getTypes } from '../../helpers';
 import {
   LabeledInput,
@@ -13,8 +15,6 @@ import {
 import { ContainerWithLoading } from '../../components/Container';
 import { HistoricList } from '../../components/Historic';
 import colors from '../../utils/colors';
-
-import Api from '../../services/Api';
 
 let titleFilter = null;
 let typeFilter = null;
@@ -184,13 +184,14 @@ export default function SearchManifestation({ navigation }) {
       toRender.push(
         <>
           <LabeledInput
+            label="Título"
             inputProps={{
               value: title,
               onChangeText: setTitle,
             }}
           />
           <SelectCheckbox
-            label=""
+            label="Categorias"
             blankOption="Selecione uma categoria"
             options={categories}
             onSelect={selectedCategories =>
@@ -198,7 +199,7 @@ export default function SearchManifestation({ navigation }) {
             }
           />
           <Select
-            label=""
+            label="Tipo"
             blankOption="Selecione um tipo"
             options={types}
             onSelect={selectedType => {
