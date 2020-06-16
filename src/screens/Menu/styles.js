@@ -2,10 +2,11 @@ import styled from 'styled-components';
 import { Text } from '../../components';
 
 export const ItemContainer = styled.View`
-  padding: 10px;
+  padding: 40px 20px;
 `;
 
 export const ItemMenu = styled(Text)`
-  font-size: 18px;
-  margin: 5px 0 5px 0;
+  font-size: 24px;
+  margin: 10px 0;
+  color: ${({ red }) => (red ? '#d00' : '#000')};
 `;

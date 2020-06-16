@@ -15,18 +15,17 @@ export default function Menu({ navigation }) {
         <ItemMenu
           onPress={() => {
             navigation.navigate('Perfil');
-          }}
-        >
+          }}>
           Meu Perfil
         </ItemMenu>
         <ItemMenu
           onPress={() => {
             navigation.navigate('Prefeitura');
-          }}
-        >
+          }}>
           Prefeitura
         </ItemMenu>
         <ItemMenu
+          red
           onPress={async () => {
             const signout = await SignOut();
             if (signout) {
@@ -36,8 +35,7 @@ export default function Menu({ navigation }) {
                 .dangerouslyGetParent()
                 .replace('Login');
             }
-          }}
-        >
+          }}>
           Sair
         </ItemMenu>
       </ItemContainer>
