@@ -129,7 +129,7 @@ export default function EditarPerfil({ navigation }) {
 
     /** Se temos todos os campos válidos */
     if (valid) {
-      if (novaSenha && novaSenha != confirmarNovaSenha) {
+      if (novaSenha && novaSenha !== confirmarNovaSenha) {
         setActionError('As senhas não coincidem');
         setBtnLoading(false);
         return;
@@ -248,7 +248,7 @@ export default function EditarPerfil({ navigation }) {
           <Button
             touchableProps={{
               onPress: handleEditProfile,
-              background: colors.Blu,
+              background: colors.Blue,
             }}
             textProps={{
               title: 'Salvar',
@@ -267,7 +267,7 @@ export default function EditarPerfil({ navigation }) {
           <Feather
             name="arrow-left"
             size={22}
-            color={colors.BlackSirius}
+            color={colors.Gray}
             onPress={() => navigation.pop()}
           />{' '}
           Editar Perfil

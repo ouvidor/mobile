@@ -21,8 +21,6 @@ export default function Historic({ navigation }) {
   const [loadingPage, setLoadingPage] = useState(false);
   const [page, setPage] = useState(1);
 
-  const { BlackSirius } = colors;
-
   useEffect(() => {
     // Pegar id do usuário
     function getUserId() {
@@ -96,7 +94,7 @@ export default function Historic({ navigation }) {
         <Feather
           name="arrow-left"
           size={22}
-          color={colors.BlackSirius}
+          color={colors.Gray}
           onPress={() => navigation.pop()}
         />{' '}
         Meu Histórico

@@ -43,13 +43,12 @@ const StackPerfilNavigator = () => {
       screenOptions={{
         gestureEnabled: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      }}
-    >
+      }}>
       <StackMenu.Screen name="Perfil" component={Perfil} />
       <StackMenu.Screen name="EditarPerfil" component={EditarPerfil} />
       <StackMenu.Screen name="Historico" component={Historico} />
       <StackMenu.Screen
-        name="ManifestaoDetalhes"
+        name="ManifestacaoDetalhes"
         component={ManifestationDetails}
       />
     </StackMenu.Navigator>
@@ -65,8 +64,7 @@ const StackMenuNavigator = () => {
       screenOptions={{
         gestureEnabled: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      }}
-    >
+      }}>
       <StackMenu.Screen
         options={{ headerShown: false }}
         name="Menu"
@@ -146,8 +144,7 @@ const HomeTabs = createBottomTabNavigator();
 const HomeTabNavigator = () => {
   return (
     <HomeTabs.Navigator
-      screenOptions={({ route }) => getScreenOptionsForRoute(route)}
-    >
+      screenOptions={({ route }) => getScreenOptionsForRoute(route)}>
       <HomeTabs.Screen name="Home" component={Home} />
       <HomeTabs.Screen
         name="SearchManifestation"
@@ -168,8 +165,7 @@ export default function Routes() {
         screenOptions={{
           gestureEnabled: false,
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        }}
-      >
+        }}>
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Home" component={HomeTabNavigator} />

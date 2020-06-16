@@ -132,8 +132,7 @@ export const HistoricList = props => {
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                }}
-              >
+                }}>
                 <FooterText>
                   Última atualização {data} às {hora}
                 </FooterText>
@@ -141,7 +140,7 @@ export const HistoricList = props => {
                   name="arrow-right"
                   size={21}
                   onPress={() =>
-                    navigation.navigate('ManifestaoDetalhes', {
+                    navigation.navigate('ManifestacaoDetalhes', {
                       id: item.id,
                     })
                   }

@@ -1,13 +1,14 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useContext } from 'react';
 import { View } from 'react-native';
-import { Container, Button, LabeledInput, Text } from '../../components';
+
 import { StandardBackground } from '../../components/BackgroundImage';
-import { SignIn } from '../../helpers';
-import { ContainerForm } from './styles';
-import colors from '../../utils/colors';
 import { SessionContext } from '../../store/session';
 import { signIn } from '../../store/session/actions';
+import { Container, Button, LabeledInput, Text } from '../../components';
+import { SignIn } from '../../helpers';
+import colors from '../../utils/colors';
+import { ContainerForm } from './styles';
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState();
@@ -98,14 +99,14 @@ export default function Login({ navigation }) {
             style={{
               width: '100%',
               alignSelf: 'center',
-              borderBottomColor: colors.BlackSirius,
+              borderBottomColor: colors.Gray,
               borderBottomWidth: 0.4,
               marginBottom: 20,
             }}
           />
 
           <Button
-            touchableProps={{ onPress: handleLogin, background: colors.Blu }}
+            touchableProps={{ onPress: handleLogin, background: colors.Blue }}
             textProps={{
               title: 'Login',
               loading: btnLoading,
@@ -120,10 +121,9 @@ export default function Login({ navigation }) {
                 lineHeight: 20,
                 fontSize: 18,
                 fontWeight: 'bold',
-                color: colors.Blu,
+                color: colors.Blue,
               }}
-              onPress={() => navigation.navigate('Cadastro')}
-            >
+              onPress={() => navigation.navigate('Cadastro')}>
               Cadastre-se já
             </Text>
           </View>

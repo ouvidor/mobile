@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import { View, ActivityIndicator } from 'react-native';
-import Foundation from 'react-native-vector-icons/Foundation';
+import FeatherIcon from 'react-native-vector-icons/Feather';
 import { getCategories, getTypes } from '../../helpers';
 import {
   LabeledInput,
@@ -34,7 +34,7 @@ export default function SearchManifestation({ navigation }) {
   const [loadingPage, setLoadingPage] = useState(false);
   const [page, setPage] = useState(1);
 
-  const { BlackSirius } = colors;
+  const { Gray } = colors;
 
   useEffect(() => {
     async function fetchCategories() {
@@ -159,8 +159,7 @@ export default function SearchManifestation({ navigation }) {
             fontWeight: 'bold',
             fontSize: 20,
             alignSelf: 'center',
-          }}
-        >
+          }}>
           Não encontrado
         </Text>
       );
@@ -229,8 +228,7 @@ export default function SearchManifestation({ navigation }) {
           fontWeight: 'bold',
           fontSize: 20,
           alignSelf: 'center',
-        }}
-      >
+        }}>
         {error}
       </Text>
     );
@@ -244,15 +242,14 @@ export default function SearchManifestation({ navigation }) {
           justifyContent: 'space-between',
           alignItems: 'center',
           paddingHorizontal: 10,
-        }}
-      >
+        }}>
         <Text style={{ marginVertical: 10, fontWeight: 'bold', fontSize: 24 }}>
           Buscar Manifestação
         </Text>
-        <Foundation
-          name="filter"
+        <FeatherIcon
+          name="search"
           size={24}
-          color={colors.Blu}
+          color={colors.Blue}
           onPress={() => {
             setFilter(!filter);
           }}
@@ -261,11 +258,7 @@ export default function SearchManifestation({ navigation }) {
       {renderFilters()}
       {error && renderError()}
       {renderManifestations()}
-      {loadingPage ? (
-        <ActivityIndicator size="small" color={BlackSirius} />
-      ) : (
-        <></>
-      )}
+      {loadingPage ? <ActivityIndicator size="small" color={Gray} /> : <></>}
     </ContainerWithLoading>
   );
 }

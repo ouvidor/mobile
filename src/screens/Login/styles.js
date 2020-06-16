@@ -10,4 +10,3 @@ export const ContainerForm = styled.View`
   padding: 15px;
   elevation: 5;
 `;
-

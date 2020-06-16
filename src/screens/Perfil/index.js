@@ -59,7 +59,7 @@ export default function Perfil({ navigation }) {
           <Button
             touchableProps={{
               onPress: () => navigation.navigate('EditarPerfil'),
-              background: colors.Blu,
+              background: colors.Blue,
             }}
             textProps={{
               title: 'Editar Perfil',
@@ -68,7 +68,7 @@ export default function Perfil({ navigation }) {
           <Button
             touchableProps={{
               onPress: () => navigation.navigate('Historico'),
-              background: colors.Blu,
+              background: colors.Blue,
             }}
             textProps={{
               title: 'Meu Histórico',
@@ -85,7 +85,7 @@ export default function Perfil({ navigation }) {
         <Feather
           name="arrow-left"
           size={22}
-          color={colors.BlackSirius}
+          color={colors.Gray}
           onPress={() => navigation.pop()}
         />{' '}
         Perfil

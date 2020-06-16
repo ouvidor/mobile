@@ -24,9 +24,9 @@ export default function Splash({ navigation }) {
   }, []);
 
   return (
-    <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Image
-        style={{maxWidth: 200, maxHeight: 200}}
+        style={{ maxWidth: 200, maxHeight: 200 }}
         source={require('../../assets/images/logoOuvidor.png')}
       />
     </View>

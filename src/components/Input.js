@@ -5,23 +5,17 @@ import { StyleSheet } from 'react-native';
 import { fontFaces, Text } from './Text';
 import colors from '../utils/colors';
 
-const {
-  ErrorTextColor,
-  ErrorBackground,
-  MarioCap,
-  BlackSirius,
-  Walter,
-} = colors;
+const { ErrorTextColor, ErrorBackground, Red, White, Gray } = colors;
 
 export const Input = styled.TextInput`
   font-size: ${props => props.fontSize || '16px'};
   font-family: ${props => fontFaces[props.fontFamily] || fontFaces.Regular};
   border: ${StyleSheet.hairlineWidth}px;
-  border-color: ${props => (props.errorMessage ? MarioCap : BlackSirius)};
+  border-color: ${props => (props.errorMessage ? Red : Gray)};
   border-radius: 5px;
   padding: 10px;
-  color: ${props => (props.errorMessage ? MarioCap : BlackSirius)};
-  background: ${props => (props.errorMessage ? ErrorBackground : Walter)};
+  color: ${props => (props.errorMessage ? Red : Gray)};
+  background: ${props => (props.errorMessage ? ErrorBackground : White)};
   elevation: ${props => (props.shadow ? 1 : 0)};
 `;
 
@@ -33,7 +27,7 @@ const Label = styled(Text)`
   padding-left: 3px;
   font-size: 16px;
   font-family: ${props => fontFaces[props.fontFamily] || fontFaces.SemiBold};
-  color: ${props => (props.errorMessage ? ErrorTextColor : BlackSirius)};
+  color: ${props => (props.errorMessage ? ErrorTextColor : Gray)};
 `;
 
 const Error = styled(Text)`

@@ -7,7 +7,7 @@ import colors from '../../utils/colors';
 
 export const HeaderContainer = styled.View`
   padding: 20px;
-  background-color: ${colors.Blu};
+  background-color: ${colors.Blue};
 `;
 
 export const HeaderButtonContainer = styled.View`
@@ -24,7 +24,7 @@ const Button = styled.TouchableOpacity`
   align-items: center;
   border: 3px solid;
   border-color: ${props =>
-    props.selected === props.position ? colors.LightBlu : colors.Blu};
+    props.selected === props.position ? colors.LightBlue : colors.Blue};
 `;
 
 export const HeaderIconContainer = styled.View`
@@ -52,8 +52,7 @@ export const HeaderButton = props => {
       selected={selected}
       onPress={() => {
         onPress();
-      }}
-    >
+      }}>
       <Text>{label}</Text>
     </Button>
   );

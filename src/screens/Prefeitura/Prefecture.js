@@ -30,7 +30,7 @@ export default function Prefecture() {
   const [error, setError] = useState({});
   const [actionMessage, setActionMessage] = useState();
 
-  const { BlackSirius } = colors;
+  const { Gray } = colors;
 
   useEffect(() => {
     async function getManifestationCount() {
@@ -208,7 +208,7 @@ export default function Prefecture() {
         <Button
           touchableProps={{
             onPress: handleManifestation,
-            background: colors.Blu,
+            background: colors.Blue,
           }}
           textProps={{
             title: 'Enviar Sugestão',
@@ -226,7 +226,7 @@ export default function Prefecture() {
           <ActivityIndicator
             style={{ marginTop: 30 }}
             size="large"
-            color={BlackSirius}
+            color={Gray}
           />
         ) : (
           [renderInfo(), renderSugestion()]

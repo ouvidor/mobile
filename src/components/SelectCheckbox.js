@@ -14,7 +14,7 @@ import {
 } from './Select';
 import colors from '../utils/colors';
 
-const { ErrorTextColor, BlackSirius, SuccessGreen, Walter } = colors;
+const { ErrorTextColor, Gray, Success, White } = colors;
 
 const Error = styled(Text)`
   color: ${ErrorTextColor};
@@ -29,7 +29,7 @@ const Check = styled(FontAwesome).attrs(props => ({
   font-size: 16px;
   margin-right: 8px;
   elevation: 1;
-  color: ${props => (props.checked ? SuccessGreen : BlackSirius)};
+  color: ${props => (props.checked ? Success : Gray)};
 `;
 
 const CheckboxItem = props => {
@@ -52,13 +52,13 @@ const SelectedOptionBadge = styled.TouchableOpacity`
   margin: 3px;
   padding: 5px;
   border-radius: 5px;
-  background: ${SuccessGreen};
+  background: ${Success};
 `;
 
 const SelectedOptionText = styled(Text)`
   font-size: 13px;
   font-family: ${fontFaces.Bold};
-  color: ${Walter};
+  color: ${White};
 `;
 
 export const SelectCheckbox = props => {
@@ -151,8 +151,7 @@ export const SelectCheckbox = props => {
                 onSelect(
                   clearEmptyKeys({ ...selected, [option.value]: false })
                 );
-              }}
-            >
+              }}>
               <SelectedOptionText>{option.label}</SelectedOptionText>
             </SelectedOptionBadge>
           );
@@ -171,12 +170,11 @@ export const SelectCheckbox = props => {
           onPress={() => {
             setCollapsed(!collapsed);
             onPress();
-          }}
-        >
+          }}>
           <SelectedOptionsContainer>
             {renderSelected()}
           </SelectedOptionsContainer>
-          <Entypo name="select-arrows" size={21} color={BlackSirius} />
+          <Entypo name="select-arrows" size={21} color={Gray} />
         </SelectedOption>
         {renderOptions()}
       </SelectContainer>

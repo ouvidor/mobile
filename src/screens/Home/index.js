@@ -132,7 +132,7 @@ export default function Home({ navigation }) {
     if (m.id !== lastManifestationPressed.current) {
       lastManifestationPressed.current = m.id;
     } else {
-      navigation.navigate('ManifestaoDetalhes', {
+      navigation.navigate('ManifestacaoDetalhes', {
         id: m.id,
       });
     }

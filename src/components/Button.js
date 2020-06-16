@@ -5,7 +5,7 @@ import { ActivityIndicator } from 'react-native';
 import { Text, fontFaces } from './Text';
 import colors from '../utils/colors';
 
-const { Purple, Walter, globalColors } = colors;
+const { Purple, White, globalColors } = colors;
 
 const ButtonContainer = styled.TouchableOpacity.attrs({
   activeOpacity: 0.7,
@@ -22,7 +22,7 @@ const ButtonText = styled.Text`
 font-size: ${props => props.fontSize || '18px'}
   font-family: ${fontFaces.Bold};
   text-align: center;
-  color: ${props => props.textColor || Walter};
+  color: ${props => props.textColor || White};
 `;
 
 export const Button = ({ touchableProps = {}, textProps = {} }) => {
@@ -30,7 +30,7 @@ export const Button = ({ touchableProps = {}, textProps = {} }) => {
   const { onPress = () => {} } = touchableProps;
   function renderButtonContent() {
     if (textProps.loading) {
-      return <ActivityIndicator size="small" color={Walter} />;
+      return <ActivityIndicator size="small" color={White} />;
     }
     const { title } = textProps;
     return <ButtonText {...textProps}>{title || 'Title'}</ButtonText>;
@@ -44,8 +44,7 @@ export const Button = ({ touchableProps = {}, textProps = {} }) => {
         if (!loading) {
           onPress();
         }
-      }}
-    >
+      }}>
       {renderButtonContent()}
     </ButtonContainer>
   );

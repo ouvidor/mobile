@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 class Api {
   constructor() {
     this.configs = {
-      baseURL: 'http://10.0.10.168:3003',
+      baseURL: 'http://192.168.0.104:3003',
     };
 
     this.api = axios.create(this.configs);

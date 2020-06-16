@@ -80,8 +80,7 @@ export const StatusHistory = ({ data }) => {
         onBackButtonPress={() => setVisible(false)}
         animationInTiming={400}
         animationOutTiming={400}
-        backdropTransitionOutTiming={0}
-      >
+        backdropTransitionOutTiming={0}>
         <Container>
           <AnexoImagem source={{ uri: getImage() }} />
         </Container>

@@ -14,7 +14,7 @@ export default function Manifestations() {
   const [currentManifestation, setCurrentManifestation] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const { BlackSirius } = colors;
+  const { Gray } = colors;
 
   useEffect(() => {
     // carrego manifestações de acordo com paginação
@@ -90,7 +90,7 @@ export default function Manifestations() {
         <ActivityIndicator
           style={{ marginTop: 30 }}
           size="large"
-          color={BlackSirius}
+          color={Gray}
         />
       ) : (
         [

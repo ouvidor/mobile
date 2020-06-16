@@ -6,13 +6,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import { fontFaces, Text } from './Text';
 import colors from '../utils/colors';
 
-const {
-  ErrorTextColor,
-  ErrorBackground,
-  BlackSirius,
-  SuccessGreen,
-  Walter,
-} = colors;
+const { ErrorTextColor, ErrorBackground, Gray, Success, White } = colors;
 
 const Error = styled(Text)`
   color: ${ErrorTextColor};
@@ -26,9 +20,8 @@ export const SelectContainer = styled.View`
   padding: 10px;
   justify-content: center;
   border: ${StyleSheet.hairlineWidth}px;
-  border-color: ${props =>
-    props.errorMessage ? ErrorBackground : BlackSirius};
-  background: ${props => (props.errorMessage ? ErrorBackground : Walter)};
+  border-color: ${props => (props.errorMessage ? ErrorBackground : Gray)};
+  background: ${props => (props.errorMessage ? ErrorBackground : White)};
   border-radius: 5px;
   margin: 5px 0;
   elevation: 1;
@@ -51,14 +44,14 @@ export const SelectOption = styled.TouchableOpacity`
 export const SelectOptionText = styled(Text)`
   flex: 1;
   font-size: 16px;
-  color: ${props => (props.success ? SuccessGreen : BlackSirius)};
+  color: ${props => (props.success ? Success : Gray)};
 `;
 
 export const SelectLabel = styled(Text)`
   padding-left: 3px;
   font-size: 16px;
   font-family: ${props => fontFaces[props.fontFamily] || fontFaces.SemiBold};
-  color: ${props => (props.errorMessage ? ErrorTextColor : BlackSirius)};
+  color: ${props => (props.errorMessage ? ErrorTextColor : Gray)};
 `;
 
 export const Select = props => {
@@ -83,8 +76,7 @@ export const Select = props => {
                 setSelected(option.label);
                 setCollapsed(!collapsed);
                 onSelect(option);
-              }}
-            >
+              }}>
               <SelectOptionText>{option.label}</SelectOptionText>
             </SelectOption>
           );
@@ -104,10 +96,9 @@ export const Select = props => {
         <SelectedOption
           onPress={() => {
             setCollapsed(!collapsed);
-          }}
-        >
+          }}>
           <SelectOptionText>{selected || blankOption}</SelectOptionText>
-          <Entypo name="select-arrows" size={21} color={BlackSirius} />
+          <Entypo name="select-arrows" size={21} color={Gray} />
         </SelectedOption>
         {renderOptions()}
       </SelectContainer>

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, useContext } from 'react';
 import { View } from 'react-native';
-import { useNetInfo } from "@react-native-community/netinfo";
+import { useNetInfo } from '@react-native-community/netinfo';
 import { StandardBackground } from '../../components/BackgroundImage';
 import {
   ScrollableContainer,
@@ -15,7 +15,6 @@ import Api from '../../services/Api';
 import colors from '../../utils/colors';
 import { SessionContext } from '../../store/session';
 import { signIn } from '../../store/session/actions';
-
 
 export default function Cadastro({ navigation }) {
   const [nome, setNome] = useState();
@@ -105,7 +104,11 @@ export default function Cadastro({ navigation }) {
       if ('error' in cadastro) {
         setActionError(cadastro.error);
       } else {
-        const sign = await SignIn(payload.email, payload.password, payload.city);
+        const sign = await SignIn(
+          payload.email,
+          payload.password,
+          payload.city
+        );
         dispatch(signIn({ token: sign.token, profile: sign.user }));
 
         navigation.replace('Home');
@@ -118,9 +121,9 @@ export default function Cadastro({ navigation }) {
     if (netInfo.isConnected) {
       handleSignUp();
     } else {
-      setActionError('Você está sem conexão a rede')
+      setActionError('Você está sem conexão a rede');
     }
-  };
+  }
 
   return (
     <StandardBackground>
@@ -132,7 +135,7 @@ export default function Cadastro({ navigation }) {
               onChangeText: setNome,
               onFocus: () => clearOnFocus('nome'),
               errorMessage: erro.nome,
-              placeholder: 'Nome'
+              placeholder: 'Nome',
             }}
           />
           <LabeledInput
@@ -141,7 +144,7 @@ export default function Cadastro({ navigation }) {
               onChangeText: setSobrenome,
               onFocus: () => clearOnFocus('sobrenome'),
               errorMessage: erro.sobrenome,
-              placeholder: 'Sobrenome'
+              placeholder: 'Sobrenome',
             }}
           />
           <LabeledInput
@@ -153,7 +156,7 @@ export default function Cadastro({ navigation }) {
               onFocus: () => clearOnFocus('email'),
               errorMessage: erro.email,
               autoCapitalize: 'none',
-              placeholder: 'E-mail'
+              placeholder: 'E-mail',
             }}
           />
           <LabeledInput
@@ -171,27 +174,30 @@ export default function Cadastro({ navigation }) {
           <Text>{actionError}</Text>
 
           <Button
-            touchableProps={{ onPress: CheckConnectivity, background: colors.Blu }}
+            touchableProps={{
+              onPress: CheckConnectivity,
+              background: colors.Blue,
+            }}
             textProps={{
               title: 'Cadastrar',
               loading: btnLoading,
             }}
-
           />
-          <View style={{alignItems: 'center', marginTop: 20}}>
+          <View style={{ alignItems: 'center', marginTop: 20 }}>
             <Text>Já tem conta?</Text>
             <Text
               style={{
                 lineHeight: 20,
                 fontSize: 18,
                 fontWeight: 'bold',
-                color: colors.Blu
+                color: colors.Blue,
               }}
-              onPress={() => navigation.navigate('Login')}>Faça login!
+              onPress={() => navigation.navigate('Login')}>
+              Faça login!
             </Text>
           </View>
         </ContainerForm>
-     </ScrollableContainer>
+      </ScrollableContainer>
     </StandardBackground>
   );
 }
