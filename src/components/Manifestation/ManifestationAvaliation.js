@@ -102,7 +102,7 @@ export const Avaliation = ({ avaliation, idManifestacao }) => {
         <>
           <RatingContainer>{renderRating()}</RatingContainer>
           <LabeledInput
-            labelProps={{ label: 'Sua avaliação' }}
+            label="Sua avaliação"
             inputProps={{
               multiline: true,
               autoCorrect: false,

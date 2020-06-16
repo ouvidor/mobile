@@ -161,7 +161,7 @@ export default function AddManifestation({ navigation }) {
   return (
     <ScrollableContainerWithLoading loading={loading}>
       <LabeledInput
-        labelProps={{ label: 'Título' }}
+        label="Título"
         inputProps={{
           value: title,
           onChangeText: setTitle,
@@ -200,7 +200,7 @@ export default function AddManifestation({ navigation }) {
         errorMessage={error.type}
       />
       <LabeledInput
-        labelProps={{ label: 'Descrição do problema' }}
+        label="Descrição do problema"
         inputProps={{
           value: description,
           onChangeText: setDescription,

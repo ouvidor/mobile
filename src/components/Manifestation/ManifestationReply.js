@@ -82,7 +82,7 @@ export const Reply = props => {
       {open && (
         <RCollapsible>
           <LabeledInput
-            labelProps={{ label: 'Sua resposta' }}
+            label="Sua resposta"
             inputProps={{
               multiline: true,
               autoCorrect: false,

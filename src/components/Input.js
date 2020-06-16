@@ -36,11 +36,9 @@ const Error = styled(Text)`
   font-family: ${fontFaces.SemiBoldItalic};
 `;
 
-export const LabeledInput = ({ labelProps = {}, inputProps = {} }) => (
+export const LabeledInput = ({ label, inputProps = {} }) => (
   <InputContainer>
-    {labelProps.label && (
-      <Label {...inputProps}>{labelProps.label || 'Label'}</Label>
-    )}
+    {label && <Label {...inputProps}>{label}</Label>}
     <Input {...inputProps} />
     {inputProps.errorMessage && <Error>{inputProps.errorMessage}</Error>}
   </InputContainer>
