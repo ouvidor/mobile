@@ -77,10 +77,15 @@ export default function Perfil({ navigation }) {
   return (
     <ScrollableContainerWithLoading loading={loading}>
       <StyledText
-        style={{ marginVertical: 10, fontWeight: 'bold', fontSize: 24 }}>
+        style={{
+          marginTop: 20,
+          marginHorizontal: 5,
+          fontWeight: 'bold',
+          fontSize: 24,
+        }}>
         <Feather
           name="arrow-left"
-          size={22}
+          size={30}
           color={colors.Gray}
           onPress={() => navigation.pop()}
         />
