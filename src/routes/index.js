@@ -47,10 +47,6 @@ const StackPerfilNavigator = () => {
       <StackMenu.Screen name="Perfil" component={Perfil} />
       <StackMenu.Screen name="EditarPerfil" component={EditarPerfil} />
       <StackMenu.Screen name="Historico" component={Historico} />
-      <StackMenu.Screen
-        name="ManifestacaoDetalhes"
-        component={ManifestationDetails}
-      />
     </StackMenu.Navigator>
   );
 };
@@ -170,6 +166,10 @@ export default function Routes() {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Home" component={HomeTabNavigator} />
         <Stack.Screen name="Cadastro" component={Cadastro} />
+        <StackMenu.Screen
+          name="ManifestacaoDetalhes"
+          component={ManifestationDetails}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
