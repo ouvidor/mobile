@@ -26,7 +26,7 @@ import Perfil from '../screens/Perfil';
 import EditarPerfil from '../screens/Perfil/EditProfile';
 import Historico from '../screens/Perfil/Historic';
 import Prefeitura from '../screens/Prefeitura';
-import ManifestationDetails from '../screens/Manifestation/ManifestationDetails';
+import ManifestationDetails from '../screens/ManifestationDetails';
 import SearchManifestation from '../screens/Manifestation/SearchManifestation';
 
 /** Component para */

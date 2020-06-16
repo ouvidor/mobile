@@ -1,16 +1,13 @@
 /* eslint-disable camelcase */
 import React, { useState, useEffect, useContext } from 'react';
-import { FlatList } from 'react-native';
+import { Text } from 'react-native';
 
 import Api from '../../services/Api';
 import { SessionContext } from '../../store/session';
-import {
-  Text,
-  ManifestationTitle,
-  Avaliation,
-  ContainerWithLoading,
-} from '../../components';
+import { Avaliation, ContainerWithLoading } from '../../components';
 import ManifestationStatus from '../../components/ManifestationStatus';
+import TagList from '../../components/TagList';
+import { Container, Title, Description, StyledFlatList } from './styles';
 
 export default function ManifestationDetails({ route }) {
   const [id, setId] = useState(null);
@@ -64,14 +61,23 @@ export default function ManifestationDetails({ route }) {
       {error && <Text>{error}</Text>}
       {manifestation && (
         <>
-          <ManifestationTitle>{manifestation.title}</ManifestationTitle>
+          <Container>
+            <Title>{manifestation.title}</Title>
+            <TagList
+              tags={[
+                ...manifestation.categories.map(category => category.title),
+                manifestation.type.title,
+              ]}
+            />
+            <Description>{manifestation.description}</Description>
+          </Container>
           {lastStatus === 5 && isOwner && (
             <Avaliation
               avaliation={manifestation.avaliation}
               idManifestacao={manifestation.id}
             />
           )}
-          <FlatList
+          <StyledFlatList
             data={manifestationStatus}
             keyExtractor={item => String(item.id)}
             renderItem={({ item }) => <ManifestationStatus status={item} />}

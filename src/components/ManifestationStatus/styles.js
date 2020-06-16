@@ -7,18 +7,9 @@ export const Container = styled.View`
   margin-bottom: 10px;
 `;
 
-export const Title = styled.Text`
-  font-family: 'OpenSans-Bold';
-  font-size: 20px;
-`;
-
 export const Description = styled.Text`
   font-family: 'OpenSans-Regular';
   font-size: 16px;
-`;
-
-export const Footer = styled.View`
-  margin-top: 4px;
 `;
 
 export const DateText = styled.Text`
