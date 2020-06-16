@@ -17,5 +17,6 @@ export {
   Container,
   CenteredContainer,
   ScrollableContainer,
+  ContainerWithLoading,
   ScrollableContainerWithLoading,
 } from './Container';

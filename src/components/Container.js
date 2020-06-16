@@ -80,9 +80,9 @@ export const ScrollableContainerWithLoading = props => {
   );
 };
 
-export const ContainerWithLoading = props => {
+export const ContainerWithLoading = ({ loading, children }) => {
   const animationRef = useRef();
-  const { loading, children } = props;
+
   if (loading) {
     return (
       <CenteredContainer onLayout={() => animationRef.current.play()}>
