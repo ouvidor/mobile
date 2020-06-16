@@ -222,7 +222,7 @@ export default function AddManifestation({ navigation }) {
           onPress: addManifestation,
         }}
         textProps={{
-          title: 'Criar manifestação, disgraça',
+          title: 'Criar manifestação',
           loading: btnLoading,
         }}
       />
