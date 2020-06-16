@@ -2,8 +2,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
+
 import { Text, ManifestationDetailsModal, Button } from '../../components';
-import { HistoricList } from '../../components/Historic';
+import ManifestationList from '../../components/ManifestationList';
 import { ContainerWithLoading } from '../../components/Container';
 import Api from '../../services/Api';
 import { SessionContext } from '../../store/session';
@@ -79,7 +80,7 @@ export default function Historic({ navigation }) {
 
     if (manifestations) {
       return (
-        <HistoricList
+        <ManifestationList
           manifestations={manifestations.rows}
           navigation={navigation}
         />

@@ -13,7 +13,7 @@ import {
   Text,
 } from '../../components';
 import { ContainerWithLoading } from '../../components/Container';
-import { HistoricList } from '../../components/Historic';
+import ManifestationList from '../../components/ManifestationList';
 import colors from '../../utils/colors';
 
 let titleFilter = null;
@@ -167,7 +167,7 @@ export default function SearchManifestation({ navigation }) {
 
     if (manifestations) {
       return (
-        <HistoricList
+        <ManifestationList
           manifestations={manifestations}
           navigation={navigation}
           handleNextPage={handleNextPage}

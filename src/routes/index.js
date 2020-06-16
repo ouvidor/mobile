@@ -12,9 +12,9 @@ import {
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Feather from 'react-native-vector-icons/Feather';
 import Foundation from 'react-native-vector-icons/Foundation';
-import { TabBarLabel } from '../components';
-import colors from '../utils/colors';
 
+import colors from '../utils/colors';
+import { TabBarLabel } from '../components';
 /** Importação das telas */
 import Splash from '../screens/Splash';
 import Login from '../screens/Login';

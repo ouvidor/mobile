@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import { ActivityIndicator } from 'react-native';
-import { HistoricList } from '../../components/Historic';
+import ManifestationList from '../../components/ManifestationList';
 import { Container, Text, ManifestationDetailsModal } from '../../components';
 import Api from '../../services/Api';
 import colors from '../../utils/colors';
@@ -69,7 +69,7 @@ export default function Manifestations() {
 
     if (manifestations) {
       return (
-        <HistoricList
+        <ManifestationList
           manifestations={manifestations}
           handleManifestationPress={handleManifestationPress}
         />
