@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { StandardBackground } from '../../components/BackgroundImage';
@@ -10,21 +10,21 @@ import {
   Text,
 } from '../../components';
 import { ContainerForm } from './styles';
-import { validarEmail, SignIn } from '../../helpers';
+import { validarEmail } from '../../helpers';
 import Api from '../../services/Api';
 import colors from '../../utils/colors';
-import { SessionContext } from '../../store/session';
-import { signIn } from '../../store/session/actions';
+import { useSession } from '../../hooks/session';
 
 export default function Cadastro({ navigation }) {
   const [nome, setNome] = useState();
   const [sobrenome, setSobrenome] = useState();
   const [email, setEmail] = useState();
   const [senha, setSenha] = useState();
+  const [city, setCity] = useState();
   const [erro, setErro] = useState({});
   const [actionError, setActionError] = useState();
   const [btnLoading, setBtnLoading] = useState(false);
-  const { dispatch } = useContext(SessionContext);
+  const { signIn } = useSession();
 
   const netInfo = useNetInfo();
 
@@ -74,11 +74,11 @@ export default function Cadastro({ navigation }) {
       sobrenome: { field: 'last_name', value: sobrenome },
       email: { field: 'email', value: email, validator: validarEmail },
       senha: { field: 'password', value: senha },
+      city: { field: 'city', value: city },
     };
 
     let valid = true;
     const payload = {};
-    payload.city = 'Cabo Frio';
 
     /** Verificando que temos todos os dados */
     Object.entries(requiredData).map(k => {
@@ -102,14 +102,17 @@ export default function Cadastro({ navigation }) {
     if (valid) {
       const cadastro = await Api.post('/user', payload);
       if ('error' in cadastro) {
-        setActionError(cadastro.error);
+        if (cadastro.message) {
+          setActionError(cadastro.message);
+        } else if (cadastro.messages) {
+          setActionError(cadastro.messages.join(', '));
+        }
       } else {
-        const sign = await SignIn(
-          payload.email,
-          payload.password,
-          payload.city
-        );
-        dispatch(signIn({ token: sign.token, profile: sign.user }));
+        await signIn({
+          email: payload.email,
+          password: payload.password,
+          city: payload.city,
+        });
 
         navigation.replace('Home');
       }
@@ -130,24 +133,25 @@ export default function Cadastro({ navigation }) {
       <ScrollableContainer>
         <ContainerForm>
           <LabeledInput
+            label="Nome"
             inputProps={{
               value: nome,
               onChangeText: setNome,
               onFocus: () => clearOnFocus('nome'),
               errorMessage: erro.nome,
-              placeholder: 'Nome',
             }}
           />
           <LabeledInput
+            label="Sobrenome"
             inputProps={{
               value: sobrenome,
               onChangeText: setSobrenome,
               onFocus: () => clearOnFocus('sobrenome'),
               errorMessage: erro.sobrenome,
-              placeholder: 'Sobrenome',
             }}
           />
           <LabeledInput
+            label="Email"
             inputProps={{
               value: email,
               onChangeText: setEmail,
@@ -156,10 +160,10 @@ export default function Cadastro({ navigation }) {
               onFocus: () => clearOnFocus('email'),
               errorMessage: erro.email,
               autoCapitalize: 'none',
-              placeholder: 'E-mail',
             }}
           />
           <LabeledInput
+            label="Senha"
             inputProps={{
               value: senha,
               onChangeText: setSenha,
@@ -167,7 +171,17 @@ export default function Cadastro({ navigation }) {
               onFocus: () => clearOnFocus('senha'),
               errorMessage: erro.senha,
               autoCapitalize: 'none',
-              placeholder: 'Senha',
+            }}
+          />
+
+          <LabeledInput
+            label="Cidade"
+            inputProps={{
+              value: city,
+              onChangeText: setCity,
+              onFocus: () => clearOnFocus('city'),
+              errorMessage: erro.city,
+              autoCapitalize: 'none',
             }}
           />
 

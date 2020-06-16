@@ -1,25 +1,20 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect } from 'react';
 import { View, Image } from 'react-native';
-import { getJWT } from '../../helpers';
+
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default function Splash({ navigation }) {
-  /**
-   * @author Lucas Sousa
-   * @since 2020.01.22
-   * @description
-   * Checa se temos um JWT armazenado no dispositivo e navega para a tela correspondente.
-   */
-  async function checkAuth() {
-    const jwt = await getJWT();
-    if (jwt) {
-      navigation.replace('Home');
-    } else {
-      navigation.replace('Login');
-    }
-  }
-
   useEffect(() => {
+    async function checkAuth() {
+      const token = await AsyncStorage.getItem('@Ouvidor:token');
+      if (token) {
+        navigation.replace('Home');
+      } else {
+        navigation.replace('Login');
+      }
+    }
+
     checkAuth();
   }, []);
 

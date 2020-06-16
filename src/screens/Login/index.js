@@ -1,22 +1,21 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 
 import { StandardBackground } from '../../components/BackgroundImage';
-import { SessionContext } from '../../store/session';
-import { signIn } from '../../store/session/actions';
 import { Container, Button, LabeledInput, Text } from '../../components';
-import { SignIn } from '../../helpers';
 import colors from '../../utils/colors';
 import { ContainerForm } from './styles';
+import { useSession } from '../../hooks/session';
 
 export default function Login({ navigation }) {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [city, setCity] = useState('');
   const [error, setError] = useState({});
-  const [actionError, setActionError] = useState();
+  const [actionError, setActionError] = useState('');
   const [btnLoading, setBtnLoading] = useState(false);
-  const { dispatch } = useContext(SessionContext);
+  const { signIn } = useSession();
 
   function clearOnFocus(field) {
     setError({ ...error, [field]: null });
@@ -27,38 +26,44 @@ export default function Login({ navigation }) {
     const requiredData = {
       email: { field: 'email', value: email },
       password: { field: 'password', value: password },
+      city: { field: 'city', value: city },
     };
 
     let valid = true;
     const payload = {};
 
-    payload.city = 'Cabo Frio';
-
     /** Verificando que temos todos os dados */
-    Object.entries(requiredData).map(k => {
+    for (const key in requiredData) {
       if (valid) {
-        const key = k[0];
-        const values = k[1];
+        const input = requiredData[key];
 
-        if (!values.value) {
+        if (!input.value) {
           valid = false;
           setError({
             ...error,
-            [key]: values.errorMessage || 'Campo obrigatório',
+            [key]: input.errorMessage || 'Campo obrigatório',
           });
         }
+
         if (valid) {
-          payload[values.field] = values.value;
+          payload[input.field] = input.value;
         }
       }
-    });
+    }
 
     if (valid) {
-      const login = await SignIn(payload.email, payload.password, payload.city);
-      dispatch(signIn({ token: login.token, profile: login.user }));
+      const signInData = await signIn({
+        email,
+        password,
+        city,
+      });
 
-      if ('error' in login) {
-        setActionError(login.messages ? login.messages[0] : login.error);
+      if ('error' in signInData || 'status' in signInData) {
+        setActionError(
+          signInData.messages
+            ? signInData.messages.join(', ')
+            : signInData.message
+        );
       } else {
         navigation.replace('Home');
       }
@@ -93,17 +98,17 @@ export default function Login({ navigation }) {
             }}
           />
 
-          <Text>{actionError}</Text>
-
-          <View
-            style={{
-              width: '100%',
-              alignSelf: 'center',
-              borderBottomColor: colors.Gray,
-              borderBottomWidth: 0.4,
-              marginBottom: 20,
+          <LabeledInput
+            inputProps={{
+              value: city,
+              onChangeText: setCity,
+              onFocus: () => clearOnFocus('city'),
+              errorMessage: error.city,
+              autoCapitalize: 'none',
             }}
           />
+
+          <Text>{actionError}</Text>
 
           <Button
             touchableProps={{ onPress: handleLogin, background: colors.Blue }}

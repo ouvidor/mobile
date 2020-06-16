@@ -1,13 +1,12 @@
 /* eslint-disable react/prop-types */
-import React, { useContext } from 'react';
+import React from 'react';
+
 import { ScrollableContainer } from '../../components';
 import { ItemMenu, ItemContainer } from './styles';
-import { SignOut } from '../../helpers';
-import { SessionContext } from '../../store/session';
-import { signOut } from '../../store/session/actions';
+import { useSession } from '../../hooks/session';
 
 export default function Menu({ navigation }) {
-  const { dispatch } = useContext(SessionContext);
+  const { signOut } = useSession();
 
   return (
     <ScrollableContainer>
@@ -27,14 +26,11 @@ export default function Menu({ navigation }) {
         <ItemMenu
           red
           onPress={async () => {
-            const signout = await SignOut();
-            if (signout) {
-              dispatch(signOut());
-              navigation
-                .dangerouslyGetParent()
-                .dangerouslyGetParent()
-                .replace('Login');
-            }
+            await signOut();
+            navigation
+              .dangerouslyGetParent()
+              .dangerouslyGetParent()
+              .replace('Login');
           }}>
           Sair
         </ItemMenu>

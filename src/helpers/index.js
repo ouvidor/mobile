@@ -1,58 +1,5 @@
 /* eslint-disable no-useless-escape */
-import AsyncStorage from '@react-native-community/async-storage';
 import Api from '../services/Api';
-
-/**
- * @param {string} email
- * @param {string} password
- * @author Lucas Sousa
- * @description
- * Realiza Login. Faz um POST request passando as credenciais para /auth.
- * Em caso de login bem sucedido, armazeno o user/JWT no dispositivo.
- * Retorno a resposta do request.
- */
-export const SignIn = async (email, password, city) => {
-  try {
-    const response = await Api.post('/auth', {
-      email,
-      password,
-      city,
-    });
-    if ('token' in response) {
-      AsyncStorage.setItem('user', JSON.stringify(response));
-    }
-    return response;
-  } catch (e) {
-    return e;
-  }
-};
-
-/**
- * @author Lucas Sousa
- * @since 2020.01.25
- * @description
- * Desloga um usuário, por deslogar, significa que simplesmente
- * limpamos o JWT do armazenamento do dispositivo.
- */
-export const SignOut = async () => {
-  await AsyncStorage.removeItem('user');
-  return true;
-};
-
-/**
- * @author Lucas Sousa
- * @since 2020.01.23
- * @description
- * Busco e retorno o JWT, caso este exista.
- */
-export const getJWT = async () => {
-  let user = await AsyncStorage.getItem('user');
-  if (user) {
-    user = JSON.parse(user);
-    return user.token;
-  }
-  return false;
-};
 
 /**
  * @param {string} email

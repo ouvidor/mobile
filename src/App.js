@@ -3,7 +3,7 @@ import SplashScreen from 'react-native-splash-screen';
 
 /** Importando nossas rotas */
 import Routes from './routes';
-import SessionContextProvider from './store/session';
+import { SessionContextProvider } from './hooks/session';
 
 export default function App() {
   useEffect(() => {

@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import MapView from 'react-native-map-clustering';
 import { Marker } from 'react-native-maps';
 import Device from 'react-native-device-info';
+import AsyncStorage from '@react-native-community/async-storage';
+
 import { Container, Text, Button } from '../../components';
 import Location from '../../services/Location';
 import Manifestation from '../../services/Manifestation';
@@ -66,6 +68,11 @@ export default function Home({ navigation }) {
    * erro foi retornado
    */
   useEffect(() => {
+    async function log() {
+      console.log('Dentro da HOME', await AsyncStorage.getAllKeys());
+    }
+
+    log();
     checkIfLocationEnabled();
   }, []);
 
