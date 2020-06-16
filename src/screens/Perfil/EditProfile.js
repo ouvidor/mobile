@@ -34,18 +34,16 @@ export default function EditarPerfil({ navigation }) {
   useEffect(() => {
     async function getUser() {
       if ('profile' in session) {
-        const { id, email, first_name, last_name } = session.profile;
-        setIdUser(id);
-        setEmail(email);
-        setNome(first_name);
-        setSobrenome(last_name);
+        setIdUser(session.profile.id);
+        setEmail(session.profile.email);
+        setNome(session.profile.first_name);
+        setSobrenome(session.profile.last_name);
       } else {
         session.then(s => {
-          const { id, email, first_name, last_name } = s.profile;
-          setIdUser(id);
-          setEmail(email);
-          setNome(first_name);
-          setSobrenome(last_name);
+          setIdUser(s.profile.id);
+          setEmail(s.profile.email);
+          setNome(s.profile.first_name);
+          setSobrenome(s.profile.last_name);
         });
       }
 
@@ -84,47 +82,44 @@ export default function EditarPerfil({ navigation }) {
 
     /** Verificando que temos todos os dados */
     if (formData) {
-      Object.entries(formData).map(k => {
+      for (const key in formData) {
         if (valid) {
-          const key = k[0];
-          const values = k[1];
+          const input = formData[key];
 
-          if (!values.value) {
+          if (!input.value) {
             valid = false;
             setErro({
               ...erro,
-              [key]: values.errorMessage || 'Campo inválido',
+              [key]: input.errorMessage || 'Campo inválido',
             });
-          } else if ('validator' in values) {
-            valid = values.validator(values.value);
+          } else if ('validator' in input) {
+            valid = input.validator(input.value);
           }
           if (valid) {
-            payload[values.field] = values.value;
+            payload[input.field] = input.value;
           }
         }
-      });
+      }
     }
     /** Verificando que temos todos os dados */
     if (requiredConfirmPasswordData) {
-      Object.entries(requiredConfirmPasswordData).map(k => {
+      for (const key in requiredConfirmPasswordData) {
         if (valid) {
-          const key = k[0];
-          const values = k[1];
-
-          if (!values.value) {
+          const input = requiredConfirmPasswordData[key];
+          if (!input.value) {
             valid = false;
             setErro({
               ...erro,
-              [key]: values.errorMessage || 'Campo inválido',
+              [key]: input.errorMessage || 'Campo inválido',
             });
-          } else if ('validator' in values) {
-            valid = values.validator(values.value);
+          } else if ('validator' in input) {
+            valid = input.validator(input.value);
           }
           if (valid) {
-            payload[values.field] = values.value;
+            payload[input.field] = input.value;
           }
         }
-      });
+      }
     }
 
     /** Se temos todos os campos válidos */
@@ -177,26 +172,27 @@ export default function EditarPerfil({ navigation }) {
       <OuterContainer>
         <View>
           <LabeledInput
+            label="Nome"
             inputProps={{
               value: nome,
               onChangeText: setNome,
               onFocus: () => clearOnFocus('nome'),
               errorMessage: erro.nome,
               autoCapitalize: 'none',
-              placeholder: 'Nome',
             }}
           />
           <LabeledInput
+            label="Sobrenome"
             inputProps={{
               value: sobrenome,
               onChangeText: setSobrenome,
               onFocus: () => clearOnFocus('sobrenome'),
               errorMessage: erro.sobrenome,
               autoCapitalize: 'none',
-              placeholder: 'Sobrenome',
             }}
           />
           <LabeledInput
+            label="Email"
             inputProps={{
               value: email,
               onChangeText: setEmail,
@@ -205,10 +201,10 @@ export default function EditarPerfil({ navigation }) {
               onFocus: () => clearOnFocus('email'),
               errorMessage: erro.email,
               autoCapitalize: 'none',
-              placeholder: 'E-mail',
             }}
           />
           <LabeledInput
+            label="Senha atual"
             inputProps={{
               value: senha,
               onChangeText: setSenha,
@@ -216,10 +212,10 @@ export default function EditarPerfil({ navigation }) {
               onFocus: () => clearOnFocus('senha'),
               errorMessage: erro.senha,
               autoCapitalize: 'none',
-              placeholder: 'Senha Atual',
             }}
           />
           <LabeledInput
+            label="Nova senha"
             inputProps={{
               value: novaSenha,
               onChangeText: setNovaSenha,
@@ -227,10 +223,10 @@ export default function EditarPerfil({ navigation }) {
               onFocus: () => clearOnFocus('novaSenha'),
               errorMessage: erro.novaSenha,
               autoCapitalize: 'none',
-              placeholder: 'Nova Senha',
             }}
           />
           <LabeledInput
+            label="Confirmar nova senha"
             inputProps={{
               value: confirmarNovaSenha,
               onChangeText: setConfirmarNovaSenha,
@@ -238,7 +234,6 @@ export default function EditarPerfil({ navigation }) {
               onFocus: () => clearOnFocus('confirmarNovaSenha'),
               errorMessage: erro.confirmarNovaSenha,
               autoCapitalize: 'none',
-              placeholder: 'Confirmar Senha',
             }}
           />
           <Text>{actionError}</Text>
