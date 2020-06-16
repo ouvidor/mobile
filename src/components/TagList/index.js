@@ -1,15 +1,19 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { FlatList, View, Text } from 'react-native';
+import { FlatList } from 'react-native';
+
+import { TagContainer, StyledText } from './styles';
 
 const TagList = ({ tags }) => {
   return (
     <FlatList
       data={tags}
+      keyExtractor={item => item}
+      horizontal
       renderItem={({ item }) => (
-        <View key={item}>
-          <Text>{item}</Text>
-        </View>
+        <TagContainer>
+          <StyledText>{item}</StyledText>
+        </TagContainer>
       )}
     />
   );

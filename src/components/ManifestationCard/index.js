@@ -1,14 +1,14 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
 import TagsList from '../TagList';
-import { Container, Title, Footer } from './styles';
+import { Container, Title, Footer, DateText } from './styles';
 
 const ManifestationCard = ({ manifestation, handleSelectManifestation }) => {
   const tags = [
-    manifestation.categories.map(category => category.title),
+    ...manifestation.categories.map(category => category.title),
     manifestation.type.title,
   ];
   const date = new Date(manifestation.updated_at);
@@ -22,7 +22,7 @@ const ManifestationCard = ({ manifestation, handleSelectManifestation }) => {
     <Container>
       <Title>{manifestation.title}</Title>
 
-      {manifestation.types && <TagsList tags={tags} />}
+      {manifestation.type && <TagsList tags={tags} />}
       <Footer>
         <View
           style={{
@@ -31,9 +31,9 @@ const ManifestationCard = ({ manifestation, handleSelectManifestation }) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <Text>
+          <DateText>
             Última atualização {data} às {hora}
-          </Text>
+          </DateText>
 
           <FeatherIcon
             name="arrow-right"
