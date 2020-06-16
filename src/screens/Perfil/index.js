@@ -2,10 +2,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
-import { ScrollableContainerWithLoading, Text, Button } from '../../components';
-import { OuterContainer } from './styles';
+import { ScrollableContainerWithLoading, Button } from '../../components';
 import colors from '../../utils/colors';
 import { SessionContext } from '../../store/session';
+import { OuterContainer, Title, Label, StyledText } from './styles';
 
 export default function Perfil({ navigation }) {
   const { session } = useContext(SessionContext);
@@ -18,16 +18,14 @@ export default function Perfil({ navigation }) {
   useEffect(() => {
     async function getUser() {
       if ('profile' in session) {
-        const { email, first_name, last_name } = session.profile;
-        setEmail(email);
-        setNome(first_name);
-        setSobrenome(last_name);
+        setEmail(session.profile.email);
+        setNome(session.profile.first_name);
+        setSobrenome(session.profile.last_name);
       } else {
         session.then(s => {
-          const { id, email, first_name, last_name } = s.profile;
-          setEmail(email);
-          setNome(first_name);
-          setSobrenome(last_name);
+          setEmail(s.profile.email);
+          setNome(s.profile.first_name);
+          setSobrenome(s.profile.last_name);
         });
       }
 
@@ -41,18 +39,15 @@ export default function Perfil({ navigation }) {
     return (
       <OuterContainer>
         <View>
-          <Text style={{ marginTop: 10, fontWeight: 'bold', fontSize: 20 }}>
-            Nome:
-          </Text>
-          <Text style={{}}>
+          <Title>Seu Perfil</Title>
+
+          <Label>Nome:</Label>
+          <StyledText>
             {nome} {sobrenome}
-          </Text>
+          </StyledText>
 
-          <Text style={{ marginTop: 10, fontWeight: 'bold', fontSize: 20 }}>
-            E-mail:
-          </Text>
-
-          <Text style={{ marginBottom: 10 }}>{email}</Text>
+          <Label>E-mail:</Label>
+          <StyledText>{email}</StyledText>
         </View>
 
         <View>
@@ -81,15 +76,15 @@ export default function Perfil({ navigation }) {
 
   return (
     <ScrollableContainerWithLoading loading={loading}>
-      <Text style={{ marginVertical: 10, fontWeight: 'bold', fontSize: 24 }}>
+      <StyledText
+        style={{ marginVertical: 10, fontWeight: 'bold', fontSize: 24 }}>
         <Feather
           name="arrow-left"
           size={22}
           color={colors.Gray}
           onPress={() => navigation.pop()}
-        />{' '}
-        Perfil
-      </Text>
+        />
+      </StyledText>
       {renderInfo()}
     </ScrollableContainerWithLoading>
   );
