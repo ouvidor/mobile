@@ -26,7 +26,7 @@ export default function Prefecture({ prefecture }) {
   return (
     <ScrollableContainer>
       <Container>
-        {loading ? (
+        {loading || !prefecture ? (
           <ActivityIndicator
             style={{ marginTop: 30 }}
             size="large"
