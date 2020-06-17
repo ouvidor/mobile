@@ -1,5 +1,4 @@
 /* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { Button } from '../Button';
@@ -93,7 +92,7 @@ export const Reply = props => {
             }}
           />
 
-          <FilesInput onSelect={data => setFiles(data)} />
+          <FilesInput formFiles={files} setFormFiles={setFiles} />
         </RCollapsible>
       )}
     </>

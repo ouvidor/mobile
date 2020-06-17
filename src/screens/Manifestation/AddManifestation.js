@@ -1,6 +1,6 @@
-/* eslint-disable array-callback-return */
-/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
+import { View } from 'react-native';
+import { showMessage } from 'react-native-flash-message';
 import { getCategories, getTypes } from '../../helpers';
 import {
   LabeledInput,
@@ -8,7 +8,6 @@ import {
   ScrollableContainerWithLoading,
   Select,
   SelectCheckbox,
-  CenteredContainer,
   Text,
 } from '../../components';
 import Api from '../../services/Api';
@@ -22,11 +21,10 @@ export default function AddManifestation({ navigation }) {
   const [type, setType] = useState();
   const [categories, setCategories] = useState();
   const [types, setTypes] = useState();
-  const [images, setImages] = useState([]);
+  const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState({});
   const [btnLoading, setBtnLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     async function fetchCategories() {
@@ -64,12 +62,12 @@ export default function AddManifestation({ navigation }) {
    */
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
-      setSuccess(false);
       setTitle(null);
       setDescription(null);
       setCategory(null);
       setType(null);
-      setImages(null);
+      setFiles([]);
+      setBtnLoading(false);
     });
 
     return unsubscribe;
@@ -90,76 +88,92 @@ export default function AddManifestation({ navigation }) {
 
     const errors = {};
 
-    Object.keys(requiredData).map(key => {
-      const entry = requiredData[key];
-      if (!entry.value) {
-        errors[key] = entry.errorMessage
-          ? entry.errorMessage
+    for (const key in requiredData) {
+      if (!requiredData[key].value) {
+        errors[key] = requiredData[key].errorMessage
+          ? requiredData[key].errorMessage
           : 'Campo inválido';
       }
-    });
+    }
 
     if (Object.keys(errors).length > 0) {
       setError(errors);
       setBtnLoading(false);
     } else {
       const data = {};
-      Object.keys(requiredData).map(key => {
-        const entry = requiredData[key];
-        data[entry.field] = entry.value;
-      });
+
+      for (const key in requiredData) {
+        if (requiredData[key]) {
+          const entry = requiredData[key];
+          data[entry.field] = entry.value;
+        }
+      }
 
       Location.getCurrentPosition(async location => {
         data.latitude = location.coords.latitude;
         data.longitude = location.coords.longitude;
 
-        const add = await Api.post('/manifestation', data);
+        const createdManifestation = await Api.post('/manifestation', data);
+
+        if (createdManifestation.id === null) {
+          showMessage({
+            message: 'Não foi possível criar manifestação',
+            type: 'danger',
+            icon: { icon: 'danger', position: 'left' },
+            duration: 3000,
+          });
+          setBtnLoading(false);
+          return;
+        }
 
         /**
          * Checando se add foi bem sucedido. Checo apenas por um id na resposta.
          * Tendo um id na resposta, assumo que add foi bem sucedido
          */
-        if (add.id && images.length > 0) {
-          const imagesData = new FormData();
+        if (createdManifestation.id && files.length > 0) {
+          const filesFormData = new FormData();
 
-          images.map(image => {
-            const file = {
-              uri: image.uri,
-              name: image.fileName,
-              type: image.type,
-            };
+          for (const file of files) {
+            filesFormData.append('file', file);
+          }
 
-            imagesData.append('file', file);
-          });
-          imagesData.append('manifestations_id', add.id);
-
-          const addFile = await Api.post(
-            `/files/manifestation/${add.id}`,
-            imagesData
+          const filesSent = await Api.post(
+            `/files/manifestation/${createdManifestation.id}`,
+            filesFormData
           );
-          console.log('Add file', addFile);
+
+          if ('error' in filesSent || 'status' in filesSent) {
+            showMessage({
+              message: 'Falha em envio de arquivo',
+              type: 'danger',
+              icon: { icon: 'danger', position: 'left' },
+              duration: 3000,
+            });
+            setBtnLoading(false);
+            return;
+          }
         }
 
-        setSuccess(add.id !== null);
+        showMessage({
+          message: 'Manifestação criada com sucesso!',
+          type: 'success',
+          icon: { icon: 'success', position: 'left' },
+          duration: 2000,
+        });
         setBtnLoading(false);
+        navigation.navigate('Home');
       });
     }
   }
 
-  function handleImageSelection(data) {
-    setImages(data);
-  }
-
-  if (success) {
-    return (
-      <CenteredContainer>
-        <Text>Manifestação cadastrada!</Text>
-      </CenteredContainer>
-    );
-  }
-
   return (
     <ScrollableContainerWithLoading loading={loading}>
+      <View>
+        <Text style={{ marginVertical: 10, fontWeight: 'bold', fontSize: 24 }}>
+          Criar Manifestação
+        </Text>
+      </View>
+
       <LabeledInput
         label="Título"
         inputProps={{
@@ -215,7 +229,7 @@ export default function AddManifestation({ navigation }) {
           numberOfLines: 4,
         }}
       />
-      <FilesInput onSelect={handleImageSelection} />
+      <FilesInput formFiles={files} setFormFiles={setFiles} />
 
       <Button
         touchableProps={{
