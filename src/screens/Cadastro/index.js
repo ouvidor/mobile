@@ -21,6 +21,7 @@ export default function Cadastro({ navigation }) {
   const [sobrenome, setSobrenome] = useState();
   const [email, setEmail] = useState();
   const [senha, setSenha] = useState();
+  const [city, setCity] = useState();
   const [erro, setErro] = useState({});
   const [actionError, setActionError] = useState();
   const [btnLoading, setBtnLoading] = useState(false);
@@ -74,29 +75,28 @@ export default function Cadastro({ navigation }) {
       sobrenome: { field: 'last_name', value: sobrenome },
       email: { field: 'email', value: email, validator: validarEmail },
       senha: { field: 'password', value: senha },
+      city: { field: 'city', value: city },
     };
 
     let valid = true;
     const payload = {};
-    payload.city = 'Cabo Frio';
 
     /** Verificando que temos todos os dados */
-    Object.entries(requiredData).map(k => {
+    for (const key in requiredData) {
       if (valid) {
-        const key = k[0];
-        const values = k[1];
+        const input = requiredData[key];
 
-        if (!values.value) {
+        if (!input.value) {
           valid = false;
-          setErro({ ...erro, [key]: values.errorMessage || 'Campo inválido' });
-        } else if ('validator' in values) {
-          valid = values.validator(values.value);
+          setErro({ ...erro, [key]: input.errorMessage || 'Campo inválido' });
+        } else if ('validator' in input) {
+          valid = input.validator(input.value);
         }
         if (valid) {
-          payload[values.field] = values.value;
+          payload[input.field] = input.value;
         }
       }
-    });
+    }
 
     /** Se temos todos os campos válidos, posso cadastrar o usuário */
     if (valid) {
@@ -109,7 +109,9 @@ export default function Cadastro({ navigation }) {
           payload.password,
           payload.city
         );
-        dispatch(signIn({ token: sign.token, profile: sign.user }));
+        dispatch(
+          signIn({ token: sign.token, profile: sign.user, city: payload.city })
+        );
 
         navigation.replace('Home');
       }
@@ -130,24 +132,25 @@ export default function Cadastro({ navigation }) {
       <ScrollableContainer>
         <ContainerForm>
           <LabeledInput
+            label="Nome"
             inputProps={{
               value: nome,
               onChangeText: setNome,
               onFocus: () => clearOnFocus('nome'),
               errorMessage: erro.nome,
-              placeholder: 'Nome',
             }}
           />
           <LabeledInput
+            label="Sobrenome"
             inputProps={{
               value: sobrenome,
               onChangeText: setSobrenome,
               onFocus: () => clearOnFocus('sobrenome'),
               errorMessage: erro.sobrenome,
-              placeholder: 'Sobrenome',
             }}
           />
           <LabeledInput
+            label="Email"
             inputProps={{
               value: email,
               onChangeText: setEmail,
@@ -156,10 +159,10 @@ export default function Cadastro({ navigation }) {
               onFocus: () => clearOnFocus('email'),
               errorMessage: erro.email,
               autoCapitalize: 'none',
-              placeholder: 'E-mail',
             }}
           />
           <LabeledInput
+            label="Senha"
             inputProps={{
               value: senha,
               onChangeText: setSenha,
@@ -167,7 +170,17 @@ export default function Cadastro({ navigation }) {
               onFocus: () => clearOnFocus('senha'),
               errorMessage: erro.senha,
               autoCapitalize: 'none',
-              placeholder: 'Senha',
+            }}
+          />
+
+          <LabeledInput
+            label="Cidade"
+            inputProps={{
+              value: city,
+              onChangeText: setCity,
+              onFocus: () => clearOnFocus('city'),
+              errorMessage: erro.city,
+              autoCapitalize: 'none',
             }}
           />
 

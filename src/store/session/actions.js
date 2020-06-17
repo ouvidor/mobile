@@ -1,8 +1,8 @@
 // login
-export function signIn({ token, profile }) {
+export function signIn({ token, profile, city }) {
   return {
     type: 'SIGN_IN',
-    payload: { token, profile },
+    payload: { token, profile, city },
   };
 }
 

@@ -5,11 +5,12 @@ export default function auth(state, action) {
       return {
         profile: action.payload.profile,
         token: action.payload.token,
+        city: action.payload.city,
         isSigned: true,
       };
     case 'SIGN_OUT':
       // retira o token, o perfil e marca o usuario como deslogado
-      return { token: null, isSigned: false, profile: null };
+      return { token: null, isSigned: false, profile: null, city: null };
 
     case 'UPDATE_PROFILE':
       return { ...state, profile: action.payload.profile };

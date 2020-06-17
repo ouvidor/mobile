@@ -113,11 +113,11 @@ export const SelectCheckbox = props => {
 
   function renderSelected() {
     let emptyKeys = 0;
-    Object.keys(selected).map(key => {
+    for (const key in selected) {
       if (!selected[key]) {
         emptyKeys += 1;
       }
-    });
+    }
 
     if (Object.keys(selected).length === emptyKeys) {
       return <SelectOptionText>{blankOption}</SelectOptionText>;
@@ -125,7 +125,7 @@ export const SelectCheckbox = props => {
 
     /** Ordenando opções selecionadas por tamanho do título */
     const orderedOptions = {};
-    Object.keys(selected).map(key => {
+    for (const key in selected) {
       if (selected[key]) {
         const option = selected[key];
         /** Index aqui se refere ao tamanho do título */
@@ -135,7 +135,7 @@ export const SelectCheckbox = props => {
         }
         orderedOptions[index].push(option);
       }
-    });
+    }
 
     /** Renderizando opções selecionadas e reordenadas */
     return Object.keys(orderedOptions).map(key => {

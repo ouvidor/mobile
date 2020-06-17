@@ -10,6 +10,7 @@ const initialState = {
   token: null,
   isSigned: false,
   profile: null,
+  city: null,
 };
 
 export const SessionContext = React.createContext({
