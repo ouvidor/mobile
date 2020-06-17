@@ -58,11 +58,7 @@ export default function Info() {
           />
         </HeaderButtonContainer>
         <HeaderIconContainer>
-          <FeatherIcon
-            color="#eee"
-            name={tab === 1 ? 'info' : 'map-pin'}
-            size={48}
-          />
+          <FeatherIcon color="#eee" name="info" size={48} />
         </HeaderIconContainer>
       </HeaderContainer>
       <Container noPadding>
