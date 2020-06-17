@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
+import { showMessage } from 'react-native-flash-message';
 import {
   ScrollableContainerWithLoading,
   Text,
@@ -27,25 +28,17 @@ export default function EditarPerfil({ navigation }) {
   const [novaSenha, setNovaSenha] = useState();
   const [confirmarNovaSenha, setConfirmarNovaSenha] = useState();
   const [erro, setErro] = useState({});
-  const [actionError, setActionError] = useState();
   const [btnLoading, setBtnLoading] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function getUser() {
-      if ('profile' in session) {
-        setIdUser(session.profile.id);
-        setEmail(session.profile.email);
-        setNome(session.profile.first_name);
-        setSobrenome(session.profile.last_name);
-      } else {
-        session.then(s => {
-          setIdUser(s.profile.id);
-          setEmail(s.profile.email);
-          setNome(s.profile.first_name);
-          setSobrenome(s.profile.last_name);
-        });
-      }
+      const resolvedSession = await session;
+
+      setIdUser(resolvedSession.profile.id);
+      setEmail(resolvedSession.profile.email);
+      setNome(resolvedSession.profile.first_name);
+      setSobrenome(resolvedSession.profile.last_name);
 
       setLoading(false);
     }
@@ -53,7 +46,14 @@ export default function EditarPerfil({ navigation }) {
     getUser();
   }, []);
 
-  useEffect(() => setActionError(null), [novaSenha, confirmarNovaSenha]);
+  function showMessageOnTop(message, type) {
+    showMessage({
+      message,
+      type,
+      icon: { icon: 'auto', position: 'left' },
+      duration: 3000,
+    });
+  }
 
   async function handleEditProfile() {
     setBtnLoading(true);
@@ -125,7 +125,7 @@ export default function EditarPerfil({ navigation }) {
     /** Se temos todos os campos válidos */
     if (valid) {
       if (novaSenha && novaSenha !== confirmarNovaSenha) {
-        setActionError('As senhas não coincidem');
+        showMessageOnTop('As senhas não coincidem', 'danger');
         setBtnLoading(false);
         return;
       }
@@ -133,23 +133,21 @@ export default function EditarPerfil({ navigation }) {
         (novaSenha && novaSenha.length < 6) ||
         (confirmarNovaSenha && confirmarNovaSenha.length < 6)
       ) {
-        setActionError('Sua senha deve conter pelo menos 6 digitos');
+        showMessageOnTop(
+          'Sua senha deve conter pelo menos 6 digitos',
+          'danger'
+        );
         setBtnLoading(false);
         return;
       }
 
       const urlPath = `/user/${idUser}`;
       const updateUser = await Api.put(urlPath, payload);
-
-      if ('message' in updateUser) {
-        setActionError(updateUser.message);
-      } else {
+      if (updateUser.id) {
         dispatch(updateProfile({ profile: updateUser }));
-        setActionError('Usuário atualizado com sucesso!!');
-
+        showMessageOnTop('Usuário atualizado com sucesso!', 'success');
         setTimeout(() => {
-          navigation.replace('Perfil');
-          setActionError('');
+          navigation.pop();
         }, 1000);
       }
     }
@@ -236,7 +234,6 @@ export default function EditarPerfil({ navigation }) {
               autoCapitalize: 'none',
             }}
           />
-          <Text>{actionError}</Text>
         </View>
 
         <View>
