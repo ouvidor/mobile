@@ -13,7 +13,7 @@ import {
 } from '../../components';
 import Api from '../../services/Api';
 import Location from '../../services/Location';
-import SelectImage from '../../components/Camera/SelectImage';
+import FilesInput from '../../components/FilesInput';
 
 export default function AddManifestation({ navigation }) {
   const [title, setTitle] = useState();
@@ -215,7 +215,7 @@ export default function AddManifestation({ navigation }) {
           numberOfLines: 4,
         }}
       />
-      <SelectImage onSelect={handleImageSelection} />
+      <FilesInput onSelect={handleImageSelection} />
 
       <Button
         touchableProps={{

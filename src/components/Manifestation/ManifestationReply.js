@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { Button } from '../Button';
 import { LabeledInput } from '../Input';
-import SelectImage from '../Camera/SelectImage';
+import FilesInput from '../FilesInput';
 import Api from '../../services/Api';
 
 const MReplyButton = styled(Button).attrs(props => ({
@@ -93,7 +93,7 @@ export const Reply = props => {
             }}
           />
 
-          <SelectImage onSelect={data => setFiles(data)} />
+          <FilesInput onSelect={data => setFiles(data)} />
         </RCollapsible>
       )}
     </>
