@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { View } from 'react-native';
 import { useNetInfo } from '@react-native-community/netinfo';
+import { showMessage } from 'react-native-flash-message';
 import { StandardBackground } from '../../components/BackgroundImage';
 import {
   ScrollableContainer,
@@ -23,13 +24,10 @@ export default function Cadastro({ navigation }) {
   const [senha, setSenha] = useState();
   const [city, setCity] = useState();
   const [erro, setErro] = useState({});
-  const [actionError, setActionError] = useState();
   const [btnLoading, setBtnLoading] = useState(false);
   const { dispatch } = useContext(SessionContext);
 
   const netInfo = useNetInfo();
-
-  useEffect(() => setActionError(null), [nome, sobrenome, email, senha]);
 
   /**
    *
@@ -101,19 +99,23 @@ export default function Cadastro({ navigation }) {
     /** Se temos todos os campos válidos, posso cadastrar o usuário */
     if (valid) {
       const cadastro = await Api.post('/user', payload);
-      if ('error' in cadastro) {
-        setActionError(cadastro.error);
-      } else {
+
+      if (cadastro.id) {
         const sign = await SignIn(
           payload.email,
           payload.password,
           payload.city
         );
-        dispatch(
-          signIn({ token: sign.token, profile: sign.user, city: payload.city })
-        );
-
-        navigation.replace('Home');
+        if (sign.user) {
+          dispatch(
+            signIn({
+              token: sign.token,
+              profile: sign.user,
+              city: payload.city,
+            })
+          );
+          navigation.replace('Home');
+        }
       }
     }
     setBtnLoading(false);
@@ -123,7 +125,12 @@ export default function Cadastro({ navigation }) {
     if (netInfo.isConnected) {
       handleSignUp();
     } else {
-      setActionError('Você está sem conexão a rede');
+      showMessage({
+        message: 'Você está sem conexão a rede',
+        type: 'danger',
+        icon: { icon: 'auto', position: 'left' },
+        duration: 3000,
+      });
     }
   }
 
@@ -183,8 +190,6 @@ export default function Cadastro({ navigation }) {
               autoCapitalize: 'none',
             }}
           />
-
-          <Text>{actionError}</Text>
 
           <Button
             touchableProps={{

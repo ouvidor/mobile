@@ -15,7 +15,6 @@ export default function Login({ navigation }) {
   const [password, setPassword] = useState();
   const [city, setCity] = useState();
   const [error, setError] = useState({});
-  const [actionError, setActionError] = useState();
   const [btnLoading, setBtnLoading] = useState(false);
   const { dispatch } = useContext(SessionContext);
 
@@ -54,13 +53,15 @@ export default function Login({ navigation }) {
 
     if (valid) {
       const login = await SignIn(payload.email, payload.password, payload.city);
-      dispatch(
-        signIn({ token: login.token, profile: login.user, city: payload.city })
-      );
 
-      if ('error' in login) {
-        setActionError(login.messages ? login.messages[0] : login.error);
-      } else {
+      if (login.user) {
+        dispatch(
+          signIn({
+            token: login.token,
+            profile: login.user,
+            city: payload.city,
+          })
+        );
         navigation.replace('Home');
       }
     }
@@ -100,20 +101,8 @@ export default function Login({ navigation }) {
               value: city,
               onChangeText: setCity,
               onFocus: () => clearOnFocus('city'),
-              errorMessage: error.password,
+              errorMessage: error.city,
               autoCapitalize: 'none',
-            }}
-          />
-
-          <Text>{actionError}</Text>
-
-          <View
-            style={{
-              width: '100%',
-              alignSelf: 'center',
-              borderBottomColor: colors.Gray,
-              borderBottomWidth: 0.4,
-              marginBottom: 20,
             }}
           />
 

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
+import { checkResponseError } from '../helpers';
 
 class Api {
   constructor() {
@@ -50,30 +51,42 @@ class Api {
   }
 
   async post(url, data) {
-    try {
-      const req = await this.api.post(url, data);
-      return req.data;
-    } catch (e) {
-      return e.response.data;
-    }
+    return this.api
+      .post(url, data)
+      .then(response => {
+        checkResponseError(response.data);
+        return response.data;
+      })
+      .catch(e => {
+        checkResponseError(e.response.data);
+        return e.response.data;
+      });
   }
 
   async get(url, params) {
-    try {
-      const req = await this.api.get(url, params);
-      return req.data;
-    } catch (e) {
-      return e.response.data;
-    }
+    return this.api
+      .get(url, params)
+      .then(response => {
+        checkResponseError(response.data);
+        return response.data;
+      })
+      .catch(e => {
+        checkResponseError(e.response.data);
+        return e.response.data;
+      });
   }
 
   async put(url, params) {
-    try {
-      const req = await this.api.put(url, params);
-      return req.data;
-    } catch (e) {
-      return e.response.data;
-    }
+    return this.api
+      .put(url, params)
+      .then(response => {
+        checkResponseError(response.data);
+        return response.data;
+      })
+      .catch(e => {
+        checkResponseError(e.response.data);
+        return e.response.data;
+      });
   }
 }
 

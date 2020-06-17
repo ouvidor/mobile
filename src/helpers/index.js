@@ -1,5 +1,6 @@
 /* eslint-disable no-useless-escape */
 import AsyncStorage from '@react-native-community/async-storage';
+import { showMessage } from 'react-native-flash-message';
 import Api from '../services/Api';
 
 /**
@@ -112,3 +113,15 @@ export const clearEmptyKeys = obj => {
   });
   return newObj;
 };
+
+export function checkResponseError(e) {
+  if ('message' in e || 'error' in e) {
+    showMessage({
+      message: e.messages ? e.messages.join(', ') : e.message,
+      type: 'danger',
+      icon: { icon: 'auto', position: 'left' },
+      duration: 3000,
+    });
+  }
+  return {};
+}
