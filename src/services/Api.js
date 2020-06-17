@@ -71,7 +71,6 @@ class Api {
         return response.data;
       })
       .catch(e => {
-        console.log(e);
         checkResponseError(e.response.data);
         return e.response.data;
       });
