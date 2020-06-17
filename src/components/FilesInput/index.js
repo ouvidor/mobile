@@ -1,16 +1,13 @@
-/* eslint-disable react/prop-types */
-import React, { useState } from 'react';
-import { PermissionsAndroid } from 'react-native';
+import React from 'react';
+import { PermissionsAndroid, FlatList } from 'react-native';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import DocumentPicker from 'react-native-document-picker';
 import { showMessage } from 'react-native-flash-message';
 
 import { Container, Text } from '../index';
-import { UploadButton } from './styles';
+import { UploadButton, FileIconContainer } from './styles';
 
-export default function FilesInput() {
-  const [files, setFiles] = useState([]);
-
+export default function FilesInput({ formFiles, setFormFiles }) {
   async function selectFiles() {
     const permissionsGranted = await PermissionsAndroid.requestMultiple([
       PermissionsAndroid.PERMISSIONS.CAMERA,
@@ -23,7 +20,7 @@ export default function FilesInput() {
       const retrievedFiles = await DocumentPicker.pickMultiple({
         type: [DocumentPicker.types.allFiles],
       });
-      setFiles(retrievedFiles);
+      setFormFiles(retrievedFiles);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         showMessage({
@@ -45,15 +42,31 @@ export default function FilesInput() {
   }
 
   return (
-    <Container>
+    <Container noPadding>
       <UploadButton onPress={selectFiles}>
         <Text style={{ fontSize: 16, marginRight: 5 }} fontFamily="SemiBold">
           Anexar arquivo
         </Text>
         <FontAwesomeIcon name="file" size={18} />
       </UploadButton>
-      {/* FILES LIST GOES HERE */}
-      {console.log(files)}
+      <FlatList
+        data={formFiles}
+        keyExtractor={file => file.name}
+        horizontal
+        renderItem={({ item }) => (
+          <>
+            {item.type.includes('image') ? (
+              <FileIconContainer>
+                <FontAwesomeIcon name="image" size={18} />
+              </FileIconContainer>
+            ) : (
+              <FileIconContainer>
+                <FontAwesomeIcon name="file" size={18} />
+              </FileIconContainer>
+            )}
+          </>
+        )}
+      />
     </Container>
   );
 }
