@@ -3,6 +3,7 @@ import React from 'react';
 import { View } from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
+import formatDate from '../../helpers/formatDate';
 import TagsList from '../TagList';
 import { Container, Title, Footer, DateText } from './styles';
 
@@ -11,12 +12,7 @@ const ManifestationCard = ({ manifestation, handleSelectManifestation }) => {
     ...manifestation.categories.map(category => category.title),
     manifestation.type.title,
   ];
-  const date = new Date(manifestation.updated_at);
-  const data = date.toLocaleDateString();
-  const hora = date.toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+  const { hour, date } = formatDate(manifestation.updated_at);
 
   return (
     <Container>
@@ -32,7 +28,7 @@ const ManifestationCard = ({ manifestation, handleSelectManifestation }) => {
             alignItems: 'center',
           }}>
           <DateText>
-            Última atualização {data} às {hora}
+            Última atualização {date} às {hour}
           </DateText>
 
           <FeatherIcon
