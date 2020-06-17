@@ -7,12 +7,25 @@ import { SessionContext } from '../../store/session';
 import { Avaliation, ContainerWithLoading } from '../../components';
 import ManifestationStatus from '../../components/ManifestationStatus';
 import TagList from '../../components/TagList';
-import { Container, Title, Description, StyledFlatList } from './styles';
+import formatDate from '../../helpers/formatDate';
+import {
+  Container,
+  Title,
+  Description,
+  StyledFlatList,
+  ManifestationFooter,
+  DateText,
+  SectionTitle,
+  AttachmentButton,
+  AttachmentText,
+} from './styles';
 
 export default function ManifestationDetails({ route }) {
   const [id, setId] = useState(null);
   const [manifestation, setManifestation] = useState(null);
   const [manifestationStatus, setManifestationStatus] = useState([]);
+  const [formattedDate, setFormattedDate] = useState('');
+  const [formattedHour, setFormattedHour] = useState('');
   const [lastStatus, setLastStatus] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -38,6 +51,11 @@ export default function ManifestationDetails({ route }) {
         resolvedManifestationStatus[resolvedManifestationStatus.length - 1]
           .status.id;
       setLastStatus(resolvedLastStatus);
+
+      const { hour, date } = formatDate(manifestationData.created_at);
+
+      setFormattedHour(hour);
+      setFormattedDate(date);
     }
     setLoading(false);
   }
@@ -62,6 +80,7 @@ export default function ManifestationDetails({ route }) {
       {manifestation && (
         <>
           <Container>
+            <SectionTitle>Manifestação</SectionTitle>
             <Title>{manifestation.title}</Title>
             <TagList
               tags={[
@@ -70,6 +89,14 @@ export default function ManifestationDetails({ route }) {
               ]}
             />
             <Description>{manifestation.description}</Description>
+            <ManifestationFooter>
+              <DateText>
+                Criado em {formattedDate} às {formattedHour}
+              </DateText>
+              <AttachmentButton>
+                <AttachmentText>Abrir anexos</AttachmentText>
+              </AttachmentButton>
+            </ManifestationFooter>
           </Container>
           {lastStatus === 5 && isOwner && (
             <Avaliation
@@ -77,6 +104,7 @@ export default function ManifestationDetails({ route }) {
               idManifestacao={manifestation.id}
             />
           )}
+          <SectionTitle>Histórico de status</SectionTitle>
           <StyledFlatList
             data={manifestationStatus}
             keyExtractor={item => String(item.id)}
