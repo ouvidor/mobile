@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import React, { useState, useEffect, useContext } from 'react';
+import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { Text } from 'react-native';
 import Modal from 'react-native-modal';
 
@@ -95,7 +96,10 @@ export default function ManifestationDetails({ route }) {
                   Criado em {formattedDate} às {formattedHour}
                 </DateText>
                 <AttachmentButton onPress={() => setIsFileModalOpen(true)}>
-                  <AttachmentText>Abrir anexos</AttachmentText>
+                  <AttachmentText>
+                    <EntypoIcon name="attachment" size={20} />
+                    Abrir anexos
+                  </AttachmentText>
                 </AttachmentButton>
               </ManifestationFooter>
             </Container>
