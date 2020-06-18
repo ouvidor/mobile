@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, useContext } from 'react';
-import { View, ActivityIndicator } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 
-import { Text, ManifestationDetailsModal, Button } from '../../components';
+import { ActivityIndicator } from 'react-native';
+import { Text } from '../../components';
 import ManifestationList from '../../components/ManifestationList';
 import { ContainerWithLoading } from '../../components/Container';
 import Api from '../../services/Api';
@@ -14,59 +14,47 @@ export default function Historic({ navigation }) {
   const { session } = useContext(SessionContext);
   const [userId, setUserId] = useState(null);
   const [manifestations, setManifestations] = useState(null);
-  /** Controle do Modal */
-  const [modalVisible, setModalVisible] = useState(false);
-  /** Controle de qual manifestação foi clicada por ultimo. */
-  const [currentManifestation, setCurrentManifestation] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loadingPage, setLoadingPage] = useState(false);
   const [page, setPage] = useState(1);
 
+  // carrego manifestações de acordo com paginação
+  async function loadManifestations(pageToLoad = 1) {
+    try {
+      const manifestationsPage = await Api.get(
+        `/manifestation/filter/?ownerId=${userId}&page=${pageToLoad}`
+      );
+      console.log(manifestationsPage);
+
+      if (pageToLoad > manifestationsPage.last_page) {
+        return;
+      }
+
+      if (manifestationsPage && manifestationsPage.count > 0) {
+        setPage(
+          manifestationsPage.rows.length >= 1 ? pageToLoad : pageToLoad - 1
+        );
+        setManifestations(
+          pageToLoad >= 2
+            ? [...manifestations, ...manifestationsPage.rows]
+            : manifestationsPage.rows
+        );
+        console.log(manifestations);
+        setLoading(false);
+      }
+    } catch (err) {
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
     // Pegar id do usuário
-    function getUserId() {
-      if ('profile' in session) {
-        const { id } = session.profile;
-        setUserId(id);
-      } else {
-        session.then(s => {
-          const { id } = s.profile;
-          setUserId(id);
-        });
-      }
+    async function getUserId() {
+      const resolvedSession = await session;
+      setUserId(resolvedSession.profile.id);
     }
     getUserId();
   }, []);
-
-  // Abrir modal
-  useEffect(() => {
-    if (currentManifestation) {
-      setModalVisible(true);
-    }
-  }, [currentManifestation]);
-
-  // Remover informação de currentManifestation quando fechar modal
-  useEffect(() => {
-    if (!modalVisible) {
-      setTimeout(() => {
-        setCurrentManifestation('');
-      }, 600);
-    }
-  }, [modalVisible]);
-
-  /**
-   * @author Matheus Tchãssêf
-   * @since oldtimes
-   * @description
-   * Busca as manifestações do usuário logado
-   */
-  async function loadManifestations() {
-    const userManifestations = await Api.get(
-      `manifestation/?ownerId=${userId}`
-    );
-    setManifestations(userManifestations);
-    setLoading(false);
-  }
 
   // ao pegar id de usuário, carrego suas manifestações e removo o loading
   useEffect(() => {
@@ -75,18 +63,10 @@ export default function Historic({ navigation }) {
     }
   }, [userId]);
 
-  function renderManifestations() {
-    const toRender = [];
-
-    if (manifestations) {
-      return (
-        <ManifestationList
-          manifestations={manifestations.rows}
-          navigation={navigation}
-        />
-      );
-    }
-    return toRender;
+  async function handleNextPage() {
+    setLoadingPage(true);
+    await loadManifestations(page + 1);
+    setLoadingPage(false);
   }
 
   return (
@@ -101,7 +81,14 @@ export default function Historic({ navigation }) {
         Meu Histórico
       </Text>
 
-      {renderManifestations()}
+      {manifestations && (
+        <ManifestationList
+          manifestations={manifestations}
+          handleNextPage={handleNextPage}
+          navigation={navigation}
+        />
+      )}
+      {loadingPage && <ActivityIndicator size="small" color={colors.Gray} />}
     </ContainerWithLoading>
   );
 }
