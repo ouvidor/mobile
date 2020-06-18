@@ -1,8 +1,8 @@
 import styled from 'styled-components/native';
+import { RectButton } from 'react-native-gesture-handler';
+
 import { OutlinedButton } from '../../components';
 import colors from '../../utils/colors';
-
-const { globalColors } = colors;
 
 export const Container = styled.View`
   margin-top: 10px;
@@ -37,13 +37,26 @@ export const SectionTitle = styled.Text`
 
 export const AttachmentButton = styled(OutlinedButton)`
   padding: 20px;
-  margin: 20px;
   border-radius: 4px;
 `;
 
 export const AttachmentText = styled.Text`
   font-family: 'OpenSans-Regular';
   font-size: 18px;
+`;
+
+export const AvaliationButton = styled(RectButton)`
+  align-items: center;
+  padding: 20px;
+  margin: 5px 0;
+  border-radius: 4px;
+  background: ${colors.Purple};
+`;
+
+export const AvaliationText = styled.Text`
+  font-family: 'OpenSans-Regular';
+  font-size: 20px;
+  color: ${colors.White};
 `;
 
 export const StyledFlatList = styled.FlatList`

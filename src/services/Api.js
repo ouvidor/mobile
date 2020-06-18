@@ -1,6 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
-import { checkResponseError } from '../helpers';
+
+import checkResponseError from '../helpers/checkResponseError';
 
 class Api {
   constructor() {
@@ -22,9 +23,11 @@ class Api {
         `setConfigs expects an object and instead received ${typeof configs}`
       );
     } else {
-      Object.keys(configs).map(k => {
-        this.configs[k] = configs[k];
-      });
+      for (const key in configs) {
+        if (configs[key]) {
+          this.configs[key] = configs[key];
+        }
+      }
       return this.configs;
     }
   }

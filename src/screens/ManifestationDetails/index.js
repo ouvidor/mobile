@@ -5,7 +5,9 @@ import Modal from 'react-native-modal';
 
 import Api from '../../services/Api';
 import { SessionContext } from '../../store/session';
-import { Avaliation, ContainerWithLoading, Button } from '../../components';
+import { ContainerWithLoading } from '../../components';
+import AvaliationModal from './AvaliationModal';
+import FilesModal from './FilesModal';
 import ManifestationStatus from '../../components/ManifestationStatus';
 import TagList from '../../components/TagList';
 import formatDate from '../../helpers/formatDate';
@@ -19,13 +21,9 @@ import {
   SectionTitle,
   AttachmentButton,
   AttachmentText,
-  ModalContainer,
-  ModalScrollView,
-  ModalContainerContent,
+  AvaliationButton,
+  AvaliationText,
 } from './styles';
-import colors from '../../utils/colors';
-
-const { globalColors } = colors;
 
 export default function ManifestationDetails({ route }) {
   const [id, setId] = useState(null);
@@ -37,7 +35,8 @@ export default function ManifestationDetails({ route }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [isFileModalOpen, setIsFileModalOpen] = useState(false);
+  const [isAvaliationModalOpen, setIsAvaliationModalOpen] = useState(false);
 
   const { session } = useContext(SessionContext);
 
@@ -66,10 +65,6 @@ export default function ManifestationDetails({ route }) {
       setFormattedDate(date);
     }
     setLoading(false);
-  }
-
-  function openFile() {
-    console.log('abrir');
   }
 
   useEffect(() => {
@@ -106,16 +101,15 @@ export default function ManifestationDetails({ route }) {
                 <DateText>
                   Criado em {formattedDate} às {formattedHour}
                 </DateText>
-                <AttachmentButton onPress={() => setModalVisible(true)}>
+                <AttachmentButton onPress={() => setIsFileModalOpen(true)}>
                   <AttachmentText>Abrir anexos</AttachmentText>
                 </AttachmentButton>
               </ManifestationFooter>
             </Container>
             {lastStatus === 5 && isOwner && (
-              <Avaliation
-                avaliation={manifestation.avaliation}
-                idManifestacao={manifestation.id}
-              />
+              <AvaliationButton onPress={() => setIsAvaliationModalOpen(true)}>
+                <AvaliationText>Avaliar</AvaliationText>
+              </AvaliationButton>
             )}
             <SectionTitle>Histórico de status</SectionTitle>
             <StyledFlatList
@@ -126,48 +120,34 @@ export default function ManifestationDetails({ route }) {
           </>
         )}
       </ContainerWithLoading>
-      <Modal
-        isVisible={modalVisible}
-        onBackButtonPress={() => setModalVisible(false)}
-        onSwipeComplete={() => setModalVisible(false)}
-        swipeDirection="down"
-        animationInTiming={600}
-        animationOutTiming={600}
-        backdropTransitionOutTiming={0}>
-        <ModalContainer>
-          <ModalScrollView>
-            <ModalContainerContent>
-              <Button
-                touchableProps={{
-                  onPress: openFile,
-                  background: globalColors.primaryColor,
-                }}
-                textProps={{
-                  title: 'Abrir arquvio .jpg',
-                }}
-              />
-              <Button
-                touchableProps={{
-                  onPress: openFile,
-                  background: globalColors.primaryColor,
-                }}
-                textProps={{
-                  title: 'Abrir arquvio .jpg',
-                }}
-              />
-              <Button
-                touchableProps={{
-                  onPress: openFile,
-                  background: globalColors.primaryColor,
-                }}
-                textProps={{
-                  title: 'Abrir arquvio .jpg',
-                }}
-              />
-            </ModalContainerContent>
-          </ModalScrollView>
-        </ModalContainer>
-      </Modal>
+      {manifestation && (
+        <Modal
+          isVisible={isAvaliationModalOpen}
+          onBackButtonPress={() => setIsAvaliationModalOpen(false)}
+          onSwipeComplete={() => setIsAvaliationModalOpen(false)}
+          swipeDirection="down"
+          animationInTiming={600}
+          animationOutTiming={600}
+          backdropTransitionOutTiming={0}>
+          <AvaliationModal
+            manifestationId={manifestation.id}
+            avaliation={manifestation.avaliation}
+          />
+        </Modal>
+      )}
+
+      {manifestation && manifestation.files && (
+        <Modal
+          isVisible={isFileModalOpen}
+          onBackButtonPress={() => setIsFileModalOpen(false)}
+          onSwipeComplete={() => setIsFileModalOpen(false)}
+          swipeDirection="down"
+          animationInTiming={600}
+          animationOutTiming={600}
+          backdropTransitionOutTiming={0}>
+          <FilesModal files={manifestation.files} />
+        </Modal>
+      )}
     </>
   );
 }
