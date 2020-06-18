@@ -39,8 +39,8 @@ export default function Home({ navigation }) {
   const lastManifestationPressed = useRef();
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', async () => {
-      if (userId) {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setTimeout(async () => {
         const manifestationList = await Manifestation.fetchAll();
         setManifestations(manifestationList.rows);
         const notification = await Api.get(
@@ -53,11 +53,11 @@ export default function Home({ navigation }) {
           }
         }
         setNotificationCount(count);
-      }
+      }, 1000);
     });
 
     return unsubscribe;
-  }, [navigation, userId]);
+  }, [navigation]);
 
   /**
    * @desc Método invocado toda vez que há uma atualização na localização.
