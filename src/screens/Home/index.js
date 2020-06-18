@@ -27,6 +27,15 @@ export default function Home({ navigation }) {
   const mapRef = useRef();
   const lastManifestationPressed = useRef();
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      const manifestationList = await Manifestation.fetchAll();
+      setManifestations(manifestationList.rows);
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   /**
    * @desc Método invocado toda vez que há uma atualização na localização.
    * Recebo as coordenadas, e atualizo o state.
