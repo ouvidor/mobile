@@ -26,7 +26,6 @@ import {
 } from './styles';
 
 export default function ManifestationDetails({ route }) {
-  const [id, setId] = useState(null);
   const [manifestation, setManifestation] = useState(null);
   const [manifestationStatus, setManifestationStatus] = useState([]);
   const [formattedDate, setFormattedDate] = useState('');
@@ -38,12 +37,14 @@ export default function ManifestationDetails({ route }) {
   const [isFileModalOpen, setIsFileModalOpen] = useState(false);
   const [isAvaliationModalOpen, setIsAvaliationModalOpen] = useState(false);
 
+  const { id } = route.params;
+
   const { session } = useContext(SessionContext);
 
   async function fetchManifestationDetails() {
     const manifestationData = await Api.get(`manifestation/${id}`);
 
-    if ('message' in manifestationData) {
+    if ('message' in manifestationData || 'messages' in manifestationData) {
       setError(manifestationData.message);
     } else {
       setManifestation(manifestationData);
@@ -66,14 +67,6 @@ export default function ManifestationDetails({ route }) {
     }
     setLoading(false);
   }
-
-  useEffect(() => {
-    function getId() {
-      const mId = route.params.id;
-      setId(mId);
-    }
-    getId();
-  }, []);
 
   useEffect(() => {
     if (id) {
