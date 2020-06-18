@@ -24,7 +24,6 @@ export default function Historic({ navigation }) {
       const manifestationsPage = await Api.get(
         `/manifestation/filter/?ownerId=${userId}&page=${pageToLoad}`
       );
-      console.log(manifestationsPage);
 
       if (pageToLoad > manifestationsPage.last_page) {
         return;
@@ -39,7 +38,6 @@ export default function Historic({ navigation }) {
             ? [...manifestations, ...manifestationsPage.rows]
             : manifestationsPage.rows
         );
-        console.log(manifestations);
         setLoading(false);
       }
     } catch (err) {

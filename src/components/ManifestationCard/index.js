@@ -8,9 +8,10 @@ import TagsList from '../TagList';
 import { Container, Title, Footer, DateText } from './styles';
 
 const ManifestationCard = ({ manifestation, handleSelectManifestation }) => {
+  const categories = manifestation.categories_title.split(',');
   const tags = [
-    ...manifestation.categories.map(category => category.title),
-    manifestation.type.title,
+    ...categories.map(category => category),
+    manifestation.type_title,
   ];
   const { hour, date } = formatDate(manifestation.updated_at);
 
@@ -18,7 +19,7 @@ const ManifestationCard = ({ manifestation, handleSelectManifestation }) => {
     <Container>
       <Title>{manifestation.title}</Title>
 
-      {manifestation.type && <TagsList tags={tags} />}
+      {manifestation.type_title && <TagsList tags={tags} />}
       <Footer>
         <View
           style={{
