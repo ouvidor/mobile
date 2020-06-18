@@ -28,6 +28,7 @@ import Historico from '../screens/Perfil/Historic';
 import Info from '../screens/Info';
 import ManifestationDetails from '../screens/ManifestationDetails';
 import SearchManifestation from '../screens/Manifestation/SearchManifestation';
+import Notification from '../screens/Notification/Notification';
 
 /** Component para */
 
@@ -170,6 +171,7 @@ export default function Routes() {
           name="ManifestacaoDetalhes"
           component={ManifestationDetails}
         />
+        <StackMenu.Screen name="Notificacao" component={Notification} />
       </Stack.Navigator>
     </NavigationContainer>
   );

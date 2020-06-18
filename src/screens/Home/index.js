@@ -1,12 +1,20 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import MapView from 'react-native-map-clustering';
 import { Marker } from 'react-native-maps';
 import Device from 'react-native-device-info';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Container, Text, Button } from '../../components';
 import Location from '../../services/Location';
 import Manifestation from '../../services/Manifestation';
+import {
+  NotificationContainer,
+  NotificationContent,
+  NotificationCount,
+} from './styles';
+import Api from '../../services/Api';
+import { SessionContext } from '../../store/session';
 
 /** Coordenadas iniciais do mapa */
 const initialCoords = {
@@ -17,24 +25,39 @@ const initialCoords = {
 };
 
 export default function Home({ navigation }) {
+  const { session } = useContext(SessionContext);
+  const [userId, setUserId] = useState(null);
   const [coords, setCoords] = useState(initialCoords);
   const [currentMapPosition, setCurrentMapPosition] = useState(initialCoords);
   const [manifestations, setManifestations] = useState([]);
   /** Controles de localização/permissao */
   const [locationEnabled, setLocationEnabled] = useState(false);
   const [locationPermission, setLocationPermission] = useState(false);
+  const [notificationCount, setNotificationCount] = useState(0);
 
   const mapRef = useRef();
   const lastManifestationPressed = useRef();
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', async () => {
-      const manifestationList = await Manifestation.fetchAll();
-      setManifestations(manifestationList.rows);
+      if (userId) {
+        const manifestationList = await Manifestation.fetchAll();
+        setManifestations(manifestationList.rows);
+        const notification = await Api.get(
+          `/manifestation/filter/?ownerId=${userId}&status=encerrada&quantity=99`
+        );
+        let count = 0;
+        for (const key of notification.rows) {
+          if (!key.avaliation_rate) {
+            count += 1;
+          }
+        }
+        setNotificationCount(count);
+      }
     });
 
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation, userId]);
 
   /**
    * @desc Método invocado toda vez que há uma atualização na localização.
@@ -75,7 +98,14 @@ export default function Home({ navigation }) {
    * erro foi retornado
    */
   useEffect(() => {
+    // Pegar id do usuário
+    async function getUserId() {
+      const resolvedSession = await session;
+      setUserId(resolvedSession.profile.id);
+    }
+
     checkIfLocationEnabled();
+    getUserId();
   }, []);
 
   /**
@@ -194,6 +224,17 @@ export default function Home({ navigation }) {
         {renderCurrentLocationMarker()}
         {renderMarkers()}
       </MapView>
+      {notificationCount !== 0 && (
+        <NotificationContainer
+          onPress={() => navigation.navigate('Notificacao')}>
+          <NotificationContent>
+            <Ionicons name="ios-notifications-outline" size={35} color="#fff" />
+            <NotificationCount>
+              <Text>{notificationCount > 9 ? '9+' : notificationCount}</Text>
+            </NotificationCount>
+          </NotificationContent>
+        </NotificationContainer>
+      )}
     </Container>
   );
 }
