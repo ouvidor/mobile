@@ -26,6 +26,7 @@ import EditarPerfil from '../screens/Perfil/EditProfile';
 import Historico from '../screens/Perfil/Historic';
 import Info from '../screens/Info';
 import ManifestationDetails from '../screens/ManifestationDetails';
+import ManifestationStatusDetails from '../screens/ManifestationStatusDetails';
 import EditManifestation from '../screens/ManifestationDetails/EditManifestation';
 import SearchManifestation from '../screens/Manifestation/SearchManifestation';
 import Notification from '../screens/Notification/Notification';
@@ -174,6 +175,10 @@ export default function Routes() {
         <StackMenu.Screen
           name="EditManifestation"
           component={EditManifestation}
+        />
+        <StackMenu.Screen
+          name="ManifestationStatusDetails"
+          component={ManifestationStatusDetails}
         />
         <StackMenu.Screen name="Notificacao" component={Notification} />
       </Stack.Navigator>

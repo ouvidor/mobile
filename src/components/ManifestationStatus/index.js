@@ -4,7 +4,7 @@ import pt from 'date-fns/locale/pt';
 
 import { Container, Description, DateText } from './styles';
 
-const ManifestationStatus = ({ status }) => {
+const ManifestationStatus = ({ status, handleStatusPress }) => {
   const date = format(
     parseISO(status.created_at),
     "dd 'de' MMMM 'às' HH':'mm",
@@ -14,7 +14,7 @@ const ManifestationStatus = ({ status }) => {
   );
 
   return (
-    <Container>
+    <Container onPress={handleStatusPress}>
       <Description>{status.description}</Description>
 
       <DateText>Criada {date}</DateText>
