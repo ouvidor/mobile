@@ -95,12 +95,14 @@ export default function ManifestationDetails({ route }) {
                 <DateText>
                   Criado em {formattedDate} às {formattedHour}
                 </DateText>
-                <AttachmentButton onPress={() => setIsFileModalOpen(true)}>
-                  <AttachmentText>
-                    <EntypoIcon name="attachment" size={20} />
-                    Abrir anexos
-                  </AttachmentText>
-                </AttachmentButton>
+                {isOwner && (
+                  <AttachmentButton onPress={() => setIsFileModalOpen(true)}>
+                    <AttachmentText>
+                      <EntypoIcon name="attachment" size={20} />
+                      Abrir anexos
+                    </AttachmentText>
+                  </AttachmentButton>
+                )}
               </ManifestationFooter>
             </Container>
             {lastStatus === 5 && isOwner && (
@@ -133,7 +135,7 @@ export default function ManifestationDetails({ route }) {
         </Modal>
       )}
 
-      {manifestation && manifestation.files && (
+      {manifestation && manifestation.files && isOwner && (
         <Modal
           isVisible={isFileModalOpen}
           onBackButtonPress={() => setIsFileModalOpen(false)}

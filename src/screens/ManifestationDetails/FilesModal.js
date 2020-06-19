@@ -1,4 +1,5 @@
 import React from 'react';
+import { PermissionsAndroid } from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
 import { showMessage } from 'react-native-flash-message';
 
@@ -15,24 +16,35 @@ const FilesModal = ({ files }) => {
   const { globalColors } = colors;
 
   async function openFile(file) {
-    console.log(`requisitando --> /files/${file.id}`);
-
     const { baseURL, headers } = Api.getConfigs();
 
-    console.log();
+    const permissionGranted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      {
+        title: 'Permitir salvar arquivo em armazenamento externo',
+        message:
+          'O aplicativo Ouvidor gostaria de salvar o arquivo no armazenamento externo.',
+        buttonPositive: 'Dar permissão',
+      }
+    );
+
+    if (!permissionGranted) return;
+
+    const { dirs } = RNFetchBlob.fs;
 
     RNFetchBlob.config({
       addAndroidDownloads: {
         useDownloadManager: true, // <-- this is the only thing required
         // Show notification when response data transmitted
         notification: true,
-        // Optional, but recommended since android DownloadManager will fail when
-        // the url does not contains a file extension, by default the mime type will be text/plain
-        mime: 'image/jpg',
+        // // Optional, but recommended since android DownloadManager will fail when
+        // // the url does not contains a file extension, by default the mime type will be text/plain
+        // mime: 'image/jpg',
         description: 'Arquivo baixado no app Ouvidor.',
-        title: `ouvidor_arquivo${file.extension}`,
+        title: file.name,
         // Make the file scannable  by media scanner
         mediaScannable: true,
+        path: `${dirs.DCIMDir}/ouvidor/`,
       },
     })
       .fetch('GET', `${baseURL}/files/${file.id}`, headers)
