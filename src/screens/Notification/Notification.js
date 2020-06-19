@@ -24,9 +24,9 @@ export default function Notification({ navigation }) {
       );
 
       const manifestationsWithoutAvaliation = [];
-      for (const key of response.rows) {
-        if (!key.avaliation_rate) {
-          manifestationsWithoutAvaliation.push(key);
+      for (const manifestation of response.rows) {
+        if (!manifestation.avaliation_rate) {
+          manifestationsWithoutAvaliation.push(manifestation);
         }
       }
       setManifestations(manifestationsWithoutAvaliation);
@@ -63,11 +63,11 @@ export default function Notification({ navigation }) {
         />{' '}
         Avaliar manifestações
       </Text>
-
-      {manifestations ? (
+      {manifestations.length > 0 ? (
         <ManifestationList
           manifestations={manifestations}
           navigation={navigation}
+          handleNextPage={() => {}}
         />
       ) : (
         <ActivityIndicator size="large" color={colors.Gray} />
