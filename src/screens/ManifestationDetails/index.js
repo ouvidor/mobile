@@ -1,8 +1,9 @@
-/* eslint-disable camelcase */
 import React, { useState, useEffect, useContext } from 'react';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { Text } from 'react-native';
 import Modal from 'react-native-modal';
+import { format, parseISO } from 'date-fns';
+import pt from 'date-fns/locale/pt';
 
 import Api from '../../services/Api';
 import { SessionContext } from '../../store/session';
@@ -11,7 +12,6 @@ import AvaliationModal from './AvaliationModal';
 import FilesModal from './FilesModal';
 import ManifestationStatus from '../../components/ManifestationStatus';
 import TagList from '../../components/TagList';
-import formatDate from '../../helpers/formatDate';
 import {
   Container,
   Title,
@@ -24,17 +24,19 @@ import {
   AttachmentText,
   AvaliationButton,
   AvaliationText,
+  HeaderContainer,
+  EditButton,
 } from './styles';
 
 export default function ManifestationDetails({ route }) {
   const [manifestation, setManifestation] = useState(null);
   const [manifestationStatus, setManifestationStatus] = useState([]);
   const [formattedDate, setFormattedDate] = useState('');
-  const [formattedHour, setFormattedHour] = useState('');
   const [lastStatus, setLastStatus] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
+  const [isInEditPeriod, setIsInEditPeriod] = useState(false);
   const [isFileModalOpen, setIsFileModalOpen] = useState(false);
   const [isAvaliationModalOpen, setIsAvaliationModalOpen] = useState(false);
 
@@ -49,6 +51,7 @@ export default function ManifestationDetails({ route }) {
       setError(manifestationData.message);
     } else {
       setManifestation(manifestationData);
+      setIsInEditPeriod(manifestationData.created_at);
 
       const resolvedSession = await session;
       setIsOwner(resolvedSession.profile.id === manifestationData.user.id);
@@ -61,9 +64,14 @@ export default function ManifestationDetails({ route }) {
           .status.id;
       setLastStatus(resolvedLastStatus);
 
-      const { hour, date } = formatDate(manifestationData.created_at);
+      const date = format(
+        parseISO(manifestationData.created_at),
+        "dd 'de' MMMM 'às' HH':'mm",
+        {
+          locale: pt,
+        }
+      );
 
-      setFormattedHour(hour);
       setFormattedDate(date);
     }
     setLoading(false);
@@ -75,6 +83,10 @@ export default function ManifestationDetails({ route }) {
     }
   }, [id]);
 
+  function handleEditClick() {
+    console.log('CLICOU EM EDITAR');
+  }
+
   return (
     <>
       <ContainerWithLoading loading={loading}>
@@ -82,7 +94,14 @@ export default function ManifestationDetails({ route }) {
         {manifestation && (
           <>
             <Container>
-              <SectionTitle>Manifestação</SectionTitle>
+              <HeaderContainer>
+                <SectionTitle>Manifestação</SectionTitle>
+                {isOwner && isInEditPeriod && (
+                  <EditButton onPress={handleEditClick}>
+                    <EntypoIcon name="edit" size={30} />
+                  </EditButton>
+                )}
+              </HeaderContainer>
               <Title>{manifestation.title}</Title>
               <TagList
                 tags={[
@@ -92,9 +111,7 @@ export default function ManifestationDetails({ route }) {
               />
               <Description>{manifestation.description}</Description>
               <ManifestationFooter>
-                <DateText>
-                  Criado em {formattedDate} às {formattedHour}
-                </DateText>
+                <DateText>Criado em {formattedDate}</DateText>
                 {isOwner && manifestation.files.length > 0 && (
                   <AttachmentButton onPress={() => setIsFileModalOpen(true)}>
                     <AttachmentText>

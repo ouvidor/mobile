@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { RectButton } from 'react-native-gesture-handler';
+import { RectButton, BorderlessButton } from 'react-native-gesture-handler';
 
 import { OutlinedButton } from '../../components';
 import colors from '../../utils/colors';
@@ -7,6 +7,17 @@ import colors from '../../utils/colors';
 export const Container = styled.View`
   margin-top: 10px;
   padding: 10px 0;
+`;
+
+export const HeaderContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 10px;
+`;
+
+export const EditButton = styled(BorderlessButton)`
+  padding: 5px;
 `;
 
 export const Title = styled.Text`

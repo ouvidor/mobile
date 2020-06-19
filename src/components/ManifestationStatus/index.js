@@ -1,23 +1,23 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
+import { format, parseISO } from 'date-fns';
+import pt from 'date-fns/locale/pt';
 
 import { Container, Description, DateText } from './styles';
 
 const ManifestationStatus = ({ status }) => {
-  const date = new Date(status.created_at);
-  const data = date.toLocaleDateString();
-  const hora = date.toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+  const date = format(
+    parseISO(status.created_at),
+    "dd 'de' MMMM 'às' HH':'mm",
+    {
+      locale: pt,
+    }
+  );
 
   return (
     <Container>
       <Description>{status.description}</Description>
 
-      <DateText>
-        Criada {data} às {hora}
-      </DateText>
+      <DateText>Criada {date}</DateText>
     </Container>
   );
 };

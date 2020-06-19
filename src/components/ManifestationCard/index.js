@@ -1,8 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import { format, parseISO } from 'date-fns';
+import pt from 'date-fns/locale/pt';
 
-import formatDate from '../../helpers/formatDate';
 import TagsList from '../TagList';
 import { Container, Title, Footer, DateText } from './styles';
 
@@ -17,7 +18,14 @@ const ManifestationCard = ({ manifestation, handleSelectManifestation }) => {
     type = manifestation.type.title;
   }
   const tags = [...categories.map(category => category), type];
-  const { hour, date } = formatDate(manifestation.updated_at);
+
+  const date = format(
+    parseISO(manifestation.updated_at),
+    "dd 'de' MMMM 'às' HH':'mm",
+    {
+      locale: pt,
+    }
+  );
 
   return (
     <Container>
@@ -32,9 +40,7 @@ const ManifestationCard = ({ manifestation, handleSelectManifestation }) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <DateText>
-            Última atualização {date} às {hour}
-          </DateText>
+          <DateText>Última atualização {date}</DateText>
 
           <FeatherIcon
             name="arrow-right"
