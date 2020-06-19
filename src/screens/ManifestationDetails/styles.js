@@ -5,7 +5,7 @@ import { OutlinedButton } from '../../components';
 import colors from '../../utils/colors';
 
 export const Container = styled.View`
-  margin-top: 10px;
+  margin: 10px;
   padding: 10px 0;
 `;
 
@@ -67,6 +67,15 @@ export const AvaliationButton = styled(RectButton)`
 export const AvaliationText = styled.Text`
   font-family: 'OpenSans-Regular';
   font-size: 20px;
+  color: ${colors.White};
+`;
+
+export const SaveEditButton = styled(AvaliationButton)`
+  margin-top: 20px;
+  background: ${colors.Blue};
+`;
+
+export const SaveEditText = styled(AvaliationText)`
   color: ${colors.White};
 `;
 

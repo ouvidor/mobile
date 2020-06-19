@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { Text } from 'react-native';
 import Modal from 'react-native-modal';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, isSameDay } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 
 import Api from '../../services/Api';
@@ -28,7 +28,7 @@ import {
   EditButton,
 } from './styles';
 
-export default function ManifestationDetails({ route }) {
+export default function ManifestationDetails({ route, navigation }) {
   const [manifestation, setManifestation] = useState(null);
   const [manifestationStatus, setManifestationStatus] = useState([]);
   const [formattedDate, setFormattedDate] = useState('');
@@ -40,7 +40,7 @@ export default function ManifestationDetails({ route }) {
   const [isFileModalOpen, setIsFileModalOpen] = useState(false);
   const [isAvaliationModalOpen, setIsAvaliationModalOpen] = useState(false);
 
-  const { id } = route.params;
+  const { id, wasEdited } = route.params;
 
   const { session } = useContext(SessionContext);
 
@@ -51,7 +51,9 @@ export default function ManifestationDetails({ route }) {
       setError(manifestationData.message);
     } else {
       setManifestation(manifestationData);
-      setIsInEditPeriod(manifestationData.created_at);
+      setIsInEditPeriod(
+        isSameDay(new Date(), parseISO(manifestationData.created_at))
+      );
 
       const resolvedSession = await session;
       setIsOwner(resolvedSession.profile.id === manifestationData.user.id);
@@ -78,13 +80,15 @@ export default function ManifestationDetails({ route }) {
   }
 
   useEffect(() => {
-    if (id) {
+    if (id || wasEdited) {
       fetchManifestationDetails();
     }
-  }, [id]);
+  }, [id, wasEdited]);
 
   function handleEditClick() {
-    console.log('CLICOU EM EDITAR');
+    navigation.push('EditManifestation', {
+      manifestation,
+    });
   }
 
   return (
