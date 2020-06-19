@@ -95,7 +95,7 @@ export default function ManifestationDetails({ route }) {
                 <DateText>
                   Criado em {formattedDate} às {formattedHour}
                 </DateText>
-                {isOwner && (
+                {isOwner && manifestation.files.length > 0 && (
                   <AttachmentButton onPress={() => setIsFileModalOpen(true)}>
                     <AttachmentText>
                       <EntypoIcon name="attachment" size={20} />
