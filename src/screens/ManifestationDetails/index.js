@@ -9,7 +9,7 @@ import Api from '../../services/Api';
 import { SessionContext } from '../../store/session';
 import { ContainerWithLoading } from '../../components';
 import AvaliationModal from './AvaliationModal';
-import FilesModal from './FilesModal';
+import FilesModal from '../../components/FilesModal';
 import ManifestationStatus from '../../components/ManifestationStatus';
 import TagList from '../../components/TagList';
 import {
@@ -91,6 +91,13 @@ export default function ManifestationDetails({ route, navigation }) {
     });
   }
 
+  function openManifestationStatusDetails(status) {
+    navigation.push('ManifestationStatusDetails', {
+      manifestationStatus: status,
+      isOwner,
+    });
+  }
+
   return (
     <>
       <ContainerWithLoading loading={loading}>
@@ -135,7 +142,12 @@ export default function ManifestationDetails({ route, navigation }) {
             <StyledFlatList
               data={manifestationStatus}
               keyExtractor={item => String(item.id)}
-              renderItem={({ item }) => <ManifestationStatus status={item} />}
+              renderItem={({ item }) => (
+                <ManifestationStatus
+                  status={item}
+                  handleStatusPress={() => openManifestationStatusDetails(item)}
+                />
+              )}
             />
           </>
         )}

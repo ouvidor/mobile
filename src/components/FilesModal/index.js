@@ -5,12 +5,8 @@ import { showMessage } from 'react-native-flash-message';
 
 import Api from '../../services/Api';
 import colors from '../../utils/colors';
-import { Button } from '../../components';
-import {
-  ModalContainer,
-  ModalScrollView,
-  ModalContainerContent,
-} from './styles';
+import { Button } from '..';
+import { Container, ScrollView, ContainerContent } from './styles';
 
 const FilesModal = ({ files }) => {
   const { globalColors } = colors;
@@ -48,9 +44,6 @@ const FilesModal = ({ files }) => {
       },
     })
       .fetch('GET', `${baseURL}/files/${file.id}`, headers)
-      .then(res =>
-        RNFetchBlob.fs.scanFile([{ path: res.path(), mime: 'image/png' }])
-      )
       .then(response => {
         if (response) {
           showMessage({
@@ -73,9 +66,9 @@ const FilesModal = ({ files }) => {
   }
 
   return (
-    <ModalContainer>
-      <ModalScrollView>
-        <ModalContainerContent>
+    <Container>
+      <ScrollView>
+        <ContainerContent>
           {files.map(file => (
             <Button
               key={file.name}
@@ -88,9 +81,9 @@ const FilesModal = ({ files }) => {
               }}
             />
           ))}
-        </ModalContainerContent>
-      </ModalScrollView>
-    </ModalContainer>
+        </ContainerContent>
+      </ScrollView>
+    </Container>
   );
 };
 
