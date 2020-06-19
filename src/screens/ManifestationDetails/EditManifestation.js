@@ -15,11 +15,6 @@ const EditManifestation = ({ route, navigation }) => {
 
   const [title, setTitle] = useState(manifestation.title);
   const [description, setDescription] = useState(manifestation.description);
-  const [error, setError] = useState({});
-
-  function clearOnFocus(field) {
-    setError({ ...error, [field]: null });
-  }
 
   async function handleSubmit() {
     const result = await Api.put(`/manifestation/${manifestation.id}`, {
@@ -47,8 +42,6 @@ const EditManifestation = ({ route, navigation }) => {
         inputProps={{
           value: title,
           onChangeText: setTitle,
-          onFocus: () => clearOnFocus('title'),
-          errorMessage: error.title,
         }}
       />
       <LabeledInput
@@ -56,8 +49,6 @@ const EditManifestation = ({ route, navigation }) => {
         inputProps={{
           value: description,
           onChangeText: setDescription,
-          onFocus: () => clearOnFocus('description'),
-          errorMessage: error.description,
         }}
       />
 
