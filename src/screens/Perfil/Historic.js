@@ -32,7 +32,16 @@ export default function Historic({ navigation }) {
         `/manifestation/filter/?ownerId=${userId}${statusFilter}&page=${pageToLoad}`
       );
 
+      if (
+        manifestationsPage.count === 0 &&
+        manifestationsPage.current_page === 1
+      ) {
+        setManifestations([]);
+      }
+
       if (pageToLoad > manifestationsPage.last_page) {
+        setLoading(false);
+        setLoadingList(false);
         return;
       }
 
@@ -59,6 +68,14 @@ export default function Historic({ navigation }) {
     setPage(1);
     loadManifestations(pageToLoad, status);
   }
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      loadManifestations();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   useEffect(() => {
     // Pegar id do usuário
