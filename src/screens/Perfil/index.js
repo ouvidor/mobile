@@ -16,24 +16,25 @@ export default function Perfil({ navigation }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function getUser() {
-      if ('profile' in session) {
-        setEmail(session.profile.email);
-        setNome(session.profile.first_name);
-        setSobrenome(session.profile.last_name);
-      } else {
-        session.then(s => {
-          setEmail(s.profile.email);
-          setNome(s.profile.first_name);
-          setSobrenome(s.profile.last_name);
-        });
-      }
+    const unsubscribe = navigation.addListener(
+      'focus',
+      async () => {
+        async function getUser() {
+          const resolvedSession = await session;
+          setEmail(resolvedSession.profile.email);
+          setNome(resolvedSession.profile.first_name);
+          setSobrenome(resolvedSession.profile.last_name);
 
-      setLoading(false);
-    }
+          setLoading(false);
+        }
 
-    getUser();
-  }, []);
+        getUser();
+
+        return unsubscribe;
+      },
+      [navigation]
+    );
+  });
 
   function renderInfo() {
     return (
