@@ -37,6 +37,27 @@ export default function SearchManifestation({ navigation }) {
   const { Gray } = colors;
 
   useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      try {
+        const manifestationsPage = await Api.get(`/manifestation/`);
+
+        if ('message' in manifestationsPage || 'error' in manifestationsPage) {
+          setError(manifestationsPage.message);
+        } else {
+          setManifestations(manifestationsPage.rows);
+        }
+
+        setLoading(false);
+      } catch (err) {
+        setLoading(false);
+        setError(err);
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
     async function fetchCategories() {
       const data = await getCategories();
       const orderedCategories = data.map(c => ({
@@ -55,25 +76,8 @@ export default function SearchManifestation({ navigation }) {
 
       setTypes(orderedTypes);
     }
-    async function loadManifestations() {
-      try {
-        const manifestationsPage = await Api.get(`/manifestation/`);
-
-        if ('message' in manifestationsPage) {
-          setError(manifestationsPage.message);
-        } else {
-          setManifestations(manifestationsPage.rows);
-        }
-
-        setLoading(false);
-      } catch (err) {
-        setLoading(false);
-        setError(err);
-      }
-    }
     fetchCategories();
     fetchTypes();
-    loadManifestations();
   }, []);
 
   /** Hook responsável por garantir que tenhamos
