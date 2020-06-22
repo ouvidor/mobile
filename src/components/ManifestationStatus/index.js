@@ -15,7 +15,7 @@ const ManifestationStatus = ({ status, handleStatusPress }) => {
 
   return (
     <Container onPress={handleStatusPress}>
-      <Description>{status.description}</Description>
+      <Description>{status.status.title}</Description>
 
       <DateText>Criada {date}</DateText>
     </Container>
